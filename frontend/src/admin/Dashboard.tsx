@@ -469,7 +469,7 @@ const Dashboard: React.FC = () => {
                     borderBottom: '1px solid #333'
                 }}>
                     <h2 style={{ margin: 0, fontSize: '20px' }}>Admin Panel</h2>
-                    <p style={{ color: '#666', fontSize: '12px', marginTop: '5px' }}>Russia Oil Tracker</p>
+                    <p style={{ color: '#666', fontSize: '12px', marginTop: '5px' }}>Russian Oil Tracker</p>
                     <button
                         onClick={handleLogout}
                         style={{

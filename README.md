@@ -1,4 +1,4 @@
-# Russia Oil Facilities Tracker
+# Russian Oil Facilities Tracker
 
 ## Quick Start
 
