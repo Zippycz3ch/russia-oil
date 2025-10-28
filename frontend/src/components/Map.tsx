@@ -743,104 +743,6 @@ const Map: React.FC = () => {
                             </label>
                         </div>
                     </div>
-
-                    {/* Weapon Range Toggle */}
-                    <div style={{ 
-                        borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-                        paddingTop: '16px',
-                        marginTop: '16px'
-                    }}>
-                        <div style={{ 
-                            fontSize: '12px', 
-                            color: '#a0aec0', 
-                            fontWeight: '600',
-                            textTransform: 'uppercase',
-                            letterSpacing: '0.8px',
-                            marginBottom: '8px'
-                        }}>
-                            Weapon Ranges
-                        </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                            <label style={{ 
-                                display: 'flex', 
-                                alignItems: 'center', 
-                                gap: '10px', 
-                                cursor: 'pointer',
-                                padding: '6px',
-                                borderRadius: '4px',
-                                transition: 'background 0.2s ease'
-                            }}
-                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'}
-                            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-                            >
-                                <input 
-                                    type="checkbox" 
-                                    checked={show500km} 
-                                    onChange={(e) => setShow500km(e.target.checked)}
-                                    style={{ 
-                                        cursor: 'pointer',
-                                        width: '16px',
-                                        height: '16px',
-                                        accentColor: '#6b7280'
-                                    }}
-                                />
-                                <span style={{ color: '#10B981', fontSize: '16px' }}>■</span>
-                                <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>500km Range</span>
-                            </label>
-                            <label style={{ 
-                                display: 'flex', 
-                                alignItems: 'center', 
-                                gap: '10px', 
-                                cursor: 'pointer',
-                                padding: '6px',
-                                borderRadius: '4px',
-                                transition: 'background 0.2s ease'
-                            }}
-                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'}
-                            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-                            >
-                                <input 
-                                    type="checkbox" 
-                                    checked={show1000km} 
-                                    onChange={(e) => setShow1000km(e.target.checked)}
-                                    style={{ 
-                                        cursor: 'pointer',
-                                        width: '16px',
-                                        height: '16px',
-                                        accentColor: '#6b7280'
-                                    }}
-                                />
-                                <span style={{ color: '#F97316', fontSize: '16px' }}>■</span>
-                                <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>1000km Range</span>
-                            </label>
-                            <label style={{ 
-                                display: 'flex', 
-                                alignItems: 'center', 
-                                gap: '10px', 
-                                cursor: 'pointer',
-                                padding: '6px',
-                                borderRadius: '4px',
-                                transition: 'background 0.2s ease'
-                            }}
-                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'}
-                            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-                            >
-                                <input 
-                                    type="checkbox" 
-                                    checked={show1500km} 
-                                    onChange={(e) => setShow1500km(e.target.checked)}
-                                    style={{ 
-                                        cursor: 'pointer',
-                                        width: '16px',
-                                        height: '16px',
-                                        accentColor: '#6b7280'
-                                    }}
-                                />
-                                <span style={{ color: '#EF4444', fontSize: '16px' }}>■</span>
-                                <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>1500km Range</span>
-                            </label>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -877,7 +779,9 @@ const Map: React.FC = () => {
                                     opacity: 0.9,
                                     fillOpacity: 0
                                 }}
-                            />
+                            >
+                                <Popup>{missile.name}</Popup>
+                            </Polygon>
                         </React.Fragment>
                     );
                 })}
