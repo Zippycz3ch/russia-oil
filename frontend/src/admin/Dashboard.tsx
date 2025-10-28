@@ -971,10 +971,163 @@ const Dashboard: React.FC = () => {
 
                 {activeView === 'hits' && (
                     <>
-                        <div style={{ marginBottom: '30px' }}>
-                            <h1 style={{ marginBottom: '5px' }}>Hit Records Management</h1>
-                            <p style={{ color: '#999' }}>View and manage all hits across facilities</p>
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            marginBottom: '30px'
+                        }}>
+                            <div>
+                                <h1 style={{ marginBottom: '5px' }}>Hit Records Management</h1>
+                                <p style={{ color: '#999' }}>View and manage all hits across facilities</p>
+                            </div>
+                            <button
+                                onClick={() => setShowAddHitForm(showAddHitForm === -1 ? null : -1)}
+                                style={{
+                                    padding: '10px 20px',
+                                    backgroundColor: '#dc2626',
+                                    color: '#fff',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer',
+                                    fontSize: '14px',
+                                    fontWeight: '600'
+                                }}
+                            >
+                                {showAddHitForm === -1 ? 'Cancel' : '+ Add New Hit'}
+                            </button>
                         </div>
+
+                        {showAddHitForm === -1 && (
+                            <div style={{
+                                backgroundColor: '#1a1a1a',
+                                padding: '20px',
+                                borderRadius: '8px',
+                                marginBottom: '30px',
+                                border: '1px solid #333'
+                            }}>
+                                <h3 style={{ marginTop: 0, color: '#dc2626' }}>Add New Hit Record</h3>
+                                <form onSubmit={(e) => {
+                                    e.preventDefault();
+                                    const facilityId = parseInt((e.target as any).facilityId.value);
+                                    handleAddHit(facilityId, e);
+                                }} style={{
+                                    display: 'grid',
+                                    gridTemplateColumns: '1fr 1fr',
+                                    gap: '15px'
+                                }}>
+                                    <div style={{ gridColumn: '1 / -1' }}>
+                                        <label style={{ color: '#999', display: 'block', marginBottom: '5px' }}>Select Facility *</label>
+                                        <select
+                                            name="facilityId"
+                                            required
+                                            style={{
+                                                width: '100%',
+                                                padding: '10px',
+                                                backgroundColor: '#0a0a0a',
+                                                border: '1px solid #333',
+                                                borderRadius: '4px',
+                                                color: '#fff',
+                                                fontSize: '14px'
+                                            }}
+                                        >
+                                            <option value="">-- Choose a facility --</option>
+                                            {facilities.map(f => (
+                                                <option key={f.id} value={f.id}>
+                                                    {f.name} ({f.type}) {f.hits && f.hits.length > 0 ? `- ${f.hits.length} existing hit${f.hits.length > 1 ? 's' : ''}` : ''}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label style={{ color: '#999', display: 'block', marginBottom: '5px' }}>Date *</label>
+                                        <input
+                                            type="date"
+                                            required
+                                            value={newHit.date}
+                                            onChange={(e) => setNewHit({ ...newHit, date: e.target.value })}
+                                            style={{
+                                                width: '100%',
+                                                padding: '10px',
+                                                backgroundColor: '#0a0a0a',
+                                                border: '1px solid #333',
+                                                borderRadius: '4px',
+                                                color: '#fff'
+                                            }}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label style={{ color: '#999', display: 'block', marginBottom: '5px' }}>Repair Time (days)</label>
+                                        <input
+                                            type="number"
+                                            value={newHit.expectedRepairTime}
+                                            onChange={(e) => setNewHit({ ...newHit, expectedRepairTime: Number(e.target.value) })}
+                                            style={{
+                                                width: '100%',
+                                                padding: '10px',
+                                                backgroundColor: '#0a0a0a',
+                                                border: '1px solid #333',
+                                                borderRadius: '4px',
+                                                color: '#fff'
+                                            }}
+                                        />
+                                    </div>
+                                    <div style={{ gridColumn: '1 / -1' }}>
+                                        <label style={{ color: '#999', display: 'block', marginBottom: '5px' }}>Video Link</label>
+                                        <input
+                                            type="url"
+                                            value={newHit.videoLink}
+                                            onChange={(e) => setNewHit({ ...newHit, videoLink: e.target.value })}
+                                            placeholder="https://..."
+                                            style={{
+                                                width: '100%',
+                                                padding: '10px',
+                                                backgroundColor: '#0a0a0a',
+                                                border: '1px solid #333',
+                                                borderRadius: '4px',
+                                                color: '#fff'
+                                            }}
+                                        />
+                                    </div>
+                                    <div style={{ gridColumn: '1 / -1' }}>
+                                        <label style={{ color: '#999', display: 'block', marginBottom: '5px' }}>Notes</label>
+                                        <textarea
+                                            value={newHit.notes}
+                                            onChange={(e) => setNewHit({ ...newHit, notes: e.target.value })}
+                                            rows={3}
+                                            placeholder="Describe the damage..."
+                                            style={{
+                                                width: '100%',
+                                                padding: '10px',
+                                                backgroundColor: '#0a0a0a',
+                                                border: '1px solid #333',
+                                                borderRadius: '4px',
+                                                color: '#fff',
+                                                resize: 'vertical',
+                                                fontFamily: 'inherit'
+                                            }}
+                                        />
+                                    </div>
+                                    <div style={{ gridColumn: '1 / -1' }}>
+                                        <button
+                                            type="submit"
+                                            style={{
+                                                padding: '12px 24px',
+                                                backgroundColor: '#dc2626',
+                                                color: '#fff',
+                                                border: 'none',
+                                                borderRadius: '4px',
+                                                cursor: 'pointer',
+                                                fontSize: '14px',
+                                                fontWeight: '600'
+                                            }}
+                                        >
+                                            💥 Add Hit Record
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        )}
 
                         {loading && (
                             <div style={{ textAlign: 'center', padding: '40px', color: '#999' }}>
@@ -995,8 +1148,9 @@ const Dashboard: React.FC = () => {
                         )}
 
                         {!loading && !error && (
+                            <>
                             <div style={{ display: 'grid', gap: '20px' }}>
-                                {facilities.map(facility => (
+                                {facilities.filter(f => f.hits && f.hits.length > 0).map(facility => (
                                     <div key={facility.id} style={{
                                         backgroundColor: '#1a1a1a',
                                         borderRadius: '8px',
@@ -1004,128 +1158,15 @@ const Dashboard: React.FC = () => {
                                         border: '1px solid #333'
                                     }}>
                                         <div style={{
-                                            display: 'flex',
-                                            justifyContent: 'space-between',
-                                            alignItems: 'center',
                                             marginBottom: '15px',
                                             paddingBottom: '15px',
                                             borderBottom: '1px solid #333'
                                         }}>
-                                            <div>
-                                                <h2 style={{ margin: 0, color: facility.hit ? '#dc2626' : '#999' }}>{facility.name}</h2>
-                                                <p style={{ margin: '5px 0 0 0', color: '#999', fontSize: '14px' }}>
-                                                    {facility.type} • {facility.hits && facility.hits.length > 0 ? `${facility.hits.length} hit record${facility.hits.length !== 1 ? 's' : ''}` : 'No hits recorded'}
-                                                </p>
-                                            </div>
-                                            <button
-                                                onClick={() => setShowAddHitForm(showAddHitForm === facility.id ? null : facility.id)}
-                                                style={{
-                                                    padding: '8px 16px',
-                                                    backgroundColor: '#4CAF50',
-                                                    color: '#fff',
-                                                    border: 'none',
-                                                    borderRadius: '4px',
-                                                    cursor: 'pointer'
-                                                }}
-                                            >
-                                                {showAddHitForm === facility.id ? 'Cancel' : '+ Add Hit'}
-                                            </button>
+                                            <h2 style={{ margin: 0, color: '#dc2626' }}>{facility.name}</h2>
+                                            <p style={{ margin: '5px 0 0 0', color: '#999', fontSize: '14px' }}>
+                                                {facility.type} • {facility.hits.length} hit record{facility.hits.length !== 1 ? 's' : ''}
+                                            </p>
                                         </div>
-
-                                            {showAddHitForm === facility.id && (
-                                                <form onSubmit={(e) => handleAddHit(facility.id, e)} style={{
-                                                    backgroundColor: '#0a0a0a',
-                                                    padding: '15px',
-                                                    borderRadius: '4px',
-                                                    marginBottom: '15px',
-                                                    display: 'grid',
-                                                    gridTemplateColumns: '1fr 1fr',
-                                                    gap: '10px'
-                                                }}>
-                                                    <div>
-                                                        <label style={{ color: '#999', display: 'block', marginBottom: '5px' }}>Date</label>
-                                                        <input
-                                                            type="date"
-                                                            required
-                                                            value={newHit.date}
-                                                            onChange={(e) => setNewHit({ ...newHit, date: e.target.value })}
-                                                            style={{
-                                                                width: '100%',
-                                                                padding: '8px',
-                                                                backgroundColor: '#1a1a1a',
-                                                                border: '1px solid #333',
-                                                                borderRadius: '4px',
-                                                                color: '#fff'
-                                                            }}
-                                                        />
-                                                    </div>
-                                                    <div>
-                                                        <label style={{ color: '#999', display: 'block', marginBottom: '5px' }}>Repair Time (days)</label>
-                                                        <input
-                                                            type="number"
-                                                            value={newHit.expectedRepairTime}
-                                                            onChange={(e) => setNewHit({ ...newHit, expectedRepairTime: Number(e.target.value) })}
-                                                            style={{
-                                                                width: '100%',
-                                                                padding: '8px',
-                                                                backgroundColor: '#1a1a1a',
-                                                                border: '1px solid #333',
-                                                                borderRadius: '4px',
-                                                                color: '#fff'
-                                                            }}
-                                                        />
-                                                    </div>
-                                                    <div style={{ gridColumn: '1 / -1' }}>
-                                                        <label style={{ color: '#999', display: 'block', marginBottom: '5px' }}>Video Link</label>
-                                                        <input
-                                                            type="url"
-                                                            value={newHit.videoLink}
-                                                            onChange={(e) => setNewHit({ ...newHit, videoLink: e.target.value })}
-                                                            placeholder="https://..."
-                                                            style={{
-                                                                width: '100%',
-                                                                padding: '8px',
-                                                                backgroundColor: '#1a1a1a',
-                                                                border: '1px solid #333',
-                                                                borderRadius: '4px',
-                                                                color: '#fff'
-                                                            }}
-                                                        />
-                                                    </div>
-                                                    <div style={{ gridColumn: '1 / -1' }}>
-                                                        <label style={{ color: '#999', display: 'block', marginBottom: '5px' }}>Notes</label>
-                                                        <textarea
-                                                            value={newHit.notes}
-                                                            onChange={(e) => setNewHit({ ...newHit, notes: e.target.value })}
-                                                            rows={3}
-                                                            style={{
-                                                                width: '100%',
-                                                                padding: '8px',
-                                                                backgroundColor: '#1a1a1a',
-                                                                border: '1px solid #333',
-                                                                borderRadius: '4px',
-                                                                color: '#fff',
-                                                                resize: 'vertical'
-                                                            }}
-                                                        />
-                                                    </div>
-                                                    <div style={{ gridColumn: '1 / -1' }}>
-                                                        <button
-                                                            type="submit"
-                                                            style={{
-                                                                padding: '10px 20px',
-                                                                backgroundColor: '#4CAF50',
-                                                                color: '#fff',
-                                                                border: 'none',
-                                                                borderRadius: '4px',
-                                                                cursor: 'pointer'
-                                                            }}
-                                                        >
-                                                            Save Hit Record
-                                                        </button>
-                                                    </div>
-                                                </form>
-                                            )}
 
                                             {facility.hits && facility.hits.length > 0 && (
                                                 <div style={{ display: 'grid', gap: '10px' }}>
@@ -1197,7 +1238,8 @@ const Dashboard: React.FC = () => {
                                             )}
                                         </div>
                                 ))}
-                                {facilities.every(f => !f.hits || f.hits.length === 0) && (
+                            </div>
+                                {facilities.filter(f => f.hits && f.hits.length > 0).length === 0 && (
                                     <div style={{
                                         textAlign: 'center',
                                         padding: '60px 20px',
@@ -1205,10 +1247,10 @@ const Dashboard: React.FC = () => {
                                     }}>
                                         <div style={{ fontSize: '48px', marginBottom: '20px' }}>💥</div>
                                         <h3 style={{ margin: '0 0 10px 0', color: '#999' }}>No Hit Records Yet</h3>
-                                        <p>Hit records will appear here when facilities are marked as hit.</p>
+                                        <p>Click the "+ Add New Hit" button above to record a strike.</p>
                                     </div>
                                 )}
-                            </div>
+                            </>
                         )}
                     </>
                 )}
