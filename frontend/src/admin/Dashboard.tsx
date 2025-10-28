@@ -546,26 +546,10 @@ const Dashboard: React.FC = () => {
                             border: 'none',
                             borderRadius: '4px',
                             cursor: 'pointer',
-                            marginBottom: '10px',
                             fontSize: '14px'
                         }}
                     >
                         🗺️ View Map
-                    </button>
-                    <button
-                        onClick={() => setIsLoggedIn(false)}
-                        style={{
-                            width: '100%',
-                            padding: '10px',
-                            backgroundColor: '#f44336',
-                            color: '#fff',
-                            border: 'none',
-                            borderRadius: '4px',
-                            cursor: 'pointer',
-                            fontSize: '14px'
-                        }}
-                    >
-                        🚪 Logout
                     </button>
                 </div>
             </div>
@@ -1158,15 +1142,134 @@ const Dashboard: React.FC = () => {
                                         border: '1px solid #333'
                                     }}>
                                         <div style={{
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center',
                                             marginBottom: '15px',
                                             paddingBottom: '15px',
                                             borderBottom: '1px solid #333'
                                         }}>
-                                            <h2 style={{ margin: 0, color: '#dc2626' }}>{facility.name}</h2>
-                                            <p style={{ margin: '5px 0 0 0', color: '#999', fontSize: '14px' }}>
-                                                {facility.type} • {facility.hits.length} hit record{facility.hits.length !== 1 ? 's' : ''}
-                                            </p>
+                                            <div>
+                                                <h2 style={{ margin: 0, color: '#dc2626' }}>{facility.name}</h2>
+                                                <p style={{ margin: '5px 0 0 0', color: '#999', fontSize: '14px' }}>
+                                                    {facility.type} • {facility.hits!.length} hit record{facility.hits!.length !== 1 ? 's' : ''}
+                                                </p>
+                                            </div>
+                                            <button
+                                                onClick={() => setShowAddHitForm(showAddHitForm === facility.id ? null : facility.id)}
+                                                style={{
+                                                    padding: '8px 16px',
+                                                    backgroundColor: '#dc2626',
+                                                    color: '#fff',
+                                                    border: 'none',
+                                                    borderRadius: '4px',
+                                                    cursor: 'pointer',
+                                                    fontSize: '13px',
+                                                    fontWeight: '600'
+                                                }}
+                                            >
+                                                {showAddHitForm === facility.id ? 'Cancel' : '+ Add Hit'}
+                                            </button>
                                         </div>
+
+                                        {showAddHitForm === facility.id && (
+                                            <form onSubmit={(e) => handleAddHit(facility.id, e)} style={{
+                                                backgroundColor: '#0a0a0a',
+                                                padding: '15px',
+                                                borderRadius: '4px',
+                                                marginBottom: '15px',
+                                                display: 'grid',
+                                                gridTemplateColumns: '1fr 1fr',
+                                                gap: '10px',
+                                                border: '1px solid #dc2626'
+                                            }}>
+                                                <div>
+                                                    <label style={{ color: '#999', display: 'block', marginBottom: '5px' }}>Date *</label>
+                                                    <input
+                                                        type="date"
+                                                        required
+                                                        value={newHit.date}
+                                                        onChange={(e) => setNewHit({ ...newHit, date: e.target.value })}
+                                                        style={{
+                                                            width: '100%',
+                                                            padding: '8px',
+                                                            backgroundColor: '#1a1a1a',
+                                                            border: '1px solid #333',
+                                                            borderRadius: '4px',
+                                                            color: '#fff'
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label style={{ color: '#999', display: 'block', marginBottom: '5px' }}>Repair Time (days)</label>
+                                                    <input
+                                                        type="number"
+                                                        value={newHit.expectedRepairTime}
+                                                        onChange={(e) => setNewHit({ ...newHit, expectedRepairTime: Number(e.target.value) })}
+                                                        style={{
+                                                            width: '100%',
+                                                            padding: '8px',
+                                                            backgroundColor: '#1a1a1a',
+                                                            border: '1px solid #333',
+                                                            borderRadius: '4px',
+                                                            color: '#fff'
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div style={{ gridColumn: '1 / -1' }}>
+                                                    <label style={{ color: '#999', display: 'block', marginBottom: '5px' }}>Video Link</label>
+                                                    <input
+                                                        type="url"
+                                                        value={newHit.videoLink}
+                                                        onChange={(e) => setNewHit({ ...newHit, videoLink: e.target.value })}
+                                                        placeholder="https://..."
+                                                        style={{
+                                                            width: '100%',
+                                                            padding: '8px',
+                                                            backgroundColor: '#1a1a1a',
+                                                            border: '1px solid #333',
+                                                            borderRadius: '4px',
+                                                            color: '#fff'
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div style={{ gridColumn: '1 / -1' }}>
+                                                    <label style={{ color: '#999', display: 'block', marginBottom: '5px' }}>Notes</label>
+                                                    <textarea
+                                                        value={newHit.notes}
+                                                        onChange={(e) => setNewHit({ ...newHit, notes: e.target.value })}
+                                                        rows={3}
+                                                        placeholder="Describe the damage..."
+                                                        style={{
+                                                            width: '100%',
+                                                            padding: '8px',
+                                                            backgroundColor: '#1a1a1a',
+                                                            border: '1px solid #333',
+                                                            borderRadius: '4px',
+                                                            color: '#fff',
+                                                            resize: 'vertical',
+                                                            fontFamily: 'inherit'
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div style={{ gridColumn: '1 / -1' }}>
+                                                    <button
+                                                        type="submit"
+                                                        style={{
+                                                            padding: '10px 20px',
+                                                            backgroundColor: '#dc2626',
+                                                            color: '#fff',
+                                                            border: 'none',
+                                                            borderRadius: '4px',
+                                                            cursor: 'pointer',
+                                                            fontWeight: '600'
+                                                        }}
+                                                    >
+                                                        💥 Save Hit Record
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        )}
 
                                             {facility.hits && facility.hits.length > 0 && (
                                                 <div style={{ display: 'grid', gap: '10px' }}>
