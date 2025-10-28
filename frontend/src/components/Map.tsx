@@ -92,24 +92,24 @@ const ukraineBorderLine: [number, number][] = [
     [46.65, 33.65],
     [46.62, 33.30],
     
-    // West Kherson and Mykolaiv Oblast - follow coastline smoothly
-    [46.62, 32.95],
-    [46.65, 32.60],
-    [46.70, 32.25],
-    [46.78, 31.90],
-    [46.88, 31.55],
-    [47.00, 31.20],
-    [47.12, 30.85],
-    [47.25, 30.55],
-    [47.38, 30.30],
-    [47.52, 30.10],
+    // Dnipro River and west Kherson Oblast (excluding occupied areas south of river)
+    [46.60, 32.95],
+    [46.60, 32.60],
+    [46.62, 32.25],
+    [46.68, 31.90],
+    [46.77, 31.55],
     
-    // Mykolaiv and Odesa Oblast - Black Sea coast
-    [46.20, 30.35],
-    [46.10, 30.20],
-    [46.00, 30.10],
-    [45.90, 30.00],
-    [45.82, 29.85],
+    // Mykolaiv Oblast coastline (excluding Crimea)
+    [46.88, 31.20],
+    [47.00, 30.90],
+    [47.12, 30.65],
+    [47.24, 30.45],
+    [47.35, 30.30],
+    [47.45, 30.20],
+    [47.55, 30.15],
+    [47.65, 30.10],
+    [47.75, 30.05],
+    [47.85, 30.00],
     
     // Odesa Oblast - Black Sea coast
     [45.98, 29.70],
