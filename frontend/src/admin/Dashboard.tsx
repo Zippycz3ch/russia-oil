@@ -449,9 +449,10 @@ const Dashboard: React.FC = () => {
     return (
         <div style={{
             display: 'flex',
-            minHeight: '100vh',
+            height: '100vh',
             backgroundColor: '#0a0a0a',
-            color: '#fff'
+            color: '#fff',
+            overflow: 'hidden'
         }}>
             {/* Left Sidebar Menu */}
             <div style={{
@@ -459,7 +460,9 @@ const Dashboard: React.FC = () => {
                 backgroundColor: '#1a1a1a',
                 borderRight: '1px solid #333',
                 display: 'flex',
-                flexDirection: 'column'
+                flexDirection: 'column',
+                flexShrink: 0,
+                overflowY: 'auto'
             }}>
                 <div style={{
                     padding: '20px',
