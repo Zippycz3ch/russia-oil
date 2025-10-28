@@ -435,35 +435,34 @@ const Map: React.FC = () => {
         <div style={{ display: 'flex', width: '100%', height: '100vh', backgroundColor: '#0a0a0a', overflow: 'hidden' }}>
             {/* Left Sidebar */}
             <div style={{ 
-                width: '340px', 
-                background: 'linear-gradient(180deg, #1a1a2e 0%, #16213e 100%)',
-                borderRight: '1px solid rgba(255, 255, 255, 0.1)',
-                boxShadow: '2px 0 20px rgba(0, 0, 0, 0.5)',
+                width: '320px', 
+                background: 'linear-gradient(180deg, #1a1a2e 0%, #0f0f1e 100%)',
+                borderRight: '1px solid rgba(255, 255, 255, 0.08)',
+                boxShadow: '2px 0 15px rgba(0, 0, 0, 0.4)',
                 display: 'flex',
                 flexDirection: 'column',
                 overflow: 'hidden'
             }}>
                 {/* Sidebar Header */}
                 <div style={{ 
-                    padding: '24px', 
-                    borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-                    background: 'linear-gradient(135deg, #e94560 0%, #c72045 100%)',
-                    boxShadow: '0 4px 12px rgba(233, 69, 96, 0.3)'
+                    padding: '18px 20px', 
+                    borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                    background: 'linear-gradient(135deg, #2d3561 0%, #1f2749 100%)',
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)'
                 }}>
                     <h2 style={{ 
-                        margin: '0 0 8px 0', 
-                        fontSize: '22px', 
+                        margin: '0 0 6px 0', 
+                        fontSize: '18px', 
                         fontWeight: '700', 
                         color: 'white',
-                        textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
-                        letterSpacing: '0.5px'
+                        letterSpacing: '0.3px'
                     }}>
-                        🎯 Russian Oil Facilities
+                        Russian Oil Facilities
                     </h2>
                     <p style={{ 
                         margin: 0, 
-                        color: 'rgba(255, 255, 255, 0.9)', 
-                        fontSize: '14px',
+                        color: 'rgba(255, 255, 255, 0.7)', 
+                        fontSize: '13px',
                         fontWeight: '500'
                     }}>
                         {filteredFacilities.length} of {facilities.length} facilities
@@ -474,20 +473,20 @@ const Map: React.FC = () => {
                 <div style={{ 
                     flex: 1,
                     overflowY: 'auto',
-                    padding: '24px'
+                    padding: '16px 20px'
                 }}>
                     {/* Search */}
-                    <div style={{ marginBottom: '24px' }}>
+                    <div style={{ marginBottom: '16px' }}>
                         <label style={{ 
                             display: 'block', 
-                            marginBottom: '10px', 
-                            fontSize: '13px', 
-                            color: '#c7d0e0', 
+                            marginBottom: '8px', 
+                            fontSize: '12px', 
+                            color: '#a0aec0', 
                             fontWeight: '600',
                             textTransform: 'uppercase',
-                            letterSpacing: '1px'
+                            letterSpacing: '0.8px'
                         }}>
-                            🔍 Search
+                            Search
                         </label>
                         <input
                             type="text"
@@ -496,50 +495,53 @@ const Map: React.FC = () => {
                             onChange={(e) => setSearchTerm(e.target.value)}
                             style={{
                                 width: '100%',
-                                padding: '12px 14px',
-                                backgroundColor: 'rgba(10, 10, 10, 0.6)',
-                                border: '2px solid rgba(255, 255, 255, 0.1)',
-                                borderRadius: '8px',
+                                padding: '10px 12px',
+                                backgroundColor: 'rgba(10, 10, 10, 0.5)',
+                                border: '1px solid rgba(255, 255, 255, 0.1)',
+                                borderRadius: '6px',
                                 color: 'white',
                                 fontSize: '14px',
                                 outline: 'none',
                                 boxSizing: 'border-box',
-                                transition: 'all 0.3s ease'
+                                transition: 'border-color 0.2s ease'
                             }}
-                            onFocus={(e) => e.target.style.borderColor = '#e94560'}
+                            onFocus={(e) => e.target.style.borderColor = 'rgba(96, 165, 250, 0.5)'}
                             onBlur={(e) => e.target.style.borderColor = 'rgba(255, 255, 255, 0.1)'}
                         />
                     </div>
 
                     {/* Facility Type */}
-                    <div style={{ marginBottom: '24px' }}>
+                    <div style={{ marginBottom: '16px' }}>
                         <label style={{ 
                             display: 'block', 
-                            marginBottom: '10px', 
-                            fontSize: '13px', 
-                            color: '#c7d0e0', 
+                            marginBottom: '8px', 
+                            fontSize: '12px', 
+                            color: '#a0aec0', 
                             fontWeight: '600',
                             textTransform: 'uppercase',
-                            letterSpacing: '1px'
+                            letterSpacing: '0.8px'
                         }}>
-                            🏭 Facility Type
+                            Facility Type
                         </label>
                         <select
                             value={filterType}
                             onChange={(e) => setFilterType(e.target.value)}
                             style={{
                                 width: '100%',
-                                padding: '12px 14px',
-                                backgroundColor: 'rgba(10, 10, 10, 0.6)',
-                                border: '2px solid rgba(255, 255, 255, 0.1)',
-                                borderRadius: '8px',
-                                color: 'white',
-                                fontSize: '14px',
+                                padding: '10px 12px',
+                                backgroundColor: 'rgba(45, 53, 97, 0.4)',
+                                border: '1px solid rgba(96, 165, 250, 0.3)',
+                                borderRadius: '6px',
+                                color: '#e2e8f0',
+                                fontSize: '13px',
                                 cursor: 'pointer',
                                 outline: 'none',
                                 boxSizing: 'border-box',
-                                fontWeight: '500'
+                                fontWeight: '500',
+                                transition: 'all 0.2s ease'
                             }}
+                            onFocus={(e) => e.currentTarget.style.borderColor = 'rgba(96, 165, 250, 0.6)'}
+                            onBlur={(e) => e.currentTarget.style.borderColor = 'rgba(96, 165, 250, 0.3)'}
                         >
                             <option value="all">All Types</option>
                             <option value="refinery">Refinery</option>
@@ -549,34 +551,37 @@ const Map: React.FC = () => {
                     </div>
 
                     {/* Status Filter */}
-                    <div style={{ marginBottom: '24px' }}>
+                    <div style={{ marginBottom: '16px' }}>
                         <label style={{ 
                             display: 'block', 
-                            marginBottom: '10px', 
-                            fontSize: '13px', 
-                            color: '#c7d0e0', 
+                            marginBottom: '8px', 
+                            fontSize: '12px', 
+                            color: '#a0aec0', 
                             fontWeight: '600',
                             textTransform: 'uppercase',
-                            letterSpacing: '1px'
+                            letterSpacing: '0.8px'
                         }}>
-                            📊 Status
+                            Status
                         </label>
                         <select
                             value={filterHitStatus}
                             onChange={(e) => setFilterHitStatus(e.target.value)}
                             style={{
                                 width: '100%',
-                                padding: '12px 14px',
-                                backgroundColor: 'rgba(10, 10, 10, 0.6)',
-                                border: '2px solid rgba(255, 255, 255, 0.1)',
-                                borderRadius: '8px',
-                                color: 'white',
-                                fontSize: '14px',
+                                padding: '10px 12px',
+                                backgroundColor: 'rgba(45, 53, 97, 0.4)',
+                                border: '1px solid rgba(96, 165, 250, 0.3)',
+                                borderRadius: '6px',
+                                color: '#e2e8f0',
+                                fontSize: '13px',
                                 cursor: 'pointer',
                                 outline: 'none',
                                 boxSizing: 'border-box',
-                                fontWeight: '500'
+                                fontWeight: '500',
+                                transition: 'all 0.2s ease'
                             }}
+                            onFocus={(e) => e.currentTarget.style.borderColor = 'rgba(96, 165, 250, 0.6)'}
+                            onBlur={(e) => e.currentTarget.style.borderColor = 'rgba(96, 165, 250, 0.3)'}
                         >
                             <option value="all">All Status</option>
                             <option value="hit">Hit</option>
@@ -585,24 +590,23 @@ const Map: React.FC = () => {
                     </div>
 
                     {/* Minimum Capacity */}
-                    <div style={{ marginBottom: '24px' }}>
+                    <div style={{ marginBottom: '16px' }}>
                         <label style={{ 
                             display: 'block', 
-                            marginBottom: '10px', 
-                            fontSize: '13px', 
-                            color: '#c7d0e0', 
+                            marginBottom: '8px', 
+                            fontSize: '12px', 
+                            color: '#a0aec0', 
                             fontWeight: '600',
                             textTransform: 'uppercase',
-                            letterSpacing: '1px'
+                            letterSpacing: '0.8px'
                         }}>
-                            ⚙️ Min. Capacity
+                            Min. Capacity
                         </label>
                         <div style={{ 
-                            color: '#e94560', 
-                            fontSize: '15px', 
-                            marginBottom: '12px',
-                            fontWeight: '700',
-                            textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
+                            color: '#60a5fa', 
+                            fontSize: '14px', 
+                            marginBottom: '10px',
+                            fontWeight: '600'
                         }}>
                             {minCapacity.toLocaleString()} barrels/day
                         </div>
@@ -616,8 +620,8 @@ const Map: React.FC = () => {
                             style={{
                                 width: '100%',
                                 cursor: 'pointer',
-                                accentColor: '#e94560',
-                                height: '6px'
+                                accentColor: '#60a5fa',
+                                height: '5px'
                             }}
                         />
                     </div>
@@ -633,56 +637,58 @@ const Map: React.FC = () => {
                             }}
                             style={{
                                 width: '100%',
-                                padding: '12px',
-                                background: 'linear-gradient(135deg, #e94560 0%, #c72045 100%)',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '8px',
+                                padding: '10px',
+                                background: 'rgba(55, 65, 81, 0.6)',
+                                color: '#e2e8f0',
+                                border: '1px solid rgba(96, 165, 250, 0.3)',
+                                borderRadius: '6px',
                                 cursor: 'pointer',
-                                fontSize: '14px',
+                                fontSize: '13px',
                                 fontWeight: '600',
-                                marginBottom: '24px',
-                                boxShadow: '0 4px 12px rgba(233, 69, 96, 0.3)',
-                                transition: 'transform 0.2s ease',
+                                marginBottom: '16px',
+                                transition: 'all 0.2s ease',
                                 letterSpacing: '0.5px'
                             }}
-                            onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
-                            onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.background = 'rgba(96, 165, 250, 0.2)';
+                                e.currentTarget.style.borderColor = 'rgba(96, 165, 250, 0.5)';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.background = 'rgba(55, 65, 81, 0.6)';
+                                e.currentTarget.style.borderColor = 'rgba(96, 165, 250, 0.3)';
+                            }}
                         >
-                            🗑️ Clear All Filters
+                            Clear All Filters
                         </button>
                     )}
 
                     {/* Legend */}
                     <div style={{ 
-                        borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-                        paddingTop: '24px',
-                        marginTop: '24px',
-                        background: 'rgba(255, 255, 255, 0.03)',
-                        padding: '20px',
-                        borderRadius: '12px'
+                        borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+                        paddingTop: '16px',
+                        marginTop: '16px'
                     }}>
                         <div style={{ 
-                            fontSize: '13px', 
-                            color: '#c7d0e0', 
+                            fontSize: '12px', 
+                            color: '#a0aec0', 
                             fontWeight: '600',
                             textTransform: 'uppercase',
-                            letterSpacing: '1px',
-                            marginBottom: '16px'
+                            letterSpacing: '0.8px',
+                            marginBottom: '12px'
                         }}>
-                            🏭 Facility Types
+                            Facility Types
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                             <label style={{ 
                                 display: 'flex', 
                                 alignItems: 'center', 
-                                gap: '12px', 
+                                gap: '10px', 
                                 cursor: 'pointer',
-                                padding: '8px',
-                                borderRadius: '6px',
+                                padding: '6px',
+                                borderRadius: '4px',
                                 transition: 'background 0.2s ease'
                             }}
-                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'}
+                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(96, 165, 250, 0.1)'}
                             onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                             >
                                 <input 
@@ -691,24 +697,24 @@ const Map: React.FC = () => {
                                     onChange={(e) => setShowRefinery(e.target.checked)}
                                     style={{ 
                                         cursor: 'pointer',
-                                        width: '18px',
-                                        height: '18px',
+                                        width: '16px',
+                                        height: '16px',
                                         accentColor: '#FF5733'
                                     }}
                                 />
-                                <span style={{ color: '#FF5733', fontSize: '20px', lineHeight: '1' }}>●</span>
-                                <span style={{ fontSize: '15px', color: '#e0e0e0', fontWeight: '500' }}>Refinery</span>
+                                <span style={{ color: '#FF5733', fontSize: '16px', lineHeight: '1' }}>●</span>
+                                <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>Refinery</span>
                             </label>
                             <label style={{ 
                                 display: 'flex', 
                                 alignItems: 'center', 
-                                gap: '12px', 
+                                gap: '10px', 
                                 cursor: 'pointer',
-                                padding: '8px',
-                                borderRadius: '6px',
+                                padding: '6px',
+                                borderRadius: '4px',
                                 transition: 'background 0.2s ease'
                             }}
-                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'}
+                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(96, 165, 250, 0.1)'}
                             onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                             >
                                 <input 
@@ -717,24 +723,24 @@ const Map: React.FC = () => {
                                     onChange={(e) => setShowExtraction(e.target.checked)}
                                     style={{ 
                                         cursor: 'pointer',
-                                        width: '18px',
-                                        height: '18px',
+                                        width: '16px',
+                                        height: '16px',
                                         accentColor: '#33FF57'
                                     }}
                                 />
-                                <span style={{ color: '#33FF57', fontSize: '20px', lineHeight: '1' }}>●</span>
-                                <span style={{ fontSize: '15px', color: '#e0e0e0', fontWeight: '500' }}>Extraction</span>
+                                <span style={{ color: '#33FF57', fontSize: '16px', lineHeight: '1' }}>●</span>
+                                <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>Extraction</span>
                             </label>
                             <label style={{ 
                                 display: 'flex', 
                                 alignItems: 'center', 
-                                gap: '12px', 
+                                gap: '10px', 
                                 cursor: 'pointer',
-                                padding: '8px',
-                                borderRadius: '6px',
+                                padding: '6px',
+                                borderRadius: '4px',
                                 transition: 'background 0.2s ease'
                             }}
-                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'}
+                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(96, 165, 250, 0.1)'}
                             onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                             >
                                 <input 
@@ -743,32 +749,29 @@ const Map: React.FC = () => {
                                     onChange={(e) => setShowStorage(e.target.checked)}
                                     style={{ 
                                         cursor: 'pointer',
-                                        width: '18px',
-                                        height: '18px',
+                                        width: '16px',
+                                        height: '16px',
                                         accentColor: '#3357FF'
                                     }}
                                 />
-                                <span style={{ color: '#3357FF', fontSize: '20px', lineHeight: '1' }}>●</span>
-                                <span style={{ fontSize: '15px', color: '#e0e0e0', fontWeight: '500' }}>Storage</span>
+                                <span style={{ color: '#3357FF', fontSize: '16px', lineHeight: '1' }}>●</span>
+                                <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>Storage</span>
                             </label>
                         </div>
                     </div>
 
                     {/* Weapon Range Toggle */}
                     <div style={{ 
-                        borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-                        paddingTop: '24px',
-                        marginTop: '24px',
-                        background: 'rgba(255, 255, 255, 0.03)',
-                        padding: '20px',
-                        borderRadius: '12px'
+                        borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+                        paddingTop: '16px',
+                        marginTop: '16px'
                     }}>
                         <div style={{ 
-                            fontSize: '13px', 
-                            color: '#c7d0e0', 
+                            fontSize: '12px', 
+                            color: '#a0aec0', 
                             fontWeight: '600',
                             textTransform: 'uppercase',
-                            letterSpacing: '0.5px',
+                            letterSpacing: '0.8px',
                             marginBottom: '12px'
                         }}>
                             Weapon Ranges
