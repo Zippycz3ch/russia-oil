@@ -1,12 +1,27 @@
-# Russian Oil Facilities Map
+# Russia Oil Facilities Tracker
 
-This project is a full-stack application that provides a map of Russian oil facilities. It is built using TypeScript and follows a modern web development stack.
+## Quick Start
 
-## Tech Stack
+### Development (In-Memory Storage)
 
-- **Frontend**: React (with Vite) and React Admin for the UI and admin dashboard.
-- **Backend**: Node.js with Express for the REST API.
-- **Database**: (Optional) SQLite or PostgreSQL via Prisma for data management.
+```bash
+# Backend
+cd backend
+npm install
+npm run dev
+
+# Frontend (new terminal)
+cd frontend
+npm install
+npm run dev
+```
+
+Visit: http://localhost:3000  
+Admin: http://localhost:3000/admin (username: `admin`, password: `admin123`)
+
+### Production (Firebase + GitHub Pages)
+
+See **[FIREBASE_SETUP.md](./FIREBASE_SETUP.md)** for complete Firebase and GitHub Pages deployment instructions.
 
 ## Project Structure
 
@@ -43,12 +58,14 @@ russian-oil-facilities-map
 ## Setup Instructions
 
 1. **Clone the repository**:
+
    ```
    git clone <repository-url>
    cd russian-oil-facilities-map
    ```
 
 2. **Install dependencies**:
+
    - For the backend:
      ```
      cd backend

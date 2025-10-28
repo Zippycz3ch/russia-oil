@@ -1,7 +1,10 @@
 import { Router } from 'express';
-import facilitiesController from '../controllers/facilitiesController';
+import facilitiesController from '../controllers/facilitiesController.firebase';
 
 const router = Router();
+
+// Route to initialize data (one-time setup)
+router.post('/init', facilitiesController.initializeData);
 
 // Route to get all facilities
 router.get('/', facilitiesController.getAllFacilities);

@@ -1,3 +1,12 @@
+export interface Hit {
+    id: number;
+    facilityId: number;
+    date: string;
+    videoLink?: string;
+    expectedRepairTime?: number;
+    notes?: string;
+}
+
 export interface Facility {
     id: number;
     name: string;
@@ -8,6 +17,7 @@ export interface Facility {
     capacity: number;
     type: string;
     hit: boolean;
+    hits?: Hit[];
 }
 
 export interface FacilityResponse {

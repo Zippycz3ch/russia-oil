@@ -3,6 +3,8 @@ import { MapContainer, TileLayer, Marker, Popup, Polygon } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { collection, getDocs } from 'firebase/firestore';
+import { db, COLLECTIONS } from '../config/firebase';
 
 interface Facility {
     id: number;
@@ -364,10 +366,24 @@ const Map: React.FC = () => {
     const [show1500km, setShow1500km] = useState<boolean>(true);
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/facilities')
-            .then(response => response.json())
-            .then(data => setFacilities(data))
-            .catch(error => console.error('Error fetching facilities:', error));
+        const fetchFacilities = async () => {
+            try {
+                if (!db) {
+                    console.error('Firebase not initialized');
+                    return;
+                }
+                const querySnapshot = await getDocs(collection(db, COLLECTIONS.FACILITIES));
+                const facilitiesData = querySnapshot.docs.map(doc => ({
+                    id: parseInt(doc.id),
+                    ...doc.data()
+                } as Facility));
+                setFacilities(facilitiesData);
+            } catch (error) {
+                console.error('Error fetching facilities:', error);
+            }
+        };
+        
+        fetchFacilities();
     }, []);
     
     const handleFacilityClick = (facility: Facility) => {

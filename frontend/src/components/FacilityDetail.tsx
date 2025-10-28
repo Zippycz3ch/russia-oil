@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { doc, getDoc } from 'firebase/firestore';
+import { db, COLLECTIONS } from '../config/firebase';
 
 interface Facility {
     id: number;
@@ -20,18 +22,34 @@ const FacilityDetail: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        if (id) {
-            fetch(`http://localhost:5000/api/facilities/${id}`)
-                .then(response => response.json())
-                .then(data => {
-                    setFacility(data);
+        const fetchFacility = async () => {
+            if (id) {
+                try {
+                    if (!db) {
+                        console.error('Firebase not initialized');
+                        setLoading(false);
+                        return;
+                    }
+                    const docRef = doc(db, COLLECTIONS.FACILITIES, id);
+                    const docSnap = await getDoc(docRef);
+                    
+                    if (docSnap.exists()) {
+                        setFacility({
+                            id: parseInt(docSnap.id),
+                            ...docSnap.data()
+                        } as Facility);
+                    } else {
+                        console.error('Facility not found');
+                    }
                     setLoading(false);
-                })
-                .catch(error => {
+                } catch (error) {
                     console.error('Error fetching facility:', error);
                     setLoading(false);
-                });
-        }
+                }
+            }
+        };
+        
+        fetchFacility();
     }, [id]);
 
     if (loading) {

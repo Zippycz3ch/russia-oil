@@ -1,0 +1,19 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow read access to facilities and hits for everyone
+    match /facilities/{facility} {
+      allow read: if true;
+      // For now, allow write for testing
+      // TODO: Add authentication and restrict to admin users only
+      allow write: if true;
+    }
+    
+    match /hits/{hit} {
+      allow read: if true;
+      // For now, allow write for testing
+      // TODO: Add authentication and restrict to admin users only
+      allow write: if true;
+    }
+  }
+}
