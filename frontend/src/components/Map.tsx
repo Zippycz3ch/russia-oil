@@ -9,10 +9,12 @@ import { db, COLLECTIONS } from '../config/firebase';
 interface Facility {
     id: number;
     name: string;
-    location: {
+    location?: {
         latitude: number;
         longitude: number;
     };
+    latitude?: number;
+    longitude?: number;
     capacity: number;
     type: string;
     hit: boolean;
@@ -290,11 +292,14 @@ const FacilityMarker: React.FC<{
             default: return '#FFC300';
         }
     };
+    // Get latitude and longitude from either location object or flat properties
+    const lat = facility.location?.latitude ?? facility.latitude ?? 0;
+    const lon = facility.location?.longitude ?? facility.longitude ?? 0;
     
     return (
         <Marker
             ref={markerRef}
-            position={[facility.location.latitude, facility.location.longitude]}
+            position={[lat, lon]}
             icon={createCustomIcon(getMarkerColor(facility.type), facility.hit)}
         >
             <Popup>
@@ -321,7 +326,7 @@ const FacilityMarker: React.FC<{
                         <strong>Capacity:</strong> {facility.capacity.toLocaleString()} bbl/day
                     </p>
                     <p style={{ margin: '5px 0 10px 0', fontSize: '11px', color: '#666' }}>
-                        {facility.location.latitude.toFixed(4)}, {facility.location.longitude.toFixed(4)}
+                        {lat.toFixed(4)}, {lon.toFixed(4)}
                     </p>
                     <button
                         onClick={() => onViewDetails(facility.id)}

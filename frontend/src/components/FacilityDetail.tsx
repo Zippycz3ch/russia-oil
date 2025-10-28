@@ -6,10 +6,12 @@ import { db, COLLECTIONS } from '../config/firebase';
 interface Facility {
     id: number;
     name: string;
-    location: {
+    location?: {
         latitude: number;
         longitude: number;
     };
+    latitude?: number;
+    longitude?: number;
     capacity: number;
     type: string;
     hit: boolean;
@@ -101,6 +103,10 @@ const FacilityDetail: React.FC = () => {
             </div>
         );
     }
+
+    // Get latitude and longitude from either location object or flat properties
+    const lat = facility.location?.latitude ?? facility.latitude ?? 0;
+    const lon = facility.location?.longitude ?? facility.longitude ?? 0;
 
     const getTypeColor = (type: string) => {
         switch (type) {
@@ -290,7 +296,7 @@ const FacilityDetail: React.FC = () => {
                                 borderRadius: '4px',
                                 border: '1px solid #333'
                             }}>
-                                {facility.location.latitude.toFixed(6)}°
+                                {lat.toFixed(6)}°
                             </div>
                         </div>
                         <div>
@@ -312,13 +318,13 @@ const FacilityDetail: React.FC = () => {
                                 borderRadius: '4px',
                                 border: '1px solid #333'
                             }}>
-                                {facility.location.longitude.toFixed(6)}°
+                                {lon.toFixed(6)}°
                             </div>
                         </div>
                     </div>
                     <div style={{ marginTop: '20px' }}>
                         <a
-                            href={`https://www.google.com/maps?q=${facility.location.latitude},${facility.location.longitude}`}
+                            href={`https://www.google.com/maps?q=${lat},${lon}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             style={{
