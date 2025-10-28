@@ -20,7 +20,7 @@ interface Facility {
     hit: boolean;
 }
 
-// Ukraine border line - Ukrainian controlled territory only (excluding occupied areas)
+// Ukraine border line (detailed complete border - clockwise from northwest)
 const ukraineBorderLine: [number, number][] = [
     // Northwest corner - Poland/Belarus border junction
     [52.37, 23.48],
@@ -48,70 +48,68 @@ const ukraineBorderLine: [number, number][] = [
     [52.00, 32.80],
     [51.88, 33.35],
     
-    // East - Russia border down to line of contact (Chernihiv, Sumy)
+    // East - Russia border (north to south)
     [51.75, 33.90],
     [51.60, 34.45],
     [51.45, 35.00],
     [51.28, 35.55],
     [51.10, 36.10],
     [50.90, 36.65],
-    
-    // Eastern line of contact - Kharkiv Oblast
     [50.70, 37.20],
-    [50.50, 37.50],
-    [50.30, 37.65],
-    [50.10, 37.75],
-    [49.90, 37.80],
+    [50.50, 37.75],
+    [50.30, 38.30],
+    [50.10, 38.70],
+    [49.90, 39.00],
+    [49.70, 39.25],
+    [49.50, 39.40],
+    [49.30, 39.50],
+    [49.10, 39.55],
+    [48.90, 39.52],
+    [48.70, 39.45],
+    [48.50, 39.35],
+    [48.30, 39.20],
+    [48.10, 39.00],
+    [47.95, 38.75],
     
-    // Line of contact - Luhansk Oblast (cutting west to exclude occupied areas)
-    [49.70, 37.70],
-    [49.50, 37.55],
-    [49.30, 37.35],
-    [49.10, 37.10],
-    [48.90, 36.85],
+    // Southeast - approaching Azov Sea
+    [47.80, 38.50],
+    [47.65, 38.30],
+    [47.50, 38.15],
+    [47.35, 38.05],
+    [47.20, 38.00],
+    [47.05, 37.95],
     
-    // Line of contact - Donetsk Oblast (controlled territory)
-    [48.70, 36.60],
-    [48.50, 36.40],
-    [48.30, 36.25],
-    [48.15, 36.15],
-    [48.00, 36.10],
-    [47.85, 36.05],
+    // South - Azov Sea coast and Crimea approach
+    [46.90, 37.85],
+    [46.75, 37.70],
+    [46.60, 37.50],
+    [46.45, 37.25],
+    [46.30, 37.00],
+    [46.15, 36.70],
+    [46.00, 36.40],
+    [45.85, 36.05],
+    [45.70, 35.70],
+    [45.55, 35.35],
+    [45.40, 35.00],
+    [45.30, 34.65],
     
-    // Line of contact - Zaporizhzhia Oblast
-    [47.70, 35.95],
-    [47.55, 35.80],
-    [47.40, 35.60],
-    [47.25, 35.35],
-    [47.10, 35.05],
+    // Southwest - Black Sea coast (west along coast)
+    [45.25, 34.30],
+    [45.22, 33.95],
+    [45.20, 33.60],
+    [45.19, 33.25],
+    [45.18, 32.90],
+    [45.20, 32.55],
+    [45.23, 32.20],
+    [45.28, 31.85],
+    [45.35, 31.50],
+    [45.43, 31.15],
+    [45.52, 30.80],
+    [45.62, 30.45],
+    [45.73, 30.15],
+    [45.85, 29.90],
     
-    // Line of contact - Kherson Oblast (north of Dnipro river)
-    [46.95, 34.70],
-    [46.80, 34.35],
-    [46.70, 34.00],
-    [46.65, 33.65],
-    [46.62, 33.30],
-    
-    // West Kherson and Mykolaiv Oblast - follow coastline smoothly
-    [46.62, 32.95],
-    [46.65, 32.60],
-    [46.70, 32.25],
-    [46.78, 31.90],
-    [46.88, 31.55],
-    [47.00, 31.20],
-    [47.12, 30.85],
-    [47.25, 30.55],
-    [47.38, 30.30],
-    [47.52, 30.10],
-    
-    // Mykolaiv and Odesa Oblast - Black Sea coast
-    [46.20, 30.35],
-    [46.10, 30.20],
-    [46.00, 30.10],
-    [45.90, 30.00],
-    [45.82, 29.85],
-    
-    // Odesa Oblast - Black Sea coast
+    // South - Danube Delta and Romania border
     [45.98, 29.70],
     [46.12, 29.55],
     [46.25, 29.45],
