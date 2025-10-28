@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Polygon } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Polygon, Tooltip } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -768,21 +768,19 @@ const Map: React.FC = () => {
                     
                     const rangeLine = createOffsetLine(ukraineBorderLine, missile.range);
                     return (
-                        <React.Fragment key={missile.name}>
-                            {/* Range boundary as line only */}
-                            <Polygon
-                                positions={rangeLine}
-                                pathOptions={{
-                                    color: missile.color,
-                                    fillColor: 'transparent',
-                                    weight: 2,
-                                    opacity: 0.9,
-                                    fillOpacity: 0
-                                }}
-                            >
-                                <Popup>{missile.name}</Popup>
-                            </Polygon>
-                        </React.Fragment>
+                        <Polygon
+                            key={missile.range}
+                            positions={rangeLine}
+                            pathOptions={{
+                                color: missile.color,
+                                fillColor: 'transparent',
+                                weight: 2,
+                                opacity: 0.9,
+                                fillOpacity: 0
+                            }}
+                        >
+                            <Tooltip sticky>{missile.range}km Range</Tooltip>
+                        </Polygon>
                     );
                 })}
 
