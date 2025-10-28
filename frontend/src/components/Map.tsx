@@ -279,8 +279,8 @@ const missileTypes = [
 
 // Capital cities
 const capitals = [
-    { name: "Kyiv", lat: 50.4501, lon: 30.5234, color: "#3B82F6" }, // Blue
-    { name: "Moscow", lat: 55.7558, lon: 37.6173, color: "#DC2626" } // Red
+    { name: "Kyiv", lat: 50.4501, lon: 30.5234, colors: { top: "#0057B7", bottom: "#FFD700" } }, // Ukrainian flag colors
+    { name: "Moscow", lat: 55.7558, lon: 37.6173, color: "#DC2626", colors: undefined } // Red
 ];
 
 // Custom marker icons
@@ -861,20 +861,35 @@ const Map: React.FC = () => {
                             iconSize: [24, 24],
                             iconAnchor: [12, 12]
                         });
-                    } else {
-                        // Circle for other capitals (Kyiv)
+                    } else if (capital.name === "Kyiv" && capital.colors) {
+                        // 5-point star with Ukrainian flag colors (blue top, yellow bottom)
                         icon = L.divIcon({
                             className: 'capital-marker',
                             html: `<div style="
-                                background-color: ${capital.color}; 
-                                width: 16px; 
-                                height: 16px; 
-                                border-radius: 50%; 
-                                border: 3px solid white;
-                                box-shadow: 0 0 10px rgba(0,0,0,0.5);
-                            "></div>`,
-                            iconSize: [16, 16],
-                            iconAnchor: [8, 8]
+                                width: 24px; 
+                                height: 24px; 
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                filter: drop-shadow(0 0 4px rgba(0,0,0,0.7));
+                            ">
+                                <svg width="24" height="24" viewBox="0 0 24 24" style="display: block;">
+                                    <defs>
+                                        <linearGradient id="ukraineFlag" x1="0%" y1="0%" x2="0%" y2="100%">
+                                            <stop offset="0%" style="stop-color:${capital.colors.top};stop-opacity:1" />
+                                            <stop offset="50%" style="stop-color:${capital.colors.top};stop-opacity:1" />
+                                            <stop offset="50%" style="stop-color:${capital.colors.bottom};stop-opacity:1" />
+                                            <stop offset="100%" style="stop-color:${capital.colors.bottom};stop-opacity:1" />
+                                        </linearGradient>
+                                    </defs>
+                                    <path d="M12 2 L15.09 8.26 L22 9.27 L17 14.14 L18.18 21.02 L12 17.77 L5.82 21.02 L7 14.14 L2 9.27 L8.91 8.26 Z" 
+                                          fill="url(#ukraineFlag)" 
+                                          stroke="white" 
+                                          stroke-width="2"/>
+                                </svg>
+                            </div>`,
+                            iconSize: [24, 24],
+                            iconAnchor: [12, 12]
                         });
                     }
                     
