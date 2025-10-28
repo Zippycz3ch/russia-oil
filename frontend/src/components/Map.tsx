@@ -837,19 +837,46 @@ const Map: React.FC = () => {
 
                 {/* Capital city markers */}
                 {capitals.map((capital) => {
-                    const icon = L.divIcon({
-                        className: 'capital-marker',
-                        html: `<div style="
-                            background-color: ${capital.color}; 
-                            width: 16px; 
-                            height: 16px; 
-                            border-radius: 50%; 
-                            border: 3px solid white;
-                            box-shadow: 0 0 10px rgba(0,0,0,0.5);
-                        "></div>`,
-                        iconSize: [16, 16],
-                        iconAnchor: [8, 8]
-                    });
+                    let icon;
+                    
+                    if (capital.name === "Moscow") {
+                        // 5-point star for Moscow
+                        icon = L.divIcon({
+                            className: 'capital-marker',
+                            html: `<div style="
+                                width: 24px; 
+                                height: 24px; 
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                filter: drop-shadow(0 0 4px rgba(0,0,0,0.7));
+                            ">
+                                <svg width="24" height="24" viewBox="0 0 24 24" style="display: block;">
+                                    <path d="M12 2 L15.09 8.26 L22 9.27 L17 14.14 L18.18 21.02 L12 17.77 L5.82 21.02 L7 14.14 L2 9.27 L8.91 8.26 Z" 
+                                          fill="${capital.color}" 
+                                          stroke="white" 
+                                          stroke-width="2"/>
+                                </svg>
+                            </div>`,
+                            iconSize: [24, 24],
+                            iconAnchor: [12, 12]
+                        });
+                    } else {
+                        // Circle for other capitals (Kyiv)
+                        icon = L.divIcon({
+                            className: 'capital-marker',
+                            html: `<div style="
+                                background-color: ${capital.color}; 
+                                width: 16px; 
+                                height: 16px; 
+                                border-radius: 50%; 
+                                border: 3px solid white;
+                                box-shadow: 0 0 10px rgba(0,0,0,0.5);
+                            "></div>`,
+                            iconSize: [16, 16],
+                            iconAnchor: [8, 8]
+                        });
+                    }
                     
                     return (
                         <Marker
