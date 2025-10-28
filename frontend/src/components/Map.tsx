@@ -240,9 +240,25 @@ const createOffsetLine = (borderLine: [number, number][], distanceKm: number): [
         const dirLat = toLat / distance;
         const dirLon = toLon / distance;
         
+        // Reduce range by 100km in east and south directions
+        let adjustedDistance = distanceKm;
+        
+        // If point is east of center (positive longitude direction)
+        if (toLon > 0) {
+            adjustedDistance -= 100;
+        }
+        
+        // If point is south of center (negative latitude direction)
+        if (toLat < 0) {
+            adjustedDistance -= 100;
+        }
+        
+        // Ensure minimum distance of 0
+        adjustedDistance = Math.max(0, adjustedDistance);
+        
         offsetPoints.push([
-            point[0] + dirLat * distanceKm * latPerKm,
-            point[1] + dirLon * distanceKm * lonPerKm
+            point[0] + dirLat * adjustedDistance * latPerKm,
+            point[1] + dirLon * adjustedDistance * lonPerKm
         ]);
     }
     
