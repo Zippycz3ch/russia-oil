@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db, COLLECTIONS } from '../config/firebase';
 
 interface Facility {
@@ -17,14 +17,24 @@ interface Facility {
     hit: boolean;
 }
 
+interface Hit {
+    id: number;
+    facilityId: number;
+    date: string;
+    videoLink: string;
+    expectedRepairTime: number;
+    notes: string;
+}
+
 const FacilityDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [facility, setFacility] = useState<Facility | null>(null);
+    const [hits, setHits] = useState<Hit[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        const fetchFacility = async () => {
+        const fetchFacilityAndHits = async () => {
             if (id) {
                 try {
                     if (!db) {
@@ -32,6 +42,8 @@ const FacilityDetail: React.FC = () => {
                         setLoading(false);
                         return;
                     }
+                    
+                    // Fetch facility
                     const docRef = doc(db, COLLECTIONS.FACILITIES, id);
                     const docSnap = await getDoc(docRef);
                     
@@ -40,6 +52,20 @@ const FacilityDetail: React.FC = () => {
                             id: parseInt(docSnap.id),
                             ...docSnap.data()
                         } as Facility);
+
+                        // Fetch hits for this facility
+                        const hitsRef = collection(db, COLLECTIONS.HITS);
+                        const q = query(
+                            hitsRef, 
+                            where('facilityId', '==', parseInt(id)),
+                            orderBy('date', 'desc')
+                        );
+                        const hitsSnap = await getDocs(q);
+                        const hitsData = hitsSnap.docs.map(doc => ({
+                            id: doc.data().id,
+                            ...doc.data()
+                        } as Hit));
+                        setHits(hitsData);
                     } else {
                         console.error('Facility not found');
                     }
@@ -51,7 +77,7 @@ const FacilityDetail: React.FC = () => {
             }
         };
         
-        fetchFacility();
+        fetchFacilityAndHits();
     }, [id]);
 
     if (loading) {
@@ -342,6 +368,137 @@ const FacilityDetail: React.FC = () => {
                         </a>
                     </div>
                 </div>
+
+                {/* Hits Section */}
+                {hits.length > 0 && (
+                    <div style={{
+                        backgroundColor: '#1a1a1a',
+                        border: '1px solid #333',
+                        borderRadius: '8px',
+                        padding: '30px',
+                        marginTop: '30px'
+                    }}>
+                        <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            marginBottom: '20px'
+                        }}>
+                            <h2 style={{ 
+                                margin: 0, 
+                                fontSize: '20px', 
+                                fontWeight: '600' 
+                            }}>
+                                Strike Records
+                            </h2>
+                            <div style={{
+                                backgroundColor: '#dc2626',
+                                color: 'white',
+                                padding: '6px 12px',
+                                borderRadius: '20px',
+                                fontSize: '12px',
+                                fontWeight: '600'
+                            }}>
+                                {hits.length} {hits.length === 1 ? 'HIT' : 'HITS'}
+                            </div>
+                        </div>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                            {hits.map((hit, index) => (
+                                <div 
+                                    key={hit.id}
+                                    style={{
+                                        backgroundColor: '#0a0a0a',
+                                        border: '1px solid #333',
+                                        borderRadius: '6px',
+                                        padding: '20px',
+                                        borderLeft: '4px solid #dc2626'
+                                    }}
+                                >
+                                    <div style={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'flex-start',
+                                        marginBottom: '12px'
+                                    }}>
+                                        <div style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '12px'
+                                        }}>
+                                            <div style={{
+                                                backgroundColor: '#dc2626',
+                                                color: 'white',
+                                                width: '32px',
+                                                height: '32px',
+                                                borderRadius: '50%',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                fontWeight: '600',
+                                                fontSize: '14px'
+                                            }}>
+                                                {hits.length - index}
+                                            </div>
+                                            <div>
+                                                <div style={{ 
+                                                    fontSize: '16px', 
+                                                    fontWeight: '600',
+                                                    marginBottom: '4px'
+                                                }}>
+                                                    Strike on {new Date(hit.date).toLocaleDateString('en-US', {
+                                                        year: 'numeric',
+                                                        month: 'long',
+                                                        day: 'numeric'
+                                                    })}
+                                                </div>
+                                                <div style={{
+                                                    fontSize: '13px',
+                                                    color: '#888'
+                                                }}>
+                                                    Expected repair time: <span style={{ color: '#f59e0b', fontWeight: '600' }}>
+                                                        {hit.expectedRepairTime} days
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {hit.videoLink && (
+                                            <a
+                                                href={hit.videoLink}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                style={{
+                                                    padding: '6px 12px',
+                                                    backgroundColor: '#dc2626',
+                                                    color: 'white',
+                                                    textDecoration: 'none',
+                                                    borderRadius: '4px',
+                                                    fontSize: '12px',
+                                                    fontWeight: '500',
+                                                    whiteSpace: 'nowrap'
+                                                }}
+                                            >
+                                                📹 Video
+                                            </a>
+                                        )}
+                                    </div>
+                                    {hit.notes && (
+                                        <div style={{
+                                            padding: '12px',
+                                            backgroundColor: '#1a1a1a',
+                                            borderRadius: '4px',
+                                            fontSize: '14px',
+                                            color: '#ccc',
+                                            lineHeight: '1.5'
+                                        }}>
+                                            {hit.notes}
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
