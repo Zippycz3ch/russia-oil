@@ -862,7 +862,7 @@ const Map: React.FC = () => {
                             iconAnchor: [12, 12]
                         });
                     } else if (capital.name === "Kyiv" && capital.colors) {
-                        // 5-point star with Ukrainian flag colors (horizontal 50/50 split)
+                        // 5-point star with Ukrainian flag colors (horizontal 60/40 split - blue 60%, yellow 40%)
                         icon = L.divIcon({
                             className: 'capital-marker',
                             html: `<div style="
@@ -876,8 +876,8 @@ const Map: React.FC = () => {
                                 <svg width="24" height="24" viewBox="0 0 24 24" style="display: block;">
                                     <defs>
                                         <linearGradient id="ukraineFlag" x1="0%" y1="0%" x2="0%" y2="100%">
-                                            <stop offset="50%" style="stop-color:${capital.colors.top};stop-opacity:1" />
-                                            <stop offset="50%" style="stop-color:${capital.colors.bottom};stop-opacity:1" />
+                                            <stop offset="60%" style="stop-color:${capital.colors.top};stop-opacity:1" />
+                                            <stop offset="60%" style="stop-color:${capital.colors.bottom};stop-opacity:1" />
                                         </linearGradient>
                                     </defs>
                                     <path d="M12 2 L15.09 8.26 L22 9.27 L17 14.14 L18.18 21.02 L12 17.77 L5.82 21.02 L7 14.14 L2 9.27 L8.91 8.26 Z" 
