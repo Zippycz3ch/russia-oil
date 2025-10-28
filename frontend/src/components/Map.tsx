@@ -522,7 +522,7 @@ const Map: React.FC = () => {
                         }}>
                             Facility Type
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                             <label style={{ 
                                 display: 'flex', 
                                 alignItems: 'center', 
@@ -631,7 +631,7 @@ const Map: React.FC = () => {
                         }}>
                             Status
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                             <label style={{ 
                                 display: 'flex', 
                                 alignItems: 'center', 
@@ -750,7 +750,7 @@ const Map: React.FC = () => {
                         }}>
                             Facility Types
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                             <label style={{ 
                                 display: 'flex', 
                                 alignItems: 'center', 
@@ -774,7 +774,7 @@ const Map: React.FC = () => {
                                         accentColor: '#6b7280'
                                     }}
                                 />
-                                <span style={{ color: '#dc8577', fontSize: '16px', lineHeight: '1' }}>●</span>
+                                <span style={{ color: '#FF5733', fontSize: '16px', lineHeight: '1' }}>●</span>
                                 <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>Refinery</span>
                             </label>
                             <label style={{ 
@@ -800,7 +800,7 @@ const Map: React.FC = () => {
                                         accentColor: '#6b7280'
                                     }}
                                 />
-                                <span style={{ color: '#82c991', fontSize: '16px', lineHeight: '1' }}>●</span>
+                                <span style={{ color: '#33FF57', fontSize: '16px', lineHeight: '1' }}>●</span>
                                 <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>Extraction</span>
                             </label>
                             <label style={{ 
@@ -826,7 +826,7 @@ const Map: React.FC = () => {
                                         accentColor: '#6b7280'
                                     }}
                                 />
-                                <span style={{ color: '#7b93c4', fontSize: '16px', lineHeight: '1' }}>●</span>
+                                <span style={{ color: '#3357FF', fontSize: '16px', lineHeight: '1' }}>●</span>
                                 <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>Storage</span>
                             </label>
                         </div>
@@ -848,7 +848,7 @@ const Map: React.FC = () => {
                         }}>
                             Weapon Ranges
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                             <label style={{ 
                                 display: 'flex', 
                                 alignItems: 'center', 
@@ -872,7 +872,7 @@ const Map: React.FC = () => {
                                         accentColor: '#6b7280'
                                     }}
                                 />
-                                <span style={{ color: '#82c991', fontSize: '16px' }}>■</span>
+                                <span style={{ color: '#10B981', fontSize: '16px' }}>■</span>
                                 <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>500km Range</span>
                             </label>
                             <label style={{ 
@@ -898,7 +898,7 @@ const Map: React.FC = () => {
                                         accentColor: '#6b7280'
                                     }}
                                 />
-                                <span style={{ color: '#d4a574', fontSize: '16px' }}>■</span>
+                                <span style={{ color: '#F97316', fontSize: '16px' }}>■</span>
                                 <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>1000km Range</span>
                             </label>
                             <label style={{ 
@@ -924,7 +924,7 @@ const Map: React.FC = () => {
                                         accentColor: '#6b7280'
                                     }}
                                 />
-                                <span style={{ color: '#c98989', fontSize: '16px' }}>■</span>
+                                <span style={{ color: '#EF4444', fontSize: '16px' }}>■</span>
                                 <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>1500km Range</span>
                             </label>
                         </div>
