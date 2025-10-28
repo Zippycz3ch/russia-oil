@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { collection, getDocs, doc, getDoc, setDoc, updateDoc, deleteDoc, query, where, addDoc } from 'firebase/firestore';
-import { db, COLLECTIONS } from '../config/firebase';
+import { signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
+import { db, auth, COLLECTIONS } from '../config/firebase';
 
 interface Hit {
     id: number;
@@ -26,8 +27,9 @@ interface Facility {
 
 const Dashboard: React.FC = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [authError, setAuthError] = useState<string | null>(null);
     const [activeView, setActiveView] = useState<'facilities' | 'hits'>('facilities');
     const [facilities, setFacilities] = useState<Facility[]>([]);
     const [loading, setLoading] = useState(false);
@@ -53,6 +55,20 @@ const Dashboard: React.FC = () => {
         hit: false
     });
     const navigate = useNavigate();
+
+    // Check authentication state on mount
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                setIsLoggedIn(true);
+                setAuthError(null);
+            } else {
+                setIsLoggedIn(false);
+            }
+        });
+
+        return () => unsubscribe();
+    }, []);
 
     useEffect(() => {
         if (isLoggedIn) {
@@ -109,13 +125,36 @@ const Dashboard: React.FC = () => {
         }
     };
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Simple authentication (in production, use proper auth)
-        if (username === 'admin' && password === 'admin123') {
-            setIsLoggedIn(true);
-        } else {
-            alert('Invalid credentials. Use admin/admin123');
+        setAuthError(null);
+        setLoading(true);
+        
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            // onAuthStateChanged will handle setting isLoggedIn
+        } catch (error: any) {
+            console.error('Login error:', error);
+            if (error.code === 'auth/invalid-credential') {
+                setAuthError('Invalid email or password');
+            } else if (error.code === 'auth/user-not-found') {
+                setAuthError('No account found with this email');
+            } else if (error.code === 'auth/wrong-password') {
+                setAuthError('Incorrect password');
+            } else {
+                setAuthError('Login failed. Please try again.');
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleLogout = async () => {
+        try {
+            await signOut(auth);
+            navigate('/');
+        } catch (error) {
+            console.error('Logout error:', error);
         }
     };
 
@@ -337,13 +376,26 @@ const Dashboard: React.FC = () => {
                     border: '1px solid #333'
                 }}>
                     <h1 style={{ color: '#fff', marginBottom: '30px', textAlign: 'center' }}>Admin Login</h1>
+                    {authError && (
+                        <div style={{
+                            backgroundColor: '#dc2626',
+                            color: '#fff',
+                            padding: '12px',
+                            borderRadius: '4px',
+                            marginBottom: '20px',
+                            textAlign: 'center'
+                        }}>
+                            {authError}
+                        </div>
+                    )}
                     <form onSubmit={handleLogin}>
                         <div style={{ marginBottom: '20px' }}>
-                            <label style={{ color: '#999', display: 'block', marginBottom: '8px' }}>Username</label>
+                            <label style={{ color: '#999', display: 'block', marginBottom: '8px' }}>Email</label>
                             <input
-                                type="text"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
                                 style={{
                                     width: '100%',
                                     padding: '10px',
@@ -386,7 +438,7 @@ const Dashboard: React.FC = () => {
                             Login
                         </button>
                         <p style={{ color: '#666', marginTop: '20px', textAlign: 'center', fontSize: '12px' }}>
-                            Default: admin / admin123
+                            Contact admin to create an account
                         </p>
                     </form>
                 </div>
@@ -415,6 +467,22 @@ const Dashboard: React.FC = () => {
                 }}>
                     <h2 style={{ margin: 0, fontSize: '20px' }}>Admin Panel</h2>
                     <p style={{ color: '#666', fontSize: '12px', marginTop: '5px' }}>Russia Oil Tracker</p>
+                    <button
+                        onClick={handleLogout}
+                        style={{
+                            width: '100%',
+                            marginTop: '15px',
+                            padding: '8px 12px',
+                            backgroundColor: '#dc2626',
+                            color: '#fff',
+                            border: 'none',
+                            borderRadius: '4px',
+                            cursor: 'pointer',
+                            fontSize: '13px'
+                        }}
+                    >
+                        Logout
+                    </button>
                 </div>
                 
                 <nav style={{ flex: 1, padding: '20px 0' }}>
