@@ -146,15 +146,19 @@ const FacilityDetail: React.FC = () => {
     return (
         <div style={{ 
             width: '100%', 
-            minHeight: '100vh', 
+            height: '100vh', 
             backgroundColor: '#0a0a0a',
-            color: 'white'
+            color: 'white',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden'
         }}>
-            {/* Header */}
+            {/* Header - Fixed */}
             <div style={{
                 backgroundColor: '#1a1a1a',
                 borderBottom: '2px solid #333',
-                padding: '20px 40px'
+                padding: '20px 40px',
+                flexShrink: 0
             }}>
                 <button
                     onClick={() => navigate('/')}
@@ -191,8 +195,13 @@ const FacilityDetail: React.FC = () => {
                 </div>
             </div>
 
-            {/* Content */}
-            <div style={{ padding: '40px', maxWidth: '1200px' }}>
+            {/* Content - Scrollable */}
+            <div style={{ 
+                flex: 1,
+                overflowY: 'auto',
+                overflowX: 'hidden'
+            }}>
+                <div style={{ padding: '40px', maxWidth: '1200px', margin: '0 auto' }}>
                 <div style={{ 
                     display: 'grid', 
                     gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
@@ -499,6 +508,7 @@ const FacilityDetail: React.FC = () => {
                         </div>
                     </div>
                 )}
+                </div>
             </div>
         </div>
     );
