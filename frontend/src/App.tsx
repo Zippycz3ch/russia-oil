@@ -6,7 +6,7 @@ import FacilityDetail from './components/FacilityDetail';
 
 const App: React.FC = () => {
   return (
-    <Router basename="/russia-oil">
+    <Router>
       <Routes>
         <Route path="/" element={<Map />} />
         <Route path="/facility/:id" element={<FacilityDetail />} />
