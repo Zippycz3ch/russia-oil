@@ -997,41 +997,40 @@ const Dashboard: React.FC = () => {
                         {!loading && !error && (
                             <div style={{ display: 'grid', gap: '20px' }}>
                                 {facilities.map(facility => (
-                                    facility.hits && facility.hits.length > 0 && (
-                                        <div key={facility.id} style={{
-                                            backgroundColor: '#1a1a1a',
-                                            borderRadius: '8px',
-                                            padding: '20px',
-                                            border: '1px solid #333'
+                                    <div key={facility.id} style={{
+                                        backgroundColor: '#1a1a1a',
+                                        borderRadius: '8px',
+                                        padding: '20px',
+                                        border: '1px solid #333'
+                                    }}>
+                                        <div style={{
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center',
+                                            marginBottom: '15px',
+                                            paddingBottom: '15px',
+                                            borderBottom: '1px solid #333'
                                         }}>
-                                            <div style={{
-                                                display: 'flex',
-                                                justifyContent: 'space-between',
-                                                alignItems: 'center',
-                                                marginBottom: '15px',
-                                                paddingBottom: '15px',
-                                                borderBottom: '1px solid #333'
-                                            }}>
-                                                <div>
-                                                    <h2 style={{ margin: 0, color: '#4CAF50' }}>{facility.name}</h2>
-                                                    <p style={{ margin: '5px 0 0 0', color: '#999', fontSize: '14px' }}>
-                                                        {facility.type} • {facility.hits.length} hit record{facility.hits.length !== 1 ? 's' : ''}
-                                                    </p>
-                                                </div>
-                                                <button
-                                                    onClick={() => setShowAddHitForm(showAddHitForm === facility.id ? null : facility.id)}
-                                                    style={{
-                                                        padding: '8px 16px',
-                                                        backgroundColor: '#4CAF50',
-                                                        color: '#fff',
-                                                        border: 'none',
-                                                        borderRadius: '4px',
-                                                        cursor: 'pointer'
-                                                    }}
-                                                >
-                                                    {showAddHitForm === facility.id ? 'Cancel' : '+ Add Hit'}
-                                                </button>
+                                            <div>
+                                                <h2 style={{ margin: 0, color: facility.hit ? '#dc2626' : '#999' }}>{facility.name}</h2>
+                                                <p style={{ margin: '5px 0 0 0', color: '#999', fontSize: '14px' }}>
+                                                    {facility.type} • {facility.hits && facility.hits.length > 0 ? `${facility.hits.length} hit record${facility.hits.length !== 1 ? 's' : ''}` : 'No hits recorded'}
+                                                </p>
                                             </div>
+                                            <button
+                                                onClick={() => setShowAddHitForm(showAddHitForm === facility.id ? null : facility.id)}
+                                                style={{
+                                                    padding: '8px 16px',
+                                                    backgroundColor: '#4CAF50',
+                                                    color: '#fff',
+                                                    border: 'none',
+                                                    borderRadius: '4px',
+                                                    cursor: 'pointer'
+                                                }}
+                                            >
+                                                {showAddHitForm === facility.id ? 'Cancel' : '+ Add Hit'}
+                                            </button>
+                                        </div>
 
                                             {showAddHitForm === facility.id && (
                                                 <form onSubmit={(e) => handleAddHit(facility.id, e)} style={{
@@ -1128,8 +1127,9 @@ const Dashboard: React.FC = () => {
                                                 </form>
                                             )}
 
-                                            <div style={{ display: 'grid', gap: '10px' }}>
-                                                {facility.hits.map(hit => (
+                                            {facility.hits && facility.hits.length > 0 && (
+                                                <div style={{ display: 'grid', gap: '10px' }}>
+                                                    {facility.hits.map(hit => (
                                                     <div key={hit.id} style={{
                                                         backgroundColor: '#0a0a0a',
                                                         padding: '15px',
@@ -1192,10 +1192,10 @@ const Dashboard: React.FC = () => {
                                                             </button>
                                                         </div>
                                                     </div>
-                                                ))}
-                                            </div>
+                                                    ))}
+                                                </div>
+                                            )}
                                         </div>
-                                    )
                                 ))}
                                 {facilities.every(f => !f.hits || f.hits.length === 0) && (
                                     <div style={{
