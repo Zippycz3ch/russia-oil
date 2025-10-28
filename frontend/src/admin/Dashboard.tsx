@@ -81,9 +81,21 @@ const Dashboard: React.FC = () => {
                         ...hitDoc.data()
                     } as Hit));
                     
+                    const data = facilityDoc.data();
+                    
+                    // Handle both old format (location object) and new format (flat lat/lon)
+                    const latitude = data.location?.latitude ?? data.latitude;
+                    const longitude = data.location?.longitude ?? data.longitude;
+                    
                     return {
                         id: parseInt(facilityDoc.id),
-                        ...facilityDoc.data(),
+                        name: data.name,
+                        type: data.type,
+                        capacity: data.capacity,
+                        latitude,
+                        longitude,
+                        status: data.status,
+                        hit: data.hit,
                         hits
                     } as Facility;
                 })
@@ -163,8 +175,25 @@ const Dashboard: React.FC = () => {
         try {
             if (!db) throw new Error('Firebase not initialized');
             
+            // Transform the data to match Firebase structure
+            const updateData: any = {
+                name: editForm.name,
+                type: editForm.type,
+                capacity: editForm.capacity,
+                status: editForm.status,
+                hit: editForm.hit
+            };
+            
+            // Add location object if lat/lon are provided
+            if (editForm.latitude !== undefined && editForm.longitude !== undefined) {
+                updateData.location = {
+                    latitude: editForm.latitude,
+                    longitude: editForm.longitude
+                };
+            }
+            
             const docRef = doc(db, COLLECTIONS.FACILITIES, editingId.toString());
-            await updateDoc(docRef, editForm);
+            await updateDoc(docRef, updateData);
             
             setEditingId(null);
             setEditForm({});
@@ -190,8 +219,15 @@ const Dashboard: React.FC = () => {
             const newId = maxId + 1;
             
             const facilityData = {
-                ...newFacility,
                 id: newId,
+                name: newFacility.name,
+                type: newFacility.type,
+                capacity: newFacility.capacity,
+                location: {
+                    latitude: newFacility.latitude,
+                    longitude: newFacility.longitude
+                },
+                status: newFacility.status,
                 hit: false,
                 hits: []
             };
