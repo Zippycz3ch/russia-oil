@@ -240,21 +240,26 @@ const createOffsetLine = (borderLine: [number, number][], distanceKm: number): [
         const dirLat = toLat / distance;
         const dirLon = toLon / distance;
         
-        // Reduce range by 100km in east and south directions
-        let adjustedDistance = distanceKm;
+        // Calculate angle from center (0° = north, 90° = east, 180° = south, 270° = west)
+        const angle = Math.atan2(toLon, toLat) * (180 / Math.PI);
         
-        // If point is east of center (positive longitude direction)
-        if (toLon > 0) {
-            adjustedDistance -= 100;
+        // Smooth reduction for east (45° to 135°) and south (135° to 225°)
+        let reduction = 0;
+        
+        // East reduction: gradually from 0 at 45° to max 100km at 90° back to 0 at 135°
+        if (angle >= 45 && angle <= 135) {
+            const eastFactor = 1 - Math.abs((angle - 90) / 45);
+            reduction += 100 * eastFactor;
         }
         
-        // If point is south of center (negative latitude direction)
-        if (toLat < 0) {
-            adjustedDistance -= 100;
+        // South reduction: gradually from 0 at 135° to max 100km at 180° back to 0 at 225°
+        if (Math.abs(angle) >= 135) {
+            const southAngle = Math.abs(angle);
+            const southFactor = 1 - Math.abs((southAngle - 180) / 45);
+            reduction += 100 * southFactor;
         }
         
-        // Ensure minimum distance of 0
-        adjustedDistance = Math.max(0, adjustedDistance);
+        const adjustedDistance = Math.max(0, distanceKm - reduction);
         
         offsetPoints.push([
             point[0] + dirLat * adjustedDistance * latPerKm,
