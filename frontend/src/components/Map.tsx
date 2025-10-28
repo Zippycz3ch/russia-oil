@@ -277,6 +277,12 @@ const missileTypes = [
     { name: "1500km Range", range: 1500, color: "#EF4444" }
 ];
 
+// Capital cities
+const capitals = [
+    { name: "Kyiv", lat: 50.4501, lon: 30.5234, color: "#3B82F6" }, // Blue
+    { name: "Moscow", lat: 55.7558, lon: 37.6173, color: "#DC2626" } // Red
+];
+
 // Custom marker icons
 const createCustomIcon = (color: string, isHit: boolean) => {
     const borderColor = isHit ? 'red' : 'white';
@@ -826,6 +832,37 @@ const Map: React.FC = () => {
                                 fillOpacity: 0
                             }}
                         />
+                    );
+                })}
+
+                {/* Capital city markers */}
+                {capitals.map((capital) => {
+                    const icon = L.divIcon({
+                        className: 'capital-marker',
+                        html: `<div style="
+                            background-color: ${capital.color}; 
+                            width: 16px; 
+                            height: 16px; 
+                            border-radius: 50%; 
+                            border: 3px solid white;
+                            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+                        "></div>`,
+                        iconSize: [16, 16],
+                        iconAnchor: [8, 8]
+                    });
+                    
+                    return (
+                        <Marker
+                            key={capital.name}
+                            position={[capital.lat, capital.lon]}
+                            icon={icon}
+                        >
+                            <Popup>
+                                <div style={{ color: '#000', fontWeight: 'bold' }}>
+                                    {capital.name}
+                                </div>
+                            </Popup>
+                        </Marker>
                     );
                 })}
 
