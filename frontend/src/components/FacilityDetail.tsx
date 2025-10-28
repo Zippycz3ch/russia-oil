@@ -15,6 +15,7 @@ interface Facility {
     capacity: number;
     type: string;
     hit: boolean;
+    description?: string;
 }
 
 interface Hit {
@@ -292,6 +293,33 @@ const FacilityDetail: React.FC = () => {
                         </div>
                     </div>
                 </div>
+
+                {/* Description Section */}
+                {facility.description && (
+                    <div style={{
+                        backgroundColor: '#1a1a1a',
+                        border: '1px solid #333',
+                        borderRadius: '8px',
+                        padding: '30px',
+                        marginBottom: '30px'
+                    }}>
+                        <h2 style={{ 
+                            margin: '0 0 16px 0', 
+                            fontSize: '20px', 
+                            fontWeight: '600' 
+                        }}>
+                            Description
+                        </h2>
+                        <p style={{ 
+                            margin: 0,
+                            fontSize: '15px',
+                            lineHeight: '1.6',
+                            color: '#ccc'
+                        }}>
+                            {facility.description}
+                        </p>
+                    </div>
+                )}
 
                 {/* Location Section */}
                 <div style={{
