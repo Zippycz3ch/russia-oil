@@ -2,7 +2,7 @@
   "name": "russian-oil-facilities-map-frontend",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://russiaoil.goto42.cz",
+  "homepage": "https://russianoil.goto42.cz",
   "scripts": {
     "start": "vite",
     "dev": "vite",
