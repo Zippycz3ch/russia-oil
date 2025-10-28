@@ -512,81 +512,189 @@ const Map: React.FC = () => {
 
                     {/* Facility Type */}
                     <div style={{ marginBottom: '16px' }}>
-                        <label style={{ 
-                            display: 'block', 
-                            marginBottom: '8px', 
+                        <div style={{ 
                             fontSize: '12px', 
                             color: '#a0aec0', 
                             fontWeight: '600',
                             textTransform: 'uppercase',
-                            letterSpacing: '0.8px'
+                            letterSpacing: '0.8px',
+                            marginBottom: '8px'
                         }}>
                             Facility Type
-                        </label>
-                        <select
-                            value={filterType}
-                            onChange={(e) => setFilterType(e.target.value)}
-                            style={{
-                                width: '100%',
-                                padding: '10px 12px',
-                                backgroundColor: 'rgba(45, 53, 97, 0.4)',
-                                border: '1px solid rgba(96, 165, 250, 0.3)',
-                                borderRadius: '6px',
-                                color: '#e2e8f0',
-                                fontSize: '13px',
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                            <label style={{ 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                gap: '10px', 
                                 cursor: 'pointer',
-                                outline: 'none',
-                                boxSizing: 'border-box',
-                                fontWeight: '500',
-                                transition: 'all 0.2s ease'
+                                padding: '6px',
+                                borderRadius: '4px',
+                                transition: 'background 0.2s ease'
                             }}
-                            onFocus={(e) => e.currentTarget.style.borderColor = 'rgba(96, 165, 250, 0.6)'}
-                            onBlur={(e) => e.currentTarget.style.borderColor = 'rgba(96, 165, 250, 0.3)'}
-                        >
-                            <option value="all">All Types</option>
-                            <option value="refinery">Refinery</option>
-                            <option value="extraction">Extraction</option>
-                            <option value="storage">Storage</option>
-                        </select>
+                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'}
+                            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                            >
+                                <input 
+                                    type="checkbox" 
+                                    checked={filterType === 'all' || filterType === 'refinery'} 
+                                    onChange={(e) => {
+                                        if (filterType === 'refinery') {
+                                            setFilterType('all');
+                                        } else {
+                                            setFilterType('refinery');
+                                        }
+                                    }}
+                                    style={{ 
+                                        cursor: 'pointer',
+                                        width: '16px',
+                                        height: '16px',
+                                        accentColor: '#6b7280'
+                                    }}
+                                />
+                                <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>Refinery</span>
+                            </label>
+                            <label style={{ 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                gap: '10px', 
+                                cursor: 'pointer',
+                                padding: '6px',
+                                borderRadius: '4px',
+                                transition: 'background 0.2s ease'
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'}
+                            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                            >
+                                <input 
+                                    type="checkbox" 
+                                    checked={filterType === 'all' || filterType === 'extraction'} 
+                                    onChange={(e) => {
+                                        if (filterType === 'extraction') {
+                                            setFilterType('all');
+                                        } else {
+                                            setFilterType('extraction');
+                                        }
+                                    }}
+                                    style={{ 
+                                        cursor: 'pointer',
+                                        width: '16px',
+                                        height: '16px',
+                                        accentColor: '#6b7280'
+                                    }}
+                                />
+                                <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>Extraction</span>
+                            </label>
+                            <label style={{ 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                gap: '10px', 
+                                cursor: 'pointer',
+                                padding: '6px',
+                                borderRadius: '4px',
+                                transition: 'background 0.2s ease'
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'}
+                            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                            >
+                                <input 
+                                    type="checkbox" 
+                                    checked={filterType === 'all' || filterType === 'storage'} 
+                                    onChange={(e) => {
+                                        if (filterType === 'storage') {
+                                            setFilterType('all');
+                                        } else {
+                                            setFilterType('storage');
+                                        }
+                                    }}
+                                    style={{ 
+                                        cursor: 'pointer',
+                                        width: '16px',
+                                        height: '16px',
+                                        accentColor: '#6b7280'
+                                    }}
+                                />
+                                <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>Storage</span>
+                            </label>
+                        </div>
                     </div>
 
                     {/* Status Filter */}
                     <div style={{ marginBottom: '16px' }}>
-                        <label style={{ 
-                            display: 'block', 
-                            marginBottom: '8px', 
+                        <div style={{ 
                             fontSize: '12px', 
                             color: '#a0aec0', 
                             fontWeight: '600',
                             textTransform: 'uppercase',
-                            letterSpacing: '0.8px'
+                            letterSpacing: '0.8px',
+                            marginBottom: '8px'
                         }}>
                             Status
-                        </label>
-                        <select
-                            value={filterHitStatus}
-                            onChange={(e) => setFilterHitStatus(e.target.value)}
-                            style={{
-                                width: '100%',
-                                padding: '10px 12px',
-                                backgroundColor: 'rgba(45, 53, 97, 0.4)',
-                                border: '1px solid rgba(96, 165, 250, 0.3)',
-                                borderRadius: '6px',
-                                color: '#e2e8f0',
-                                fontSize: '13px',
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                            <label style={{ 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                gap: '10px', 
                                 cursor: 'pointer',
-                                outline: 'none',
-                                boxSizing: 'border-box',
-                                fontWeight: '500',
-                                transition: 'all 0.2s ease'
+                                padding: '6px',
+                                borderRadius: '4px',
+                                transition: 'background 0.2s ease'
                             }}
-                            onFocus={(e) => e.currentTarget.style.borderColor = 'rgba(96, 165, 250, 0.6)'}
-                            onBlur={(e) => e.currentTarget.style.borderColor = 'rgba(96, 165, 250, 0.3)'}
-                        >
-                            <option value="all">All Status</option>
-                            <option value="hit">Hit</option>
-                            <option value="operational">Operational</option>
-                        </select>
+                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'}
+                            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                            >
+                                <input 
+                                    type="checkbox" 
+                                    checked={filterHitStatus === 'all' || filterHitStatus === 'hit'} 
+                                    onChange={(e) => {
+                                        if (filterHitStatus === 'hit') {
+                                            setFilterHitStatus('all');
+                                        } else {
+                                            setFilterHitStatus('hit');
+                                        }
+                                    }}
+                                    style={{ 
+                                        cursor: 'pointer',
+                                        width: '16px',
+                                        height: '16px',
+                                        accentColor: '#6b7280'
+                                    }}
+                                />
+                                <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>Hit</span>
+                            </label>
+                            <label style={{ 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                gap: '10px', 
+                                cursor: 'pointer',
+                                padding: '6px',
+                                borderRadius: '4px',
+                                transition: 'background 0.2s ease'
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'}
+                            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                            >
+                                <input 
+                                    type="checkbox" 
+                                    checked={filterHitStatus === 'all' || filterHitStatus === 'operational'} 
+                                    onChange={(e) => {
+                                        if (filterHitStatus === 'operational') {
+                                            setFilterHitStatus('all');
+                                        } else {
+                                            setFilterHitStatus('operational');
+                                        }
+                                    }}
+                                    style={{ 
+                                        cursor: 'pointer',
+                                        width: '16px',
+                                        height: '16px',
+                                        accentColor: '#6b7280'
+                                    }}
+                                />
+                                <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>Operational</span>
+                            </label>
+                        </div>
                     </div>
 
                     {/* Minimum Capacity */}
@@ -603,9 +711,9 @@ const Map: React.FC = () => {
                             Min. Capacity
                         </label>
                         <div style={{ 
-                            color: '#60a5fa', 
+                            color: '#9ca3af', 
                             fontSize: '14px', 
-                            marginBottom: '10px',
+                            marginBottom: '8px',
                             fontWeight: '600'
                         }}>
                             {minCapacity.toLocaleString()} barrels/day
@@ -620,47 +728,11 @@ const Map: React.FC = () => {
                             style={{
                                 width: '100%',
                                 cursor: 'pointer',
-                                accentColor: '#60a5fa',
+                                accentColor: '#6b7280',
                                 height: '5px'
                             }}
                         />
                     </div>
-
-                    {/* Clear Filters */}
-                    {(filterType !== 'all' || filterHitStatus !== 'all' || searchTerm !== '' || minCapacity > 0) && (
-                        <button
-                            onClick={() => {
-                                setFilterType('all');
-                                setFilterHitStatus('all');
-                                setSearchTerm('');
-                                setMinCapacity(0);
-                            }}
-                            style={{
-                                width: '100%',
-                                padding: '10px',
-                                background: 'rgba(55, 65, 81, 0.6)',
-                                color: '#e2e8f0',
-                                border: '1px solid rgba(96, 165, 250, 0.3)',
-                                borderRadius: '6px',
-                                cursor: 'pointer',
-                                fontSize: '13px',
-                                fontWeight: '600',
-                                marginBottom: '16px',
-                                transition: 'all 0.2s ease',
-                                letterSpacing: '0.5px'
-                            }}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.background = 'rgba(96, 165, 250, 0.2)';
-                                e.currentTarget.style.borderColor = 'rgba(96, 165, 250, 0.5)';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.background = 'rgba(55, 65, 81, 0.6)';
-                                e.currentTarget.style.borderColor = 'rgba(96, 165, 250, 0.3)';
-                            }}
-                        >
-                            Clear All Filters
-                        </button>
-                    )}
 
                     {/* Legend */}
                     <div style={{ 
@@ -674,7 +746,7 @@ const Map: React.FC = () => {
                             fontWeight: '600',
                             textTransform: 'uppercase',
                             letterSpacing: '0.8px',
-                            marginBottom: '12px'
+                            marginBottom: '8px'
                         }}>
                             Facility Types
                         </div>
@@ -688,7 +760,7 @@ const Map: React.FC = () => {
                                 borderRadius: '4px',
                                 transition: 'background 0.2s ease'
                             }}
-                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(96, 165, 250, 0.1)'}
+                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'}
                             onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                             >
                                 <input 
@@ -699,10 +771,10 @@ const Map: React.FC = () => {
                                         cursor: 'pointer',
                                         width: '16px',
                                         height: '16px',
-                                        accentColor: '#FF5733'
+                                        accentColor: '#6b7280'
                                     }}
                                 />
-                                <span style={{ color: '#FF5733', fontSize: '16px', lineHeight: '1' }}>●</span>
+                                <span style={{ color: '#dc8577', fontSize: '16px', lineHeight: '1' }}>●</span>
                                 <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>Refinery</span>
                             </label>
                             <label style={{ 
@@ -714,7 +786,7 @@ const Map: React.FC = () => {
                                 borderRadius: '4px',
                                 transition: 'background 0.2s ease'
                             }}
-                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(96, 165, 250, 0.1)'}
+                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'}
                             onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                             >
                                 <input 
@@ -725,10 +797,10 @@ const Map: React.FC = () => {
                                         cursor: 'pointer',
                                         width: '16px',
                                         height: '16px',
-                                        accentColor: '#33FF57'
+                                        accentColor: '#6b7280'
                                     }}
                                 />
-                                <span style={{ color: '#33FF57', fontSize: '16px', lineHeight: '1' }}>●</span>
+                                <span style={{ color: '#82c991', fontSize: '16px', lineHeight: '1' }}>●</span>
                                 <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>Extraction</span>
                             </label>
                             <label style={{ 
@@ -740,7 +812,7 @@ const Map: React.FC = () => {
                                 borderRadius: '4px',
                                 transition: 'background 0.2s ease'
                             }}
-                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(96, 165, 250, 0.1)'}
+                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'}
                             onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                             >
                                 <input 
@@ -751,10 +823,10 @@ const Map: React.FC = () => {
                                         cursor: 'pointer',
                                         width: '16px',
                                         height: '16px',
-                                        accentColor: '#3357FF'
+                                        accentColor: '#6b7280'
                                     }}
                                 />
-                                <span style={{ color: '#3357FF', fontSize: '16px', lineHeight: '1' }}>●</span>
+                                <span style={{ color: '#7b93c4', fontSize: '16px', lineHeight: '1' }}>●</span>
                                 <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>Storage</span>
                             </label>
                         </div>
@@ -772,12 +844,23 @@ const Map: React.FC = () => {
                             fontWeight: '600',
                             textTransform: 'uppercase',
                             letterSpacing: '0.8px',
-                            marginBottom: '12px'
+                            marginBottom: '8px'
                         }}>
                             Weapon Ranges
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
+                            <label style={{ 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                gap: '10px', 
+                                cursor: 'pointer',
+                                padding: '6px',
+                                borderRadius: '4px',
+                                transition: 'background 0.2s ease'
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'}
+                            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                            >
                                 <input 
                                     type="checkbox" 
                                     checked={show500km} 
@@ -786,13 +869,24 @@ const Map: React.FC = () => {
                                         cursor: 'pointer',
                                         width: '16px',
                                         height: '16px',
-                                        accentColor: '#10B981'
+                                        accentColor: '#6b7280'
                                     }}
                                 />
-                                <span style={{ color: '#10B981', fontSize: '16px' }}>■</span>
-                                <span style={{ fontSize: '14px', color: '#ccc' }}>500km Range</span>
+                                <span style={{ color: '#82c991', fontSize: '16px' }}>■</span>
+                                <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>500km Range</span>
                             </label>
-                            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
+                            <label style={{ 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                gap: '10px', 
+                                cursor: 'pointer',
+                                padding: '6px',
+                                borderRadius: '4px',
+                                transition: 'background 0.2s ease'
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'}
+                            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                            >
                                 <input 
                                     type="checkbox" 
                                     checked={show1000km} 
@@ -801,13 +895,24 @@ const Map: React.FC = () => {
                                         cursor: 'pointer',
                                         width: '16px',
                                         height: '16px',
-                                        accentColor: '#F97316'
+                                        accentColor: '#6b7280'
                                     }}
                                 />
-                                <span style={{ color: '#F97316', fontSize: '16px' }}>■</span>
-                                <span style={{ fontSize: '14px', color: '#ccc' }}>1000km Range</span>
+                                <span style={{ color: '#d4a574', fontSize: '16px' }}>■</span>
+                                <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>1000km Range</span>
                             </label>
-                            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
+                            <label style={{ 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                gap: '10px', 
+                                cursor: 'pointer',
+                                padding: '6px',
+                                borderRadius: '4px',
+                                transition: 'background 0.2s ease'
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'}
+                            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                            >
                                 <input 
                                     type="checkbox" 
                                     checked={show1500km} 
@@ -816,11 +921,11 @@ const Map: React.FC = () => {
                                         cursor: 'pointer',
                                         width: '16px',
                                         height: '16px',
-                                        accentColor: '#EF4444'
+                                        accentColor: '#6b7280'
                                     }}
                                 />
-                                <span style={{ color: '#EF4444', fontSize: '16px' }}>■</span>
-                                <span style={{ fontSize: '14px', color: '#ccc' }}>1500km Range</span>
+                                <span style={{ color: '#c98989', fontSize: '16px' }}>■</span>
+                                <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>1500km Range</span>
                             </label>
                         </div>
                     </div>
