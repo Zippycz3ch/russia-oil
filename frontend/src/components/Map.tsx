@@ -767,19 +767,6 @@ const Map: React.FC = () => {
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
                 />
                 
-                {/* Ukraine natural border - highlighted */}
-                <Polygon
-                    positions={ukraineBorderLine}
-                    pathOptions={{
-                        color: '#FFD700',  // Gold/yellow for visibility
-                        fillColor: 'transparent',
-                        weight: 3,
-                        opacity: 0.9,
-                        fillOpacity: 0,
-                        dashArray: '10, 5'  // Dashed line to distinguish from ranges
-                    }}
-                />
-
                 {/* Range boundary from Ukraine border */}
                 {missileTypes.map((missile) => {
                     // Check if this range should be shown
