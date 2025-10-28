@@ -100,30 +100,8 @@ const ukraineBorderLine: [number, number][] = [
 ];
 
 // Function to interpolate points between border points for smoother curves
-const interpolateBorder = (borderLine: [number, number][], pointsPerSegment: number = 3): [number, number][] => {
-    const interpolated: [number, number][] = [];
-    
-    for (let i = 0; i < borderLine.length - 1; i++) {
-        const current = borderLine[i];
-        const next = borderLine[i + 1];
-        
-        for (let j = 0; j < pointsPerSegment; j++) {
-            const t = j / pointsPerSegment;
-            interpolated.push([
-                current[0] + (next[0] - current[0]) * t,
-                current[1] + (next[1] - current[1]) * t
-            ]);
-        }
-    }
-    
-    return interpolated;
-};
-
-// Function to create rounded offset boundary around all of Ukraine
+// Function to create offset boundary around Ukraine for weapon ranges
 const createOffsetLine = (borderLine: [number, number][], distanceKm: number): [number, number][] => {
-    // First interpolate more points for smoother boundary
-    const smoothBorder = interpolateBorder(borderLine, 5);
-    
     // Create offset points radially outward from Ukraine's center
     // At this latitude, 1 degree longitude ≈ 70km, 1 degree latitude ≈ 111km
     const latPerKm = 1 / 111;
@@ -134,8 +112,8 @@ const createOffsetLine = (borderLine: [number, number][], distanceKm: number): [
     
     const offsetPoints: [number, number][] = [];
     
-    for (let i = 0; i < smoothBorder.length; i++) {
-        const point = smoothBorder[i];
+    for (let i = 0; i < borderLine.length; i++) {
+        const point = borderLine[i];
         
         // Calculate direction from center to this border point (radial outward)
         const toLat = point[0] - centerLat;
