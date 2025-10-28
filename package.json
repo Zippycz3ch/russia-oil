@@ -1,0 +1,23 @@
+{
+  "name": "russian-oil-facilities-map",
+  "version": "1.0.0",
+  "description": "A full-stack application to visualize Russian oil facilities on a map.",
+  "scripts": {
+    "start": "node backend/src/index.js",
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "backend": "ts-node backend/src/index.ts",
+    "frontend": "cd frontend && npm run start"
+  },
+  "dependencies": {
+    "@types/cors": "^2.8.19",
+    "cors": "^2.8.5",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "concurrently": "^6.2.1",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.4"
+  },
+  "author": "Your Name",
+  "license": "MIT"
+}
