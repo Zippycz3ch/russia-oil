@@ -743,6 +743,53 @@ const Map: React.FC = () => {
                             </label>
                         </div>
                     </div>
+
+                    {/* Weapon Ranges Legend */}
+                    <div style={{ 
+                        borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+                        paddingTop: '16px',
+                        marginTop: '16px'
+                    }}>
+                        <div style={{ 
+                            fontSize: '12px', 
+                            color: '#a0aec0', 
+                            fontWeight: '600',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.8px',
+                            marginBottom: '8px'
+                        }}>
+                            Weapon Ranges
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                            <div style={{ 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                gap: '10px', 
+                                padding: '6px'
+                            }}>
+                                <span style={{ color: '#10B981', fontSize: '16px' }}>■</span>
+                                <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>500km Range</span>
+                            </div>
+                            <div style={{ 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                gap: '10px', 
+                                padding: '6px'
+                            }}>
+                                <span style={{ color: '#F97316', fontSize: '16px' }}>■</span>
+                                <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>1000km Range</span>
+                            </div>
+                            <div style={{ 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                gap: '10px', 
+                                padding: '6px'
+                            }}>
+                                <span style={{ color: '#EF4444', fontSize: '16px' }}>■</span>
+                                <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>1500km Range</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -778,9 +825,7 @@ const Map: React.FC = () => {
                                 opacity: 0.9,
                                 fillOpacity: 0
                             }}
-                        >
-                            <Tooltip sticky>{missile.range}km Range</Tooltip>
-                        </Polygon>
+                        />
                     );
                 })}
 
