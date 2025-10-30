@@ -185,26 +185,6 @@ const Dashboard: React.FC = () => {
         }
     };
 
-    const handleToggleHit = async (id: number) => {
-        try {
-            if (!db) throw new Error('Firebase not initialized');
-            
-            const docRef = doc(db, COLLECTIONS.FACILITIES, id.toString());
-            const docSnap = await getDoc(docRef);
-            
-            if (docSnap.exists()) {
-                const facility = docSnap.data() as Facility;
-                await updateDoc(docRef, {
-                    hit: !facility.hit
-                });
-                fetchFacilities();
-            }
-        } catch (error) {
-            console.error('Error toggling hit status:', error);
-            alert('Failed to toggle hit status');
-        }
-    };
-
     const handleEdit = (facility: Facility) => {
         setEditingId(facility.id);
         setEditForm(facility);
@@ -947,21 +927,6 @@ const Dashboard: React.FC = () => {
                                                 }}
                                             >
                                                 Edit
-                                            </button>
-                                            <button
-                                                onClick={() => handleToggleHit(facility.id)}
-                                                style={{
-                                                    padding: '5px 10px',
-                                                    backgroundColor: facility.hit ? '#4CAF50' : '#FF9800',
-                                                    color: '#fff',
-                                                    border: 'none',
-                                                    borderRadius: '4px',
-                                                    cursor: 'pointer',
-                                                    marginRight: '5px',
-                                                    fontSize: '12px'
-                                                }}
-                                            >
-                                                {facility.hit ? 'Restore' : 'Mark Hit'}
                                             </button>
                                             <button
                                                 onClick={() => handleDelete(facility.id)}
