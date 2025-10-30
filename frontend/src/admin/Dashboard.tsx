@@ -23,6 +23,7 @@ interface Facility {
     longitude: number;
     status: string;
     hit: boolean;
+    draft: boolean;
     hits?: Hit[];
 }
 
@@ -35,9 +36,6 @@ const Dashboard: React.FC = () => {
     const [facilities, setFacilities] = useState<Facility[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [editingId, setEditingId] = useState<number | null>(null);
-    const [editForm, setEditForm] = useState<Partial<Facility>>({});
-    const [showAddForm, setShowAddForm] = useState(false);
     const [showAddHitForm, setShowAddHitForm] = useState<number | null>(null);
     const [editingHitId, setEditingHitId] = useState<number | null>(null);
     const [newHit, setNewHit] = useState<Partial<Hit>>({
@@ -45,15 +43,6 @@ const Dashboard: React.FC = () => {
         videoLink: '',
         expectedRepairTime: 0,
         notes: ''
-    });
-    const [newFacility, setNewFacility] = useState<Partial<Facility>>({
-        name: '',
-        type: 'Refinery',
-        capacity: 0,
-        latitude: 0,
-        longitude: 0,
-        status: 'OPERATIONAL',
-        hit: false
     });
     const navigate = useNavigate();
 
@@ -114,6 +103,7 @@ const Dashboard: React.FC = () => {
                         longitude,
                         status: data.status,
                         hit: data.hit,
+                        draft: data.draft ?? false,
                         hits
                     } as Facility;
                 })
@@ -185,98 +175,7 @@ const Dashboard: React.FC = () => {
         }
     };
 
-    const handleEdit = (facility: Facility) => {
-        setEditingId(facility.id);
-        setEditForm(facility);
-    };
 
-    const handleUpdate = async () => {
-        if (!editingId) return;
-
-        try {
-            if (!db) throw new Error('Firebase not initialized');
-            
-            // Transform the data to match Firebase structure
-            const updateData: any = {
-                name: editForm.name,
-                type: editForm.type,
-                capacity: editForm.capacity,
-                gasCapacity: editForm.gasCapacity,
-                status: editForm.status,
-                hit: editForm.hit
-            };
-            
-            // Add location object if lat/lon are provided
-            if (editForm.latitude !== undefined && editForm.longitude !== undefined) {
-                updateData.location = {
-                    latitude: editForm.latitude,
-                    longitude: editForm.longitude
-                };
-            }
-            
-            const docRef = doc(db, COLLECTIONS.FACILITIES, editingId.toString());
-            await updateDoc(docRef, updateData);
-            
-            setEditingId(null);
-            setEditForm({});
-            fetchFacilities();
-        } catch (error) {
-            console.error('Error updating facility:', error);
-            alert('Failed to update facility');
-        }
-    };
-
-    const handleAdd = async (e: React.FormEvent) => {
-        e.preventDefault();
-        
-        try {
-            if (!db) throw new Error('Firebase not initialized');
-            
-            // Get the next available ID
-            const querySnapshot = await getDocs(collection(db, COLLECTIONS.FACILITIES));
-            const maxId = querySnapshot.docs.reduce((max, doc) => {
-                const id = parseInt(doc.id);
-                return id > max ? id : max;
-            }, 0);
-            const newId = maxId + 1;
-            
-            const facilityData: any = {
-                id: newId,
-                name: newFacility.name,
-                type: newFacility.type,
-                capacity: newFacility.capacity,
-                location: {
-                    latitude: newFacility.latitude,
-                    longitude: newFacility.longitude
-                },
-                status: newFacility.status,
-                hit: false,
-                hits: []
-            };
-            
-            // Add gasCapacity only if it's provided
-            if (newFacility.gasCapacity) {
-                facilityData.gasCapacity = newFacility.gasCapacity;
-            }
-            
-            await setDoc(doc(db, COLLECTIONS.FACILITIES, newId.toString()), facilityData);
-            
-            setShowAddForm(false);
-            setNewFacility({
-                name: '',
-                type: 'Refinery',
-                capacity: 0,
-                latitude: 0,
-                longitude: 0,
-                status: 'OPERATIONAL',
-                hit: false
-            });
-            fetchFacilities();
-        } catch (error) {
-            console.error('Error adding facility:', error);
-            alert('Failed to add facility');
-        }
-    };
 
     const handleAddHit = async (facilityId: number, e: React.FormEvent) => {
         e.preventDefault();
@@ -561,7 +460,7 @@ const Dashboard: React.FC = () => {
                                 <p style={{ color: '#999' }}>Total: {facilities.length} facilities</p>
                             </div>
                             <button
-                                onClick={() => setShowAddForm(!showAddForm)}
+                                onClick={() => navigate('/admin/facility/new')}
                                 style={{
                                     padding: '10px 20px',
                                     backgroundColor: '#4CAF50',
@@ -571,161 +470,9 @@ const Dashboard: React.FC = () => {
                                     cursor: 'pointer'
                                 }}
                             >
-                                {showAddForm ? 'Cancel' : '+ Add Facility'}
+                                + Add Facility
                             </button>
                         </div>
-
-            {showAddForm && (
-                <div style={{
-                    backgroundColor: '#1a1a1a',
-                    padding: '20px',
-                    borderRadius: '8px',
-                    marginBottom: '20px',
-                    border: '1px solid #333'
-                }}>
-                    <h2 style={{ marginBottom: '20px' }}>Add New Facility</h2>
-                    <form onSubmit={handleAdd} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-                        <div>
-                            <label style={{ color: '#999', display: 'block', marginBottom: '5px' }}>Name</label>
-                            <input
-                                type="text"
-                                required
-                                value={newFacility.name}
-                                onChange={(e) => setNewFacility({ ...newFacility, name: e.target.value })}
-                                style={{
-                                    width: '100%',
-                                    padding: '8px',
-                                    backgroundColor: '#0a0a0a',
-                                    border: '1px solid #333',
-                                    borderRadius: '4px',
-                                    color: '#fff'
-                                }}
-                            />
-                        </div>
-                        <div>
-                            <label style={{ color: '#999', display: 'block', marginBottom: '5px' }}>Type</label>
-                            <select
-                                value={newFacility.type}
-                                onChange={(e) => setNewFacility({ ...newFacility, type: e.target.value })}
-                                style={{
-                                    width: '100%',
-                                    padding: '8px',
-                                    backgroundColor: '#0a0a0a',
-                                    border: '1px solid #333',
-                                    borderRadius: '4px',
-                                    color: '#fff'
-                                }}
-                            >
-                                <option value="Refinery">Refinery</option>
-                                <option value="Extraction">Extraction</option>
-                                <option value="Storage">Storage</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label style={{ color: '#999', display: 'block', marginBottom: '5px' }}>Capacity (barrels/day)</label>
-                            <input
-                                type="number"
-                                required
-                                value={newFacility.capacity}
-                                onChange={(e) => setNewFacility({ ...newFacility, capacity: Number(e.target.value) })}
-                                style={{
-                                    width: '100%',
-                                    padding: '8px',
-                                    backgroundColor: '#0a0a0a',
-                                    border: '1px solid #333',
-                                    borderRadius: '4px',
-                                    color: '#fff'
-                                }}
-                            />
-                        </div>
-                        <div>
-                            <label style={{ color: '#999', display: 'block', marginBottom: '5px' }}>Gas Capacity (million m³/year) - Optional</label>
-                            <input
-                                type="number"
-                                value={newFacility.gasCapacity || ''}
-                                onChange={(e) => setNewFacility({ ...newFacility, gasCapacity: e.target.value ? Number(e.target.value) : undefined })}
-                                style={{
-                                    width: '100%',
-                                    padding: '8px',
-                                    backgroundColor: '#0a0a0a',
-                                    border: '1px solid #333',
-                                    borderRadius: '4px',
-                                    color: '#fff'
-                                }}
-                            />
-                        </div>
-                        <div>
-                            <label style={{ color: '#999', display: 'block', marginBottom: '5px' }}>Status</label>
-                            <select
-                                value={newFacility.status}
-                                onChange={(e) => setNewFacility({ ...newFacility, status: e.target.value })}
-                                style={{
-                                    width: '100%',
-                                    padding: '8px',
-                                    backgroundColor: '#0a0a0a',
-                                    border: '1px solid #333',
-                                    borderRadius: '4px',
-                                    color: '#fff'
-                                }}
-                            >
-                                <option value="OPERATIONAL">OPERATIONAL</option>
-                                <option value="HIT">HIT</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label style={{ color: '#999', display: 'block', marginBottom: '5px' }}>Latitude</label>
-                            <input
-                                type="number"
-                                step="any"
-                                required
-                                value={newFacility.latitude}
-                                onChange={(e) => setNewFacility({ ...newFacility, latitude: Number(e.target.value) })}
-                                style={{
-                                    width: '100%',
-                                    padding: '8px',
-                                    backgroundColor: '#0a0a0a',
-                                    border: '1px solid #333',
-                                    borderRadius: '4px',
-                                    color: '#fff'
-                                }}
-                            />
-                        </div>
-                        <div>
-                            <label style={{ color: '#999', display: 'block', marginBottom: '5px' }}>Longitude</label>
-                            <input
-                                type="number"
-                                step="any"
-                                required
-                                value={newFacility.longitude}
-                                onChange={(e) => setNewFacility({ ...newFacility, longitude: Number(e.target.value) })}
-                                style={{
-                                    width: '100%',
-                                    padding: '8px',
-                                    backgroundColor: '#0a0a0a',
-                                    border: '1px solid #333',
-                                    borderRadius: '4px',
-                                    color: '#fff'
-                                }}
-                            />
-                        </div>
-                        <div style={{ gridColumn: '1 / -1' }}>
-                            <button
-                                type="submit"
-                                style={{
-                                    padding: '10px 30px',
-                                    backgroundColor: '#4CAF50',
-                                    color: '#fff',
-                                    border: 'none',
-                                    borderRadius: '4px',
-                                    cursor: 'pointer'
-                                }}
-                            >
-                                Create Facility
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            )}
 
             {loading && (
                 <div style={{ textAlign: 'center', padding: '40px', color: '#999' }}>
@@ -763,190 +510,78 @@ const Dashboard: React.FC = () => {
                             <th style={{ padding: '15px', textAlign: 'left', borderBottom: '1px solid #333' }}>Gas Capacity</th>
                             <th style={{ padding: '15px', textAlign: 'left', borderBottom: '1px solid #333' }}>Location</th>
                             <th style={{ padding: '15px', textAlign: 'left', borderBottom: '1px solid #333' }}>Status</th>
+                            <th style={{ padding: '15px', textAlign: 'left', borderBottom: '1px solid #333' }}>Draft</th>
                             <th style={{ padding: '15px', textAlign: 'left', borderBottom: '1px solid #333' }}>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {facilities.map((facility) => (
-                            <React.Fragment key={facility.id}>
-                            <tr style={{ borderBottom: '1px solid #333' }}>
-                                {editingId === facility.id ? (
-                                    <>
-                                        <td style={{ padding: '15px' }}>{facility.id}</td>
-                                        <td style={{ padding: '15px' }}>
-                                            <input
-                                                type="text"
-                                                value={editForm.name}
-                                                onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                                                style={{
-                                                    width: '100%',
-                                                    padding: '5px',
-                                                    backgroundColor: '#0a0a0a',
-                                                    border: '1px solid #333',
-                                                    borderRadius: '4px',
-                                                    color: '#fff'
-                                                }}
-                                            />
-                                        </td>
-                                        <td style={{ padding: '15px' }}>
-                                            <select
-                                                value={editForm.type}
-                                                onChange={(e) => setEditForm({ ...editForm, type: e.target.value })}
-                                                style={{
-                                                    width: '100%',
-                                                    padding: '5px',
-                                                    backgroundColor: '#0a0a0a',
-                                                    border: '1px solid #333',
-                                                    borderRadius: '4px',
-                                                    color: '#fff'
-                                                }}
-                                            >
-                                                <option value="Refinery">Refinery</option>
-                                                <option value="Extraction">Extraction</option>
-                                                <option value="Storage">Storage</option>
-                                            </select>
-                                        </td>
-                                        <td style={{ padding: '15px' }}>
-                                            <input
-                                                type="number"
-                                                value={editForm.capacity}
-                                                onChange={(e) => setEditForm({ ...editForm, capacity: Number(e.target.value) })}
-                                                style={{
-                                                    width: '100%',
-                                                    padding: '5px',
-                                                    backgroundColor: '#0a0a0a',
-                                                    border: '1px solid #333',
-                                                    borderRadius: '4px',
-                                                    color: '#fff'
-                                                }}
-                                            />
-                                        </td>
-                                        <td style={{ padding: '15px' }}>
-                                            <input
-                                                type="number"
-                                                value={editForm.gasCapacity || ''}
-                                                onChange={(e) => setEditForm({ ...editForm, gasCapacity: e.target.value ? Number(e.target.value) : undefined })}
-                                                placeholder="Optional"
-                                                style={{
-                                                    width: '100%',
-                                                    padding: '5px',
-                                                    backgroundColor: '#0a0a0a',
-                                                    border: '1px solid #333',
-                                                    borderRadius: '4px',
-                                                    color: '#fff'
-                                                }}
-                                            />
-                                        </td>
-                                        <td style={{ padding: '15px', fontSize: '12px', color: '#999' }}>
-                                            {facility.latitude != null && facility.longitude != null 
-                                                ? `${facility.latitude.toFixed(4)}, ${facility.longitude.toFixed(4)}`
-                                                : 'N/A'}
-                                        </td>
-                                        <td style={{ padding: '15px' }}>
-                                            <select
-                                                value={editForm.status}
-                                                onChange={(e) => setEditForm({ ...editForm, status: e.target.value })}
-                                                style={{
-                                                    width: '100%',
-                                                    padding: '5px',
-                                                    backgroundColor: '#0a0a0a',
-                                                    border: '1px solid #333',
-                                                    borderRadius: '4px',
-                                                    color: '#fff'
-                                                }}
-                                            >
-                                                <option value="OPERATIONAL">OPERATIONAL</option>
-                                                <option value="HIT">HIT</option>
-                                            </select>
-                                        </td>
-                                        <td style={{ padding: '15px' }}>
-                                            <button
-                                                onClick={handleUpdate}
-                                                style={{
-                                                    padding: '5px 15px',
-                                                    backgroundColor: '#4CAF50',
-                                                    color: '#fff',
-                                                    border: 'none',
-                                                    borderRadius: '4px',
-                                                    cursor: 'pointer',
-                                                    marginRight: '5px'
-                                                }}
-                                            >
-                                                Save
-                                            </button>
-                                            <button
-                                                onClick={() => setEditingId(null)}
-                                                style={{
-                                                    padding: '5px 15px',
-                                                    backgroundColor: '#666',
-                                                    color: '#fff',
-                                                    border: 'none',
-                                                    borderRadius: '4px',
-                                                    cursor: 'pointer'
-                                                }}
-                                            >
-                                                Cancel
-                                            </button>
-                                        </td>
-                                    </>
-                                ) : (
-                                    <>
-                                        <td style={{ padding: '15px' }}>{facility.id}</td>
-                                        <td style={{ padding: '15px' }}>{facility.name}</td>
-                                        <td style={{ padding: '15px' }}>{facility.type}</td>
-                                        <td style={{ padding: '15px' }}>{facility.capacity?.toLocaleString() || 0}</td>
-                                        <td style={{ padding: '15px' }}>{facility.gasCapacity ? facility.gasCapacity.toLocaleString() : '-'}</td>
-                                        <td style={{ padding: '15px', fontSize: '12px', color: '#999' }}>
-                                            {facility.latitude != null && facility.longitude != null 
-                                                ? `${facility.latitude.toFixed(4)}, ${facility.longitude.toFixed(4)}`
-                                                : 'N/A'}
-                                        </td>
-                                        <td style={{ padding: '15px' }}>
-                                            <span style={{
-                                                padding: '4px 12px',
-                                                borderRadius: '4px',
-                                                fontSize: '12px',
-                                                backgroundColor: facility.hit ? '#f44336' : '#4CAF50',
-                                                color: '#fff'
-                                            }}>
-                                                {facility.status}
-                                            </span>
-                                        </td>
-                                        <td style={{ padding: '15px' }}>
-                                            <button
-                                                onClick={() => handleEdit(facility)}
-                                                style={{
-                                                    padding: '5px 10px',
-                                                    backgroundColor: '#2196F3',
-                                                    color: '#fff',
-                                                    border: 'none',
-                                                    borderRadius: '4px',
-                                                    cursor: 'pointer',
-                                                    marginRight: '5px',
-                                                    fontSize: '12px'
-                                                }}
-                                            >
-                                                Edit
-                                            </button>
-                                            <button
-                                                onClick={() => handleDelete(facility.id)}
-                                                style={{
-                                                    padding: '5px 10px',
-                                                    backgroundColor: '#f44336',
-                                                    color: '#fff',
-                                                    border: 'none',
-                                                    borderRadius: '4px',
-                                                    cursor: 'pointer',
-                                                    fontSize: '12px'
-                                                }}
-                                            >
-                                                Delete
-                                            </button>
-                                        </td>
-                                    </>
-                                )}
+                            <tr key={facility.id} style={{ borderBottom: '1px solid #333' }}>
+                                <td style={{ padding: '15px' }}>{facility.id}</td>
+                                <td style={{ padding: '15px' }}>{facility.name}</td>
+                                <td style={{ padding: '15px' }}>{facility.type}</td>
+                                <td style={{ padding: '15px' }}>{facility.capacity?.toLocaleString() || 0}</td>
+                                <td style={{ padding: '15px' }}>{facility.gasCapacity ? facility.gasCapacity.toLocaleString() : '-'}</td>
+                                <td style={{ padding: '15px', fontSize: '12px', color: '#999' }}>
+                                    {facility.latitude != null && facility.longitude != null 
+                                        ? `${facility.latitude.toFixed(4)}, ${facility.longitude.toFixed(4)}`
+                                        : 'N/A'}
+                                </td>
+                                <td style={{ padding: '15px' }}>
+                                    <span style={{
+                                        padding: '4px 12px',
+                                        borderRadius: '4px',
+                                        fontSize: '12px',
+                                        backgroundColor: facility.hit ? '#f44336' : '#4CAF50',
+                                        color: '#fff'
+                                    }}>
+                                        {facility.status}
+                                    </span>
+                                </td>
+                                <td style={{ padding: '15px' }}>
+                                    <span style={{
+                                        padding: '4px 12px',
+                                        borderRadius: '4px',
+                                        fontSize: '12px',
+                                        fontWeight: 'bold',
+                                        backgroundColor: facility.draft ? '#ff9800' : '#4CAF50',
+                                        color: '#fff'
+                                    }}>
+                                        {facility.draft ? 'DRAFT' : 'Published'}
+                                    </span>
+                                </td>
+                                <td style={{ padding: '15px' }}>
+                                    <button
+                                        onClick={() => navigate(`/admin/facility/${facility.id}`)}
+                                        style={{
+                                            padding: '5px 10px',
+                                            backgroundColor: '#2196F3',
+                                            color: '#fff',
+                                            border: 'none',
+                                            borderRadius: '4px',
+                                            cursor: 'pointer',
+                                            marginRight: '5px',
+                                            fontSize: '12px'
+                                        }}
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete(facility.id)}
+                                        style={{
+                                            padding: '5px 10px',
+                                            backgroundColor: '#f44336',
+                                            color: '#fff',
+                                            border: 'none',
+                                            borderRadius: '4px',
+                                            cursor: 'pointer',
+                                            fontSize: '12px'
+                                        }}
+                                    >
+                                        Delete
+                                    </button>
+                                </td>
                             </tr>
-                            </React.Fragment>
                         ))}
                     </tbody>
                 </table>

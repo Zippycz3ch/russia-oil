@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Dashboard from './admin/Dashboard';
+import FacilityEditor from './admin/FacilityEditor';
 import Map from './components/Map';
 import FacilityDetail from './components/FacilityDetail';
 
@@ -11,6 +12,7 @@ const App: React.FC = () => {
         <Route path="/" element={<Map />} />
         <Route path="/facility/:id" element={<FacilityDetail />} />
         <Route path="/admin" element={<Dashboard />} />
+        <Route path="/admin/facility/:id" element={<FacilityEditor />} />
       </Routes>
     </Router>
   );

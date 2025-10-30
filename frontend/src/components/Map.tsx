@@ -19,6 +19,7 @@ interface Facility {
     gasCapacity?: number;
     type: string;
     hit: boolean;
+    draft?: boolean;
 }
 
 // Ukraine border line (detailed complete border - clockwise from northwest)
@@ -406,10 +407,12 @@ const Map: React.FC = () => {
                     return;
                 }
                 const querySnapshot = await getDocs(collection(db, COLLECTIONS.FACILITIES));
-                const facilitiesData = querySnapshot.docs.map(doc => ({
-                    id: parseInt(doc.id),
-                    ...doc.data()
-                } as Facility));
+                const facilitiesData = querySnapshot.docs
+                    .map(doc => ({
+                        id: parseInt(doc.id),
+                        ...doc.data()
+                    } as Facility))
+                    .filter(facility => !facility.draft); // Filter out draft facilities
                 setFacilities(facilitiesData);
             } catch (error) {
                 console.error('Error fetching facilities:', error);
