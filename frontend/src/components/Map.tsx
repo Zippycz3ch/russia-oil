@@ -16,6 +16,7 @@ interface Facility {
     latitude?: number;
     longitude?: number;
     capacity: number;
+    gasCapacity?: number;
     type: string;
     hit: boolean;
 }

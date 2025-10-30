@@ -15,6 +15,7 @@ export interface Facility {
         longitude: number;
     };
     capacity: number;
+    gasCapacity?: number;
     type: string;
     hit: boolean;
     hits?: Hit[];

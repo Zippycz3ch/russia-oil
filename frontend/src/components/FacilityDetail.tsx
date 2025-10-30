@@ -13,6 +13,7 @@ interface Facility {
     latitude?: number;
     longitude?: number;
     capacity: number;
+    gasCapacity?: number;
     type: string;
     hit: boolean;
     description?: string;
@@ -262,8 +263,18 @@ const FacilityDetail: React.FC = () => {
                             {facility.capacity.toLocaleString()}
                         </div>
                         <div style={{ fontSize: '14px', color: '#888', marginTop: '4px' }}>
-                            barrels per day
+                            barrels per day (oil)
                         </div>
+                        {facility.gasCapacity && (
+                            <>
+                                <div style={{ fontSize: '28px', fontWeight: '600', color: 'white', marginTop: '16px' }}>
+                                    {facility.gasCapacity.toLocaleString()}
+                                </div>
+                                <div style={{ fontSize: '14px', color: '#888', marginTop: '4px' }}>
+                                    million cubic meters per year (gas)
+                                </div>
+                            </>
+                        )}
                     </div>
 
                     {/* ID Card */}
