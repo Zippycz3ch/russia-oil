@@ -18,6 +18,7 @@ interface Facility {
     name: string;
     type: string;
     capacity: number;
+    gasCapacity?: number;
     latitude: number;
     longitude: number;
     status: string;
@@ -108,6 +109,7 @@ const Dashboard: React.FC = () => {
                         name: data.name,
                         type: data.type,
                         capacity: data.capacity,
+                        gasCapacity: data.gasCapacity,
                         latitude,
                         longitude,
                         status: data.status,
@@ -219,6 +221,7 @@ const Dashboard: React.FC = () => {
                 name: editForm.name,
                 type: editForm.type,
                 capacity: editForm.capacity,
+                gasCapacity: editForm.gasCapacity,
                 status: editForm.status,
                 hit: editForm.hit
             };
@@ -257,7 +260,7 @@ const Dashboard: React.FC = () => {
             }, 0);
             const newId = maxId + 1;
             
-            const facilityData = {
+            const facilityData: any = {
                 id: newId,
                 name: newFacility.name,
                 type: newFacility.type,
@@ -270,6 +273,11 @@ const Dashboard: React.FC = () => {
                 hit: false,
                 hits: []
             };
+            
+            // Add gasCapacity only if it's provided
+            if (newFacility.gasCapacity) {
+                facilityData.gasCapacity = newFacility.gasCapacity;
+            }
             
             await setDoc(doc(db, COLLECTIONS.FACILITIES, newId.toString()), facilityData);
             
@@ -651,6 +659,22 @@ const Dashboard: React.FC = () => {
                             />
                         </div>
                         <div>
+                            <label style={{ color: '#999', display: 'block', marginBottom: '5px' }}>Gas Capacity (million m³/year) - Optional</label>
+                            <input
+                                type="number"
+                                value={newFacility.gasCapacity || ''}
+                                onChange={(e) => setNewFacility({ ...newFacility, gasCapacity: e.target.value ? Number(e.target.value) : undefined })}
+                                style={{
+                                    width: '100%',
+                                    padding: '8px',
+                                    backgroundColor: '#0a0a0a',
+                                    border: '1px solid #333',
+                                    borderRadius: '4px',
+                                    color: '#fff'
+                                }}
+                            />
+                        </div>
+                        <div>
                             <label style={{ color: '#999', display: 'block', marginBottom: '5px' }}>Status</label>
                             <select
                                 value={newFacility.status}
@@ -755,7 +779,8 @@ const Dashboard: React.FC = () => {
                             <th style={{ padding: '15px', textAlign: 'left', borderBottom: '1px solid #333' }}>ID</th>
                             <th style={{ padding: '15px', textAlign: 'left', borderBottom: '1px solid #333' }}>Name</th>
                             <th style={{ padding: '15px', textAlign: 'left', borderBottom: '1px solid #333' }}>Type</th>
-                            <th style={{ padding: '15px', textAlign: 'left', borderBottom: '1px solid #333' }}>Capacity</th>
+                            <th style={{ padding: '15px', textAlign: 'left', borderBottom: '1px solid #333' }}>Oil Capacity</th>
+                            <th style={{ padding: '15px', textAlign: 'left', borderBottom: '1px solid #333' }}>Gas Capacity</th>
                             <th style={{ padding: '15px', textAlign: 'left', borderBottom: '1px solid #333' }}>Location</th>
                             <th style={{ padding: '15px', textAlign: 'left', borderBottom: '1px solid #333' }}>Status</th>
                             <th style={{ padding: '15px', textAlign: 'left', borderBottom: '1px solid #333' }}>Actions</th>
@@ -806,6 +831,22 @@ const Dashboard: React.FC = () => {
                                                 type="number"
                                                 value={editForm.capacity}
                                                 onChange={(e) => setEditForm({ ...editForm, capacity: Number(e.target.value) })}
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '5px',
+                                                    backgroundColor: '#0a0a0a',
+                                                    border: '1px solid #333',
+                                                    borderRadius: '4px',
+                                                    color: '#fff'
+                                                }}
+                                            />
+                                        </td>
+                                        <td style={{ padding: '15px' }}>
+                                            <input
+                                                type="number"
+                                                value={editForm.gasCapacity || ''}
+                                                onChange={(e) => setEditForm({ ...editForm, gasCapacity: e.target.value ? Number(e.target.value) : undefined })}
+                                                placeholder="Optional"
                                                 style={{
                                                     width: '100%',
                                                     padding: '5px',
@@ -874,6 +915,7 @@ const Dashboard: React.FC = () => {
                                         <td style={{ padding: '15px' }}>{facility.name}</td>
                                         <td style={{ padding: '15px' }}>{facility.type}</td>
                                         <td style={{ padding: '15px' }}>{facility.capacity?.toLocaleString() || 0}</td>
+                                        <td style={{ padding: '15px' }}>{facility.gasCapacity ? facility.gasCapacity.toLocaleString() : '-'}</td>
                                         <td style={{ padding: '15px', fontSize: '12px', color: '#999' }}>
                                             {facility.latitude != null && facility.longitude != null 
                                                 ? `${facility.latitude.toFixed(4)}, ${facility.longitude.toFixed(4)}`
