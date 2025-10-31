@@ -348,77 +348,242 @@ const FacilityMarker: React.FC<{
             icon={createCustomIcon(markerColor, facility.damagePercentage || 0)}
         >
             <Popup>
-                <div style={{ color: '#000', minWidth: '200px' }}>
-                    <h3 style={{ margin: '0 0 10px 0', fontSize: '16px' }}>{facility.name}</h3>
-                    <div style={{ marginBottom: '8px', display: 'flex', gap: '6px', alignItems: 'center' }}>
-                        <div style={{ 
-                            display: 'inline-block',
-                            padding: '3px 8px',
-                            backgroundColor: facility.hit ? '#dc2626' : '#10b981',
-                            color: 'white',
-                            borderRadius: '3px',
-                            fontSize: '11px',
-                            fontWeight: '600',
-                            textTransform: 'uppercase'
+                <div style={{ 
+                    color: '#1f2937', 
+                    minWidth: '280px',
+                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
+                }}>
+                    {/* Header with facility name */}
+                    <div style={{ 
+                        marginBottom: '12px',
+                        paddingBottom: '12px',
+                        borderBottom: '2px solid #e5e7eb'
+                    }}>
+                        <h3 style={{ 
+                            margin: '0', 
+                            fontSize: '18px',
+                            fontWeight: '700',
+                            color: '#111827',
+                            lineHeight: '1.3'
                         }}>
-                            {facility.hit ? 'HIT' : 'OPERATIONAL'}
+                            {facility.name}
+                        </h3>
+                    </div>
+
+                    {/* Status badges */}
+                    <div style={{ 
+                        marginBottom: '14px', 
+                        display: 'flex', 
+                        gap: '8px', 
+                        alignItems: 'center',
+                        flexWrap: 'wrap'
+                    }}>
+                        <div style={{ 
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            padding: '5px 12px',
+                            backgroundColor: facility.hit ? '#ef4444' : '#10b981',
+                            color: 'white',
+                            borderRadius: '6px',
+                            fontSize: '12px',
+                            fontWeight: '700',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.5px',
+                            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                        }}>
+                            {facility.hit ? '⚠ HIT' : '✓ OPERATIONAL'}
                         </div>
                         {facility.hit && facility.damagePercentage && facility.damagePercentage > 0 && (
                             <div style={{ 
-                                display: 'inline-block',
-                                padding: '3px 8px',
-                                backgroundColor: '#f59e0b',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                padding: '5px 12px',
+                                backgroundColor: '#f97316',
                                 color: 'white',
-                                borderRadius: '3px',
-                                fontSize: '11px',
-                                fontWeight: '600'
+                                borderRadius: '6px',
+                                fontSize: '12px',
+                                fontWeight: '700',
+                                letterSpacing: '0.3px',
+                                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
                             }}>
-                                -{facility.damagePercentage}%
+                                ↓ {facility.damagePercentage}%
                             </div>
                         )}
                     </div>
-                    <p style={{ margin: '5px 0', fontSize: '13px' }}>
-                        <strong>Type:</strong> <span style={{ textTransform: 'capitalize' }}>{facility.type}</span>
-                    </p>
-                    <div style={{ margin: '10px 0' }}>
-                        <p style={{ margin: '0 0 5px 0', fontSize: '13px', fontWeight: 'bold' }}>Production:</p>
-                        <p style={{ margin: '2px 0 2px 10px', fontSize: '13px' }}>
-                            <strong>Oil:</strong> {facility.capacity.toLocaleString()} bbl/day
-                            {facility.hit && facility.damagePercentage && facility.damagePercentage > 0 && (
-                                <span style={{ color: '#dc2626', fontWeight: '600', marginLeft: '6px' }}>
-                                    → {Math.round(facility.capacity * (1 - facility.damagePercentage / 100)).toLocaleString()} bbl/day
-                                </span>
-                            )}
+
+                    {/* Type section */}
+                    <div style={{ 
+                        marginBottom: '14px',
+                        padding: '10px 12px',
+                        backgroundColor: '#f9fafb',
+                        borderRadius: '6px',
+                        border: '1px solid #e5e7eb'
+                    }}>
+                        <p style={{ 
+                            margin: '0', 
+                            fontSize: '13px',
+                            color: '#6b7280'
+                        }}>
+                            <span style={{ fontWeight: '600', color: '#374151' }}>Type:</span>{' '}
+                            <span style={{ 
+                                textTransform: 'capitalize',
+                                color: '#111827',
+                                fontWeight: '500'
+                            }}>
+                                {facility.type}
+                            </span>
                         </p>
-                        {facility.gasCapacity && (
-                            <p style={{ margin: '2px 0 2px 10px', fontSize: '13px' }}>
-                                <strong>Gas:</strong> {facility.gasCapacity.toLocaleString()} m³/year
+                    </div>
+
+                    {/* Production section */}
+                    <div style={{ 
+                        margin: '14px 0',
+                        padding: '12px',
+                        backgroundColor: '#fef3c7',
+                        borderRadius: '8px',
+                        border: '1px solid #fde68a'
+                    }}>
+                        <p style={{ 
+                            margin: '0 0 10px 0', 
+                            fontSize: '13px', 
+                            fontWeight: '700',
+                            color: '#92400e',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.5px'
+                        }}>
+                            📊 Production
+                        </p>
+                        
+                        {/* Oil production */}
+                        <div style={{ 
+                            marginBottom: '8px',
+                            padding: '8px',
+                            backgroundColor: 'white',
+                            borderRadius: '4px'
+                        }}>
+                            <p style={{ margin: '0', fontSize: '13px', lineHeight: '1.6' }}>
+                                <span style={{ 
+                                    fontWeight: '600',
+                                    color: '#374151'
+                                }}>
+                                    🛢️ Oil:
+                                </span>{' '}
+                                <span style={{ 
+                                    color: '#111827',
+                                    fontWeight: '500'
+                                }}>
+                                    {facility.capacity.toLocaleString()} bbl/day
+                                </span>
                                 {facility.hit && facility.damagePercentage && facility.damagePercentage > 0 && (
-                                    <span style={{ color: '#dc2626', fontWeight: '600', marginLeft: '6px' }}>
-                                        → {Math.round(facility.gasCapacity * (1 - facility.damagePercentage / 100)).toLocaleString()} m³/year
-                                    </span>
+                                    <>
+                                        <br />
+                                        <span style={{ 
+                                            color: '#dc2626', 
+                                            fontWeight: '700',
+                                            fontSize: '12px',
+                                            display: 'inline-flex',
+                                            alignItems: 'center',
+                                            gap: '4px',
+                                            marginTop: '4px'
+                                        }}>
+                                            → {Math.round(facility.capacity * (1 - facility.damagePercentage / 100)).toLocaleString()} bbl/day
+                                        </span>
+                                    </>
                                 )}
                             </p>
+                        </div>
+
+                        {/* Gas production */}
+                        {facility.gasCapacity && (
+                            <div style={{ 
+                                padding: '8px',
+                                backgroundColor: 'white',
+                                borderRadius: '4px'
+                            }}>
+                                <p style={{ margin: '0', fontSize: '13px', lineHeight: '1.6' }}>
+                                    <span style={{ 
+                                        fontWeight: '600',
+                                        color: '#374151'
+                                    }}>
+                                        🔥 Gas:
+                                    </span>{' '}
+                                    <span style={{ 
+                                        color: '#111827',
+                                        fontWeight: '500'
+                                    }}>
+                                        {facility.gasCapacity.toLocaleString()} m³/year
+                                    </span>
+                                    {facility.hit && facility.damagePercentage && facility.damagePercentage > 0 && (
+                                        <>
+                                            <br />
+                                            <span style={{ 
+                                                color: '#dc2626', 
+                                                fontWeight: '700',
+                                                fontSize: '12px',
+                                                display: 'inline-flex',
+                                                alignItems: 'center',
+                                                gap: '4px',
+                                                marginTop: '4px'
+                                            }}>
+                                                → {Math.round(facility.gasCapacity * (1 - facility.damagePercentage / 100)).toLocaleString()} m³/year
+                                            </span>
+                                        </>
+                                    )}
+                                </p>
+                            </div>
                         )}
                     </div>
-                    <p style={{ margin: '5px 0 10px 0', fontSize: '11px', color: '#666' }}>
-                        {lat.toFixed(4)}, {lon.toFixed(4)}
-                    </p>
+
+                    {/* Coordinates */}
+                    <div style={{ 
+                        margin: '12px 0 14px 0',
+                        padding: '8px 10px',
+                        backgroundColor: '#f3f4f6',
+                        borderRadius: '4px',
+                        textAlign: 'center'
+                    }}>
+                        <p style={{ 
+                            margin: '0', 
+                            fontSize: '11px', 
+                            color: '#6b7280',
+                            fontWeight: '500',
+                            fontFamily: 'monospace',
+                            letterSpacing: '0.3px'
+                        }}>
+                            📍 {lat.toFixed(4)}, {lon.toFixed(4)}
+                        </p>
+                    </div>
+
+                    {/* View details button */}
                     <button
                         onClick={() => onViewDetails(facility.id)}
                         style={{
                             width: '100%',
-                            padding: '8px 12px',
+                            padding: '10px 16px',
                             backgroundColor: '#3b82f6',
                             color: 'white',
                             border: 'none',
-                            borderRadius: '4px',
+                            borderRadius: '8px',
                             cursor: 'pointer',
-                            fontSize: '13px',
-                            fontWeight: '500'
+                            fontSize: '14px',
+                            fontWeight: '600',
+                            transition: 'all 0.2s ease',
+                            boxShadow: '0 2px 6px rgba(59, 130, 246, 0.3)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '6px'
                         }}
-                        onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#2563eb'}
-                        onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#3b82f6'}
+                        onMouseOver={(e) => {
+                            e.currentTarget.style.backgroundColor = '#2563eb';
+                            e.currentTarget.style.transform = 'translateY(-1px)';
+                            e.currentTarget.style.boxShadow = '0 4px 8px rgba(59, 130, 246, 0.4)';
+                        }}
+                        onMouseOut={(e) => {
+                            e.currentTarget.style.backgroundColor = '#3b82f6';
+                            e.currentTarget.style.transform = 'translateY(0)';
+                            e.currentTarget.style.boxShadow = '0 2px 6px rgba(59, 130, 246, 0.3)';
+                        }}
                     >
                         View Full Details →
                     </button>
