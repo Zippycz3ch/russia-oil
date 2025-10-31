@@ -1,4 +1,5 @@
 import React from 'react';
+import { LegendIcon } from './LegendIcon';
 
 interface FilterState {
     searchTerm: string;
@@ -293,13 +294,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ filteredCount, totalCount, fil
                                     accentColor: '#6b7280'
                                 }}
                             />
-                            <span style={{ 
-                                display: 'inline-block',
-                                width: '12px', 
-                                height: '12px', 
-                                backgroundColor: '#1cc5b7ff',
-                                borderRadius: '50%'
-                            }}></span>
+                            <LegendIcon color="#1cc5b7ff" />
                             <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>Refinery</span>
                         </label>
                         <label style={{ 
@@ -325,13 +320,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ filteredCount, totalCount, fil
                                     accentColor: '#6b7280'
                                 }}
                             />
-                            <span style={{ 
-                                display: 'inline-block',
-                                width: '12px', 
-                                height: '12px', 
-                                backgroundColor: '#8B5CF6',
-                                borderRadius: '50%'
-                            }}></span>
+                            <LegendIcon color="#8B5CF6" />
                             <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>Extraction</span>
                         </label>
                         <label style={{ 
@@ -357,13 +346,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ filteredCount, totalCount, fil
                                     accentColor: '#6b7280'
                                 }}
                             />
-                            <span style={{ 
-                                display: 'inline-block',
-                                width: '12px', 
-                                height: '12px', 
-                                backgroundColor: '#F59E0B',
-                                borderRadius: '50%'
-                            }}></span>
+                            <LegendIcon color="#F59E0B" />
                             <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>Storage</span>
                         </label>
                     </div>
@@ -393,15 +376,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ filteredCount, totalCount, fil
                                 gap: '6px',
                                 flex: '1'
                             }}>
-                                <span style={{ 
-                                    display: 'inline-block',
-                                    width: '12px', 
-                                    height: '12px', 
-                                    backgroundColor: '#1cc5b7ff',
-                                    borderRadius: '50%',
-                                    border: '2px solid white',
-                                    boxSizing: 'border-box'
-                                }}></span>
+                                <LegendIcon color="#1cc5b7ff" damagePercentage={0} />
                                 <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>0%</span>
                             </div>
                             <div style={{ 
@@ -410,15 +385,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ filteredCount, totalCount, fil
                                 gap: '6px',
                                 flex: '1'
                             }}>
-                                <span style={{ 
-                                    display: 'inline-block',
-                                    width: '12px', 
-                                    height: '12px', 
-                                    backgroundColor: '#1cc5b7ff',
-                                    borderRadius: '50%',
-                                    border: '3px solid #F59E0B',
-                                    boxSizing: 'border-box'
-                                }}></span>
+                                <LegendIcon color="#1cc5b7ff" damagePercentage={20} />
                                 <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>1-39%</span>
                             </div>
                         </div>
@@ -429,15 +396,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ filteredCount, totalCount, fil
                                 gap: '6px',
                                 flex: '1'
                             }}>
-                                <span style={{ 
-                                    display: 'inline-block',
-                                    width: '12px', 
-                                    height: '12px', 
-                                    backgroundColor: '#1cc5b7ff',
-                                    borderRadius: '50%',
-                                    border: '3px solid #DC2626',
-                                    boxSizing: 'border-box'
-                                }}></span>
+                                <LegendIcon color="#1cc5b7ff" damagePercentage={50} />
                                 <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>40-79%</span>
                             </div>
                             <div style={{ 
@@ -446,15 +405,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ filteredCount, totalCount, fil
                                 gap: '6px',
                                 flex: '1'
                             }}>
-                                <span style={{ 
-                                    display: 'inline-block',
-                                    width: '12px', 
-                                    height: '12px', 
-                                    backgroundColor: '#1cc5b7ff',
-                                    borderRadius: '50%',
-                                    border: '3px solid #000000',
-                                    boxSizing: 'border-box'
-                                }}></span>
+                                <LegendIcon color="#1cc5b7ff" damagePercentage={90} />
                                 <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>80-100%</span>
                             </div>
                         </div>
