@@ -745,8 +745,31 @@ const Dashboard: React.FC = () => {
                                             <option value="destroyed">Destroyed</option>
                                         </select>
                                     </div>
-                                    <div style={{ gridColumn: '1 / -1' }}>
-                                        <label style={{ color: '#999', display: 'block', marginBottom: '5px' }}>Repair Time (days)</label>
+                                    <div>
+                                        <label style={{ color: '#999', display: 'block', marginBottom: '5px' }}>Damage to Production (%) *</label>
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            max="100"
+                                            required
+                                            value={newHit.damagePercentage || 20}
+                                            onChange={(e) => {
+                                                const val = Number(e.target.value);
+                                                setNewHit({ ...newHit, damagePercentage: Math.min(100, Math.max(0, val)) });
+                                            }}
+                                            placeholder="0-100"
+                                            style={{
+                                                width: '100%',
+                                                padding: '10px',
+                                                backgroundColor: '#0a0a0a',
+                                                border: '1px solid #333',
+                                                borderRadius: '4px',
+                                                color: '#fff'
+                                            }}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label style={{ color: '#999', display: 'block', marginBottom: '5px' }}>Expected Repair Time (days)</label>
                                         <input
                                             type="number"
                                             value={newHit.expectedRepairTime}
@@ -965,8 +988,31 @@ const Dashboard: React.FC = () => {
                                                         <option value="destroyed">Destroyed</option>
                                                     </select>
                                                 </div>
-                                                <div style={{ gridColumn: '1 / -1' }}>
-                                                    <label style={{ color: '#999', display: 'block', marginBottom: '5px' }}>Repair Time (days)</label>
+                                                <div>
+                                                    <label style={{ color: '#999', display: 'block', marginBottom: '5px' }}>Damage to Production (%) *</label>
+                                                    <input
+                                                        type="number"
+                                                        min="0"
+                                                        max="100"
+                                                        required
+                                                        value={newHit.damagePercentage || 20}
+                                                        onChange={(e) => {
+                                                            const val = Number(e.target.value);
+                                                            setNewHit({ ...newHit, damagePercentage: Math.min(100, Math.max(0, val)) });
+                                                        }}
+                                                        placeholder="0-100"
+                                                        style={{
+                                                            width: '100%',
+                                                            padding: '8px',
+                                                            backgroundColor: '#1a1a1a',
+                                                            border: '1px solid #333',
+                                                            borderRadius: '4px',
+                                                            color: '#fff'
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label style={{ color: '#999', display: 'block', marginBottom: '5px' }}>Expected Repair Time (days)</label>
                                                     <input
                                                         type="number"
                                                         value={newHit.expectedRepairTime}
