@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { collection, getDocs, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
-import { db, COLLECTIONS } from '../config/firebase';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { db, storage, COLLECTIONS } from '../config/firebase';
 
 interface Hit {
     id: number;
@@ -26,6 +27,7 @@ const HitEditor: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const [uploading, setUploading] = useState(false);
     const [facilities, setFacilities] = useState<Facility[]>([]);
     const [hit, setHit] = useState<Hit>({
         id: 0,
@@ -172,6 +174,38 @@ const HitEditor: React.FC = () => {
         const updated = [...(hit.mediaLinks || [])];
         updated[index] = value;
         setHit({ ...hit, mediaLinks: updated });
+    };
+
+    const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = event.target.files;
+        if (!files || files.length === 0) return;
+
+        setUploading(true);
+        try {
+            const uploadedUrls: string[] = [];
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const timestamp = Date.now();
+                const fileName = `hits/${timestamp}_${file.name}`;
+                const storageRef = ref(storage, fileName);
+                
+                await uploadBytes(storageRef, file);
+                const url = await getDownloadURL(storageRef);
+                uploadedUrls.push(url);
+            }
+
+            // Add uploaded URLs to mediaLinks
+            const currentLinks = hit.mediaLinks?.filter(link => link.trim() !== '') || [];
+            setHit({ ...hit, mediaLinks: [...currentLinks, ...uploadedUrls] });
+            
+            alert(`Successfully uploaded ${uploadedUrls.length} file(s)!`);
+        } catch (error) {
+            console.error('Error uploading files:', error);
+            alert('Failed to upload files. Please try again.');
+        } finally {
+            setUploading(false);
+        }
     };
 
     return (
@@ -443,21 +477,43 @@ const HitEditor: React.FC = () => {
                                         )}
                                     </div>
                                 ))}
-                                <button
-                                    type="button"
-                                    onClick={addMediaLink}
-                                    style={{
+                                <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                                    <button
+                                        type="button"
+                                        onClick={addMediaLink}
+                                        style={{
+                                            padding: '10px 20px',
+                                            backgroundColor: '#333',
+                                            color: '#fff',
+                                            border: '1px solid #555',
+                                            borderRadius: '4px',
+                                            cursor: 'pointer',
+                                            fontSize: '14px'
+                                        }}
+                                    >
+                                        + Add Another Link
+                                    </button>
+                                    <label style={{
                                         padding: '10px 20px',
-                                        backgroundColor: '#333',
+                                        backgroundColor: '#2563eb',
                                         color: '#fff',
-                                        border: '1px solid #555',
+                                        border: 'none',
                                         borderRadius: '4px',
-                                        cursor: 'pointer',
-                                        fontSize: '14px'
-                                    }}
-                                >
-                                    + Add Another Link
-                                </button>
+                                        cursor: uploading ? 'not-allowed' : 'pointer',
+                                        fontSize: '14px',
+                                        opacity: uploading ? 0.6 : 1
+                                    }}>
+                                        {uploading ? '⏳ Uploading...' : '📁 Upload Photos/Videos'}
+                                        <input
+                                            type="file"
+                                            multiple
+                                            accept="image/*,video/*"
+                                            onChange={handleFileUpload}
+                                            disabled={uploading}
+                                            style={{ display: 'none' }}
+                                        />
+                                    </label>
+                                </div>
                             </div>
 
                             <div style={{ gridColumn: '1 / -1' }}>
