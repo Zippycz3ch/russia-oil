@@ -288,14 +288,14 @@ const capitals = [
 
 // Custom marker icons
 const createCustomIcon = (color: string, damagePercentage: number = 0) => {
-    let borderColor = 'white';
+    let borderColor = '#10B981'; // Green for operational
     let borderWidth = 2;
     
     if (damagePercentage > 0 && damagePercentage < 50) {
-        borderColor = '#FF9800'; // Orange
+        borderColor = '#F59E0B'; // Orange
         borderWidth = 3;
     } else if (damagePercentage >= 50) {
-        borderColor = '#EF4444'; // Brighter red for visibility
+        borderColor = '#DC2626'; // Red
         borderWidth = 3;
     }
     
@@ -896,9 +896,10 @@ const Map: React.FC = () => {
                                     display: 'inline-block',
                                     width: '12px', 
                                     height: '12px', 
-                                    backgroundColor: '#10B981',
+                                    backgroundColor: '#1cc5b7ff',
                                     borderRadius: '50%',
-                                    border: '2px solid #10B981'
+                                    border: '2px solid #10B981',
+                                    boxSizing: 'border-box'
                                 }}></span>
                                 <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>Operational</span>
                             </div>
@@ -912,11 +913,12 @@ const Map: React.FC = () => {
                                     display: 'inline-block',
                                     width: '12px', 
                                     height: '12px', 
-                                    backgroundColor: '#F59E0B',
+                                    backgroundColor: '#1cc5b7ff',
                                     borderRadius: '50%',
-                                    border: '2px solid #F59E0B'
+                                    border: '3px solid #F59E0B',
+                                    boxSizing: 'border-box'
                                 }}></span>
-                                <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>1-50% Damage</span>
+                                <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>1-49% Damage</span>
                             </div>
                             <div style={{ 
                                 display: 'flex', 
@@ -928,11 +930,12 @@ const Map: React.FC = () => {
                                     display: 'inline-block',
                                     width: '12px', 
                                     height: '12px', 
-                                    backgroundColor: '#DC2626',
+                                    backgroundColor: '#1cc5b7ff',
                                     borderRadius: '50%',
-                                    border: '2px solid #DC2626'
+                                    border: '3px solid #DC2626',
+                                    boxSizing: 'border-box'
                                 }}></span>
-                                <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>51-100% Damage</span>
+                                <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>50-100% Damage</span>
                             </div>
                         </div>
                     </div>
