@@ -20,6 +20,7 @@ interface Facility {
     type: string;
     hit: boolean;
     draft?: boolean;
+    damagePercentage?: number;
 }
 
 // Ukraine border line (detailed complete border - clockwise from northwest)
@@ -286,8 +287,14 @@ const capitals = [
 ];
 
 // Custom marker icons
-const createCustomIcon = (color: string, isHit: boolean) => {
-    const borderColor = isHit ? 'red' : 'white';
+const createCustomIcon = (color: string, damagePercentage: number = 0) => {
+    let borderColor = 'white';
+    if (damagePercentage > 0 && damagePercentage < 50) {
+        borderColor = '#FF9800'; // Orange
+    } else if (damagePercentage >= 50) {
+        borderColor = '#DC2626'; // Red
+    }
+    
     return L.divIcon({
         className: 'custom-marker',
         html: `<div style="background-color: ${color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid ${borderColor};"></div>`,
@@ -296,7 +303,7 @@ const createCustomIcon = (color: string, isHit: boolean) => {
     });
 };
 
-// Custom Marker Component that updates icon on hit status change
+// Custom Marker Component that updates icon on damage status change
 const FacilityMarker: React.FC<{
     facility: Facility;
     onViewDetails: (id: number) => void;
@@ -304,14 +311,14 @@ const FacilityMarker: React.FC<{
     const markerRef = useRef<L.Marker>(null);
     
     useEffect(() => {
-        // Update marker icon when hit status changes
+        // Update marker icon when damage percentage changes
         if (markerRef.current) {
             const color = facility.type === 'refinery' ? '#FF5733' : 
                          facility.type === 'extraction' ? '#33FF57' : 
                          facility.type === 'storage' ? '#3357FF' : '#FFC300';
-            markerRef.current.setIcon(createCustomIcon(color, facility.hit));
+            markerRef.current.setIcon(createCustomIcon(color, facility.damagePercentage || 0));
         }
-    }, [facility.hit, facility.type]);
+    }, [facility.damagePercentage, facility.type]);
     
     const getMarkerColor = (type: string) => {
         switch (type) {
@@ -329,7 +336,7 @@ const FacilityMarker: React.FC<{
         <Marker
             ref={markerRef}
             position={[lat, lon]}
-            icon={createCustomIcon(getMarkerColor(facility.type), facility.hit)}
+            icon={createCustomIcon(getMarkerColor(facility.type), facility.damagePercentage || 0)}
         >
             <Popup>
                 <div style={{ color: '#000', minWidth: '200px' }}>
@@ -407,11 +414,28 @@ const Map: React.FC = () => {
                     return;
                 }
                 const querySnapshot = await getDocs(collection(db, COLLECTIONS.FACILITIES));
+                const hitsSnapshot = await getDocs(collection(db, COLLECTIONS.HITS));
+                
+                // Calculate damage per facility
                 const facilitiesData = querySnapshot.docs
-                    .map(doc => ({
-                        id: parseInt(doc.id),
-                        ...doc.data()
-                    } as Facility))
+                    .map(doc => {
+                        const facilityData = doc.data();
+                        const facilityId = parseInt(doc.id);
+                        
+                        // Get all published hits for this facility
+                        const facilityHits = hitsSnapshot.docs
+                            .map(hitDoc => hitDoc.data())
+                            .filter(hit => hit.facilityId === facilityId && !hit.draft);
+                        
+                        // Calculate total damage percentage
+                        const totalDamage = facilityHits.reduce((sum, hit) => sum + (hit.damagePercentage || 0), 0);
+                        
+                        return {
+                            id: facilityId,
+                            ...facilityData,
+                            damagePercentage: totalDamage
+                        } as Facility;
+                    })
                     .filter(facility => !facility.draft); // Filter out draft facilities
                 setFacilities(facilitiesData);
             } catch (error) {
