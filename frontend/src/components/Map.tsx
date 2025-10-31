@@ -249,17 +249,29 @@ const createOffsetLine = (borderLine: [number, number][], distanceKm: number): [
         // Smooth reduction for east (45° to 135°) and south (135° to 225°)
         let reduction = 0;
         
-        // East reduction: gradually from 0 at 45° to max 100km at 90° back to 0 at 135°
-        if (angle >= 45 && angle <= 135) {
-            const eastFactor = 1 - Math.abs((angle - 90) / 45);
-            reduction += 100 * eastFactor;
+        // East-northeast reduction: gradually from 0 at 45° to max 100km at 67.5° back to 0 at 90°
+        if (angle >= 45 && angle <= 90) {
+            const eneFactor = 1 - Math.abs((angle - 67.5) / 22.5);
+            reduction += 100 * eneFactor;
         }
         
-        // South reduction: gradually from 0 at 135° to max 100km at 180° back to 0 at 225°
+        // East reduction: gradually from 0 at 45° to max 300km at 90° back to 0 at 135°
+        if (angle >= 45 && angle <= 135) {
+            const eastFactor = 1 - Math.abs((angle - 90) / 45);
+            reduction += 300 * eastFactor;
+        }
+        
+        // South reduction: gradually from 0 at 135° to max 300km at 180° back to 0 at 225°
         if (Math.abs(angle) >= 135) {
             const southAngle = Math.abs(angle);
             const southFactor = 1 - Math.abs((southAngle - 180) / 45);
-            reduction += 100 * southFactor;
+            reduction += 300 * southFactor;
+        }
+        
+        // Southeast reduction: gradually from 0 at 90° to max 300km at 135° back to 0 at 180°
+        if (angle >= 90 && angle <= 180) {
+            const southeastFactor = 1 - Math.abs((angle - 135) / 45);
+            reduction += 300 * southeastFactor;
         }
         
         const adjustedDistance = Math.max(0, distanceKm - reduction);
@@ -277,7 +289,8 @@ const createOffsetLine = (borderLine: [number, number][], distanceKm: number): [
 const missileTypes = [
     { name: "500km Range", range: 500, color: "#10B981" },
     { name: "1000km Range", range: 1000, color: "#F97316" },
-    { name: "1500km Range", range: 1500, color: "#EF4444" }
+    { name: "1500km Range", range: 1500, color: "#EF4444" },
+    { name: "2000km Range", range: 2000, color: "#3B82F6" }
 ];
 
 // Capital cities
@@ -446,6 +459,7 @@ const Map: React.FC = () => {
     const [show500km, setShow500km] = useState<boolean>(true);
     const [show1000km, setShow1000km] = useState<boolean>(true);
     const [show1500km, setShow1500km] = useState<boolean>(true);
+    const [show2000km, setShow2000km] = useState<boolean>(true);
 
     useEffect(() => {
         const fetchFacilities = async () => {
@@ -536,7 +550,7 @@ const Map: React.FC = () => {
         <div style={{ display: 'flex', width: '100%', height: '100vh', backgroundColor: '#0a0a0a', overflow: 'hidden' }}>
             {/* Left Sidebar */}
             <div style={{ 
-                width: '320px', 
+                width: '280px', 
                 background: 'linear-gradient(180deg, #1a1a2e 0%, #0f0f1e 100%)',
                 borderRight: '1px solid rgba(255, 255, 255, 0.08)',
                 boxShadow: '2px 0 15px rgba(0, 0, 0, 0.4)',
@@ -959,7 +973,8 @@ const Map: React.FC = () => {
                         <div style={{ 
                             display: 'flex', 
                             alignItems: 'center', 
-                            gap: '12px', 
+                            justifyContent: 'center',
+                            gap: '16px', 
                             padding: '4px',
                             flexWrap: 'wrap'
                         }}>
@@ -974,6 +989,10 @@ const Map: React.FC = () => {
                             <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                                 <span style={{ color: '#EF4444', fontSize: '14px' }}>■</span>
                                 <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>1500</span>
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                <span style={{ color: '#3B82F6', fontSize: '14px' }}>■</span>
+                                <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>2000</span>
                             </div>
                         </div>
                     </div>
@@ -999,6 +1018,7 @@ const Map: React.FC = () => {
                     if (missile.range === 500 && !show500km) return null;
                     if (missile.range === 1000 && !show1000km) return null;
                     if (missile.range === 1500 && !show1500km) return null;
+                    if (missile.range === 2000 && !show2000km) return null;
                     
                     const rangeLine = createOffsetLine(ukraineBorderLine, missile.range);
                     return (
