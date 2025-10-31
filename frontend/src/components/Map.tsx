@@ -300,7 +300,7 @@ const createCustomIcon = (color: string, damagePercentage: number = 0) => {
     }
     
     return L.divIcon({
-        className: 'custom-marker-v2',
+        className: 'custom-marker',
         html: `<div style="background-color: ${color}; width: 12px; height: 12px; border-radius: 50%; border: ${borderWidth}px solid ${borderColor}; box-sizing: border-box;"></div>`,
         iconSize: [12, 12],
         iconAnchor: [6, 6]
@@ -315,7 +315,9 @@ const FacilityMarker: React.FC<{
     const markerRef = useRef<L.Marker>(null);
     
     const getMarkerColor = (type: string) => {
-        switch (type) {
+        // Normalize type to lowercase for comparison
+        const normalizedType = type?.toLowerCase().trim();
+        switch (normalizedType) {
             case 'refinery': return '#DC2626';
             case 'extraction': return '#16A34A';
             case 'storage': return '#2563EB';
@@ -484,7 +486,9 @@ const Map: React.FC = () => {
     });
 
     const getMarkerColor = (type: string) => {
-        switch (type) {
+        // Normalize type to lowercase for comparison
+        const normalizedType = type?.toLowerCase().trim();
+        switch (normalizedType) {
             case 'refinery': return '#DC2626';
             case 'extraction': return '#16A34A';
             case 'storage': return '#2563EB';
