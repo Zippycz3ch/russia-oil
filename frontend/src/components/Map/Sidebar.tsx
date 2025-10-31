@@ -1,5 +1,6 @@
 import React from 'react';
 import { LegendIcon } from './LegendIcon';
+import { Facility } from './types';
 
 interface FilterState {
     searchTerm: string;
@@ -21,10 +22,12 @@ interface FilterState {
 interface SidebarProps {
     filteredCount: number;
     totalCount: number;
+    facilities: Facility[];
+    filteredFacilities: Facility[];
     filterState: FilterState;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ filteredCount, totalCount, filterState }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ filteredCount, totalCount, facilities, filteredFacilities, filterState }) => {
     const {
         searchTerm, setSearchTerm,
         filterHitStatus, setFilterHitStatus,
@@ -34,6 +37,25 @@ export const Sidebar: React.FC<SidebarProps> = ({ filteredCount, totalCount, fil
         showExtraction, setShowExtraction,
         showStorage, setShowStorage
     } = filterState;
+
+    // Calculate total production and production after hits
+    const calculateProduction = () => {
+        // Only consider production facilities (extraction and refinery), not storage
+        const productionFacilities = filteredFacilities.filter(f => 
+            f.type.toLowerCase() === 'extraction' || f.type.toLowerCase() === 'refinery'
+        );
+        
+        const totalProduction = productionFacilities.reduce((sum, f) => sum + f.capacity, 0);
+        const currentProduction = productionFacilities.reduce((sum, f) => {
+            const damageMultiplier = (100 - (f.damagePercentage || 0)) / 100;
+            return sum + (f.capacity * damageMultiplier);
+        }, 0);
+        
+        return { totalProduction, currentProduction };
+    };
+
+    const { totalProduction, currentProduction } = calculateProduction();
+    const productionPercentage = totalProduction > 0 ? (currentProduction / totalProduction) * 100 : 100;
 
     return (
         <div style={{ 
@@ -451,6 +473,86 @@ export const Sidebar: React.FC<SidebarProps> = ({ filteredCount, totalCount, fil
                         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                             <span style={{ color: '#3B82F6', fontSize: '14px' }}>■</span>
                             <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>2000</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Production Meter - Vertical Oil Banner */}
+                <div style={{ 
+                    borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+                    paddingTop: '12px',
+                    marginTop: '12px'
+                }}>
+                    <div style={{ 
+                        fontSize: '12px', 
+                        color: '#a0aec0', 
+                        fontWeight: '600',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.8px',
+                        marginBottom: '10px',
+                        textAlign: 'center'
+                    }}>
+                        Oil Production
+                    </div>
+                    
+                    <div style={{ 
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: '8px',
+                        padding: '8px'
+                    }}>
+                        {/* Simple vertical bar meter */}
+                        <div style={{
+                            width: '60px',
+                            height: '100px',
+                            background: '#1a1a1a',
+                            borderRadius: '4px',
+                            border: '2px solid #333',
+                            position: 'relative',
+                            overflow: 'hidden',
+                            boxShadow: 'inset 0 2px 8px rgba(0, 0, 0, 0.5)'
+                        }}>
+                            {/* Oil fill */}
+                            <div style={{
+                                position: 'absolute',
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                height: `${productionPercentage}%`,
+                                background: productionPercentage > 70 
+                                    ? 'linear-gradient(to top, #0a7a4f, #10B981)'
+                                    : productionPercentage > 40 
+                                    ? 'linear-gradient(to top, #c45c10, #F97316)'
+                                    : 'linear-gradient(to top, #a01f1f, #EF4444)',
+                                transition: 'height 0.6s ease',
+                                boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.3)'
+                            }}>
+                                {/* Surface shimmer */}
+                                <div style={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: 0,
+                                    right: 0,
+                                    height: '2px',
+                                    background: 'rgba(255, 255, 255, 0.3)'
+                                }} />
+                            </div>
+                            
+                            {/* Percentage in center */}
+                            <div style={{
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                transform: 'translate(-50%, -50%)',
+                                fontSize: '18px',
+                                fontWeight: '900',
+                                color: '#ffffff',
+                                textShadow: '0 2px 6px rgba(0, 0, 0, 0.9)',
+                                zIndex: 10
+                            }}>
+                                {productionPercentage.toFixed(0)}%
+                            </div>
                         </div>
                     </div>
                 </div>

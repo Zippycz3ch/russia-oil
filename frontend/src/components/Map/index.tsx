@@ -107,6 +107,8 @@ const Map: React.FC = () => {
             <Sidebar 
                 filteredCount={filteredFacilities.length}
                 totalCount={facilities.length}
+                facilities={facilities}
+                filteredFacilities={filteredFacilities}
                 filterState={{
                     searchTerm,
                     setSearchTerm,
