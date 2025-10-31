@@ -273,33 +273,33 @@ const HitEditor: React.FC = () => {
                                 )}
                             </div>
 
-                            <div>
-                                <label style={{
-                                    display: 'block',
-                                    marginBottom: '8px',
-                                    color: '#999',
-                                    fontSize: '14px',
-                                    fontWeight: '600'
-                                }}>
-                                    Date *
-                                </label>
-                                <input
-                                    type="date"
-                                    value={hit.date}
-                                    onChange={(e) => setHit({ ...hit, date: e.target.value })}
-                                    style={{
-                                        width: '100%',
-                                        padding: '12px',
-                                        backgroundColor: '#0a0a0a',
-                                        border: '1px solid #333',
-                                        borderRadius: '4px',
-                                        color: '#fff',
-                                        fontSize: '14px'
-                                    }}
-                                />
-                            </div>
-
                             <div style={{ gridColumn: '1 / -1', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                                <div>
+                                    <label style={{
+                                        display: 'block',
+                                        marginBottom: '8px',
+                                        color: '#999',
+                                        fontSize: '14px',
+                                        fontWeight: '600'
+                                    }}>
+                                        Date *
+                                    </label>
+                                    <input
+                                        type="date"
+                                        value={hit.date}
+                                        onChange={(e) => setHit({ ...hit, date: e.target.value })}
+                                        style={{
+                                            width: '100%',
+                                            padding: '12px',
+                                            backgroundColor: '#0a0a0a',
+                                            border: '1px solid #333',
+                                            borderRadius: '4px',
+                                            color: '#fff',
+                                            fontSize: '14px'
+                                        }}
+                                    />
+                                </div>
+
                                 <div>
                                     <label style={{
                                         display: 'block',
@@ -327,7 +327,9 @@ const HitEditor: React.FC = () => {
                                         <option value="destroyed">Destroyed</option>
                                     </select>
                                 </div>
+                            </div>
 
+                            <div style={{ gridColumn: '1 / -1', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
                                 <div>
                                     <label style={{
                                         display: 'block',
@@ -362,33 +364,33 @@ const HitEditor: React.FC = () => {
                                         Percentage of facility capacity affected by this hit
                                     </p>
                                 </div>
-                            </div>
 
-                            <div style={{ gridColumn: '1 / -1' }}>
-                                <label style={{
-                                    display: 'block',
-                                    marginBottom: '8px',
-                                    color: '#999',
-                                    fontSize: '14px',
-                                    fontWeight: '600'
-                                }}>
-                                    Expected Repair Time (days)
-                                </label>
-                                <input
-                                    type="number"
-                                    value={hit.expectedRepairTime || ''}
-                                    onChange={(e) => setHit({ ...hit, expectedRepairTime: e.target.value ? Number(e.target.value) : undefined })}
-                                    placeholder="e.g., 30"
-                                    style={{
-                                        width: '100%',
-                                        padding: '12px',
-                                        backgroundColor: '#0a0a0a',
-                                        border: '1px solid #333',
-                                        borderRadius: '4px',
-                                        color: '#fff',
-                                        fontSize: '14px'
-                                    }}
-                                />
+                                <div>
+                                    <label style={{
+                                        display: 'block',
+                                        marginBottom: '8px',
+                                        color: '#999',
+                                        fontSize: '14px',
+                                        fontWeight: '600'
+                                    }}>
+                                        Expected Repair Time (days)
+                                    </label>
+                                    <input
+                                        type="number"
+                                        value={hit.expectedRepairTime || ''}
+                                        onChange={(e) => setHit({ ...hit, expectedRepairTime: e.target.value ? Number(e.target.value) : undefined })}
+                                        placeholder="e.g., 30"
+                                        style={{
+                                            width: '100%',
+                                            padding: '12px',
+                                            backgroundColor: '#0a0a0a',
+                                            border: '1px solid #333',
+                                            borderRadius: '4px',
+                                            color: '#fff',
+                                            fontSize: '14px'
+                                        }}
+                                    />
+                                </div>
                             </div>
 
                             <div style={{ gridColumn: '1 / -1' }}>
