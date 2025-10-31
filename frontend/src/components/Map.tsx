@@ -735,7 +735,13 @@ const Map: React.FC = () => {
                                         accentColor: '#6b7280'
                                     }}
                                 />
-                                <span style={{ color: '#DC2626', fontSize: '16px', lineHeight: '1' }}>●</span>
+                                <span style={{ 
+                                    display: 'inline-block',
+                                    width: '12px', 
+                                    height: '12px', 
+                                    backgroundColor: '#DC2626',
+                                    borderRadius: '2px'
+                                }}></span>
                                 <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>Refinery</span>
                             </label>
                             <label style={{ 
@@ -761,7 +767,13 @@ const Map: React.FC = () => {
                                         accentColor: '#6b7280'
                                     }}
                                 />
-                                <span style={{ color: '#16A34A', fontSize: '16px', lineHeight: '1' }}>●</span>
+                                <span style={{ 
+                                    display: 'inline-block',
+                                    width: '12px', 
+                                    height: '12px', 
+                                    backgroundColor: '#16A34A',
+                                    borderRadius: '2px'
+                                }}></span>
                                 <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>Extraction</span>
                             </label>
                             <label style={{ 
@@ -787,7 +799,13 @@ const Map: React.FC = () => {
                                         accentColor: '#6b7280'
                                     }}
                                 />
-                                <span style={{ color: '#2563EB', fontSize: '16px', lineHeight: '1' }}>●</span>
+                                <span style={{ 
+                                    display: 'inline-block',
+                                    width: '12px', 
+                                    height: '12px', 
+                                    backgroundColor: '#2563EB',
+                                    borderRadius: '2px'
+                                }}></span>
                                 <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>Storage</span>
                             </label>
                         </div>
