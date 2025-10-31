@@ -112,12 +112,15 @@ const FacilityEditor: React.FC = () => {
                     latitude: facility.latitude,
                     longitude: facility.longitude
                 },
-                status: facility.status,
                 hit: facility.hit ?? false,
                 draft: publishNow ? false : (facility.draft ?? true)
             };
             
-            if (facility.gasCapacity) {
+            if (facility.status) {
+                facilityData.status = facility.status;
+            }
+            
+            if (facility.gasCapacity !== undefined && facility.gasCapacity !== null) {
                 facilityData.gasCapacity = facility.gasCapacity;
             }
             
