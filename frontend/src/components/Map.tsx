@@ -498,7 +498,7 @@ const Map: React.FC = () => {
         // Normalize type to lowercase for comparison
         const normalizedType = type?.toLowerCase().trim();
         switch (normalizedType) {
-            case 'refinery': return '#EF4444';
+            case 'refinery': return '#1cc5b7ff';
             case 'extraction': return '#8B5CF6';
             case 'storage': return '#F59E0B';
             default: return '#FFC300';
@@ -743,7 +743,7 @@ const Map: React.FC = () => {
                                     display: 'inline-block',
                                     width: '12px', 
                                     height: '12px', 
-                                    backgroundColor: '#EF4444',
+                                    backgroundColor: '#1cc5b7ff',
                                     borderRadius: '2px'
                                 }}></span>
                                 <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>Refinery</span>
