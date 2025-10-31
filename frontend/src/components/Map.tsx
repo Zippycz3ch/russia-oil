@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Polygon, Tooltip, GeoJSON } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Polygon, Tooltip } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -452,7 +452,6 @@ const Map: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [minCapacity, setMinCapacity] = useState<number>(0);
     const [minGasCapacity, setMinGasCapacity] = useState<number>(0);
-    const [countriesGeoJSON, setCountriesGeoJSON] = useState<any>(null);
     
     // Facility type visibility
     const [showRefinery, setShowRefinery] = useState<boolean>(true);
@@ -464,17 +463,6 @@ const Map: React.FC = () => {
     const [show1000km, setShow1000km] = useState<boolean>(true);
     const [show1500km, setShow1500km] = useState<boolean>(true);
     const [show2000km, setShow2000km] = useState<boolean>(true);
-
-    // Load countries GeoJSON
-    useEffect(() => {
-        fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json')
-            .then(response => response.json())
-            .then(data => {
-                console.log('GeoJSON loaded:', data);
-                setCountriesGeoJSON(data);
-            })
-            .catch(error => console.error('Error loading countries GeoJSON:', error));
-    }, []);
 
     useEffect(() => {
         const fetchFacilities = async () => {
@@ -1047,25 +1035,6 @@ const Map: React.FC = () => {
                     url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
                 />
-                
-                {/* Countries choropleth - Ukraine highlighted */}
-                {countriesGeoJSON && (
-                    <GeoJSON
-                        data={countriesGeoJSON}
-                        style={(feature) => {
-                            const countryName = feature?.properties?.name;
-                            const isUkraine = countryName === 'Ukraine';
-                            console.log('Country:', countryName, 'isUkraine:', isUkraine);
-                            return {
-                                fillColor: isUkraine ? '#0057B7' : 'transparent',
-                                fillOpacity: isUkraine ? 0.3 : 0,
-                                color: isUkraine ? '#0057B7' : 'transparent',
-                                weight: isUkraine ? 2 : 0,
-                                opacity: isUkraine ? 1 : 0
-                            };
-                        }}
-                    />
-                )}
                 
                 {/* Range boundary from Ukraine border */}
                 {missileTypes.map((missile) => {
