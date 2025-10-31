@@ -318,10 +318,11 @@ const FacilityMarker: React.FC<{
         // Normalize type to lowercase for comparison
         const normalizedType = type?.toLowerCase().trim();
         switch (normalizedType) {
-            case 'refinery': return '#DC2626';
-            case 'extraction': return '#16A34A';
-            case 'storage': return '#2563EB';
-            default: return '#FFC300';
+            case 'refinery': return '#1cc5b7ff';
+            case 'extraction': return '#8B5CF6';
+            case 'storage': return '#F59E0B';
+            default: 
+                return '#FFC300';
         }
     };
     
@@ -497,9 +498,9 @@ const Map: React.FC = () => {
         // Normalize type to lowercase for comparison
         const normalizedType = type?.toLowerCase().trim();
         switch (normalizedType) {
-            case 'refinery': return '#DC2626';
-            case 'extraction': return '#16A34A';
-            case 'storage': return '#2563EB';
+            case 'refinery': return '#EF4444';
+            case 'extraction': return '#8B5CF6';
+            case 'storage': return '#F59E0B';
             default: return '#FFC300';
         }
     };
@@ -742,7 +743,7 @@ const Map: React.FC = () => {
                                     display: 'inline-block',
                                     width: '12px', 
                                     height: '12px', 
-                                    backgroundColor: '#DC2626',
+                                    backgroundColor: '#EF4444',
                                     borderRadius: '2px'
                                 }}></span>
                                 <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>Refinery</span>
@@ -774,7 +775,7 @@ const Map: React.FC = () => {
                                     display: 'inline-block',
                                     width: '12px', 
                                     height: '12px', 
-                                    backgroundColor: '#16A34A',
+                                    backgroundColor: '#8B5CF6',
                                     borderRadius: '2px'
                                 }}></span>
                                 <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>Extraction</span>
@@ -806,7 +807,7 @@ const Map: React.FC = () => {
                                     display: 'inline-block',
                                     width: '12px', 
                                     height: '12px', 
-                                    backgroundColor: '#2563EB',
+                                    backgroundColor: '#F59E0B',
                                     borderRadius: '2px'
                                 }}></span>
                                 <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>Storage</span>
