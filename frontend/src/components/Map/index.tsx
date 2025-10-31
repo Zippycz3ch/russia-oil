@@ -174,7 +174,13 @@ const Map: React.FC = () => {
                                 icon={icon}
                             >
                                 <Popup>
-                                    <div style={{ color: '#000', fontWeight: 'bold' }}>
+                                    <div style={{ 
+                                        backgroundColor: '#1a1a2e',
+                                        color: 'white',
+                                        fontWeight: 'bold',
+                                        padding: '4px',
+                                        borderRadius: '8px'
+                                    }}>
                                         {capital.name}
                                     </div>
                                 </Popup>

@@ -107,7 +107,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ filteredCount, totalCount, fil
                             boxSizing: 'border-box',
                             transition: 'border-color 0.2s ease'
                         }}
-                        onFocus={(e) => e.target.style.borderColor = 'rgba(96, 165, 250, 0.5)'}
+                        onFocus={(e) => e.target.style.borderColor = '#FFD700'}
                         onBlur={(e) => e.target.style.borderColor = 'rgba(255, 255, 255, 0.1)'}
                     />
                 </div>
@@ -151,7 +151,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ filteredCount, totalCount, fil
                                     cursor: 'pointer',
                                     width: '16px',
                                     height: '16px',
-                                    accentColor: '#6b7280'
+                                    accentColor: '#0057B7'
                                 }}
                             />
                             <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>Hit</span>
@@ -182,7 +182,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ filteredCount, totalCount, fil
                                     cursor: 'pointer',
                                     width: '16px',
                                     height: '16px',
-                                    accentColor: '#6b7280'
+                                    accentColor: '#0057B7'
                                 }}
                             />
                             <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>Operational</span>
@@ -216,7 +216,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ filteredCount, totalCount, fil
                         style={{
                             width: '100%',
                             cursor: 'pointer',
-                            accentColor: '#6b7280',
+                            accentColor: '#0057B7',
                             height: '4px'
                         }}
                     />
@@ -248,7 +248,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ filteredCount, totalCount, fil
                         style={{
                             width: '100%',
                             cursor: 'pointer',
-                            accentColor: '#6b7280',
+                            accentColor: '#0057B7',
                             height: '4px'
                         }}
                     />
@@ -291,7 +291,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ filteredCount, totalCount, fil
                                     cursor: 'pointer',
                                     width: '14px',
                                     height: '14px',
-                                    accentColor: '#6b7280'
+                                    accentColor: '#0057B7'
                                 }}
                             />
                             <LegendIcon color="#1cc5b7ff" />
@@ -317,7 +317,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ filteredCount, totalCount, fil
                                     cursor: 'pointer',
                                     width: '14px',
                                     height: '14px',
-                                    accentColor: '#6b7280'
+                                    accentColor: '#0057B7'
                                 }}
                             />
                             <LegendIcon color="#8B5CF6" />
@@ -343,7 +343,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ filteredCount, totalCount, fil
                                     cursor: 'pointer',
                                     width: '14px',
                                     height: '14px',
-                                    accentColor: '#6b7280'
+                                    accentColor: '#0057B7'
                                 }}
                             />
                             <LegendIcon color="#F59E0B" />

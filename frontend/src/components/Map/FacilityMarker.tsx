@@ -34,8 +34,14 @@ export const FacilityMarker: React.FC<FacilityMarkerProps> = ({ facility, onView
             icon={createCustomIcon(markerColor, facility.damagePercentage || 0)}
         >
             <Popup>
-                <div style={{ color: '#000', minWidth: '200px' }}>
-                    <h3 style={{ margin: '0 0 10px 0', fontSize: '16px' }}>{facility.name}</h3>
+                <div style={{ 
+                    backgroundColor: '#1a1a2e',
+                    color: '#e2e8f0',
+                    minWidth: '200px',
+                    padding: '4px',
+                    borderRadius: '8px'
+                }}>
+                    <h3 style={{ margin: '0 0 10px 0', fontSize: '16px', color: 'white' }}>{facility.name}</h3>
                     <div style={{ marginBottom: '8px', display: 'flex', gap: '6px', alignItems: 'center' }}>
                         <div style={{ 
                             display: 'inline-block',
@@ -87,7 +93,7 @@ export const FacilityMarker: React.FC<FacilityMarkerProps> = ({ facility, onView
                             </p>
                         )}
                     </div>
-                    <p style={{ margin: '5px 0 10px 0', fontSize: '11px', color: '#666' }}>
+                    <p style={{ margin: '5px 0 10px 0', fontSize: '11px', color: '#94a3b8' }}>
                         {lat.toFixed(4)}, {lon.toFixed(4)}
                     </p>
                     <button
@@ -95,16 +101,16 @@ export const FacilityMarker: React.FC<FacilityMarkerProps> = ({ facility, onView
                         style={{
                             width: '100%',
                             padding: '8px 12px',
-                            backgroundColor: '#3b82f6',
-                            color: 'white',
+                            backgroundColor: '#0057B7',
+                            color: '#FFD700',
                             border: 'none',
                             borderRadius: '4px',
                             cursor: 'pointer',
                             fontSize: '13px',
-                            fontWeight: '500'
+                            fontWeight: '600'
                         }}
-                        onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#2563eb'}
-                        onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#3b82f6'}
+                        onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#004494'}
+                        onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#0057B7'}
                     >
                         View Full Details →
                     </button>
