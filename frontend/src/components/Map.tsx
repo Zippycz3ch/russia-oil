@@ -435,6 +435,7 @@ const Map: React.FC = () => {
     const [filterHitStatus, setFilterHitStatus] = useState<string>('all');
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [minCapacity, setMinCapacity] = useState<number>(0);
+    const [minGasCapacity, setMinGasCapacity] = useState<number>(0);
     
     // Facility type visibility
     const [showRefinery, setShowRefinery] = useState<boolean>(true);
@@ -510,6 +511,9 @@ const Map: React.FC = () => {
         
         // Capacity filter
         if (facility.capacity < minCapacity) return false;
+        
+        // Gas capacity filter
+        if (facility.gasCapacity && facility.gasCapacity < minGasCapacity) return false;
         
         // Search filter
         if (searchTerm && !facility.name.toLowerCase().includes(searchTerm.toLowerCase())) return false;
@@ -685,27 +689,22 @@ const Map: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Minimum Capacity */}
-                    <div style={{ marginBottom: '16px' }}>
+                    {/* Minimum Oil Capacity */}
+                    <div style={{ marginBottom: '12px' }}>
                         <label style={{ 
-                            display: 'block', 
-                            marginBottom: '8px', 
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            marginBottom: '6px', 
                             fontSize: '12px', 
                             color: '#a0aec0', 
                             fontWeight: '600',
                             textTransform: 'uppercase',
                             letterSpacing: '0.8px'
                         }}>
-                            Min. Capacity
+                            <span>Min. Oil</span>
+                            <span style={{ color: '#9ca3af', fontSize: '11px' }}>{minCapacity.toLocaleString()} bbl/d</span>
                         </label>
-                        <div style={{ 
-                            color: '#9ca3af', 
-                            fontSize: '14px', 
-                            marginBottom: '8px',
-                            fontWeight: '600'
-                        }}>
-                            {minCapacity.toLocaleString()} barrels/day
-                        </div>
                         <input
                             type="range"
                             min="0"
@@ -717,16 +716,48 @@ const Map: React.FC = () => {
                                 width: '100%',
                                 cursor: 'pointer',
                                 accentColor: '#6b7280',
-                                height: '5px'
+                                height: '4px'
                             }}
                         />
                     </div>
 
-                    {/* Legend */}
+                    {/* Minimum Gas Capacity */}
+                    <div style={{ marginBottom: '12px' }}>
+                        <label style={{ 
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            marginBottom: '6px', 
+                            fontSize: '12px', 
+                            color: '#a0aec0', 
+                            fontWeight: '600',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.8px'
+                        }}>
+                            <span>Min. Gas</span>
+                            <span style={{ color: '#9ca3af', fontSize: '11px' }}>{minGasCapacity.toLocaleString()} m³/yr</span>
+                        </label>
+                        <input
+                            type="range"
+                            min="0"
+                            max="30000000000"
+                            step="1000000000"
+                            value={minGasCapacity}
+                            onChange={(e) => setMinGasCapacity(Number(e.target.value))}
+                            style={{
+                                width: '100%',
+                                cursor: 'pointer',
+                                accentColor: '#6b7280',
+                                height: '4px'
+                            }}
+                        />
+                    </div>
+
+                    {/* Facility Types Legend */}
                     <div style={{ 
                         borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-                        paddingTop: '16px',
-                        marginTop: '16px'
+                        paddingTop: '12px',
+                        marginTop: '12px'
                     }}>
                         <div style={{ 
                             fontSize: '12px', 
@@ -734,17 +765,17 @@ const Map: React.FC = () => {
                             fontWeight: '600',
                             textTransform: 'uppercase',
                             letterSpacing: '0.8px',
-                            marginBottom: '8px'
+                            marginBottom: '6px'
                         }}>
                             Facility Types
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
                             <label style={{ 
                                 display: 'flex', 
                                 alignItems: 'center', 
-                                gap: '10px', 
+                                gap: '8px', 
                                 cursor: 'pointer',
-                                padding: '6px',
+                                padding: '4px',
                                 borderRadius: '4px',
                                 transition: 'background 0.2s ease'
                             }}
@@ -757,8 +788,8 @@ const Map: React.FC = () => {
                                     onChange={(e) => setShowRefinery(e.target.checked)}
                                     style={{ 
                                         cursor: 'pointer',
-                                        width: '16px',
-                                        height: '16px',
+                                        width: '14px',
+                                        height: '14px',
                                         accentColor: '#6b7280'
                                     }}
                                 />
@@ -767,16 +798,16 @@ const Map: React.FC = () => {
                                     width: '12px', 
                                     height: '12px', 
                                     backgroundColor: '#1cc5b7ff',
-                                    borderRadius: '2px'
+                                    borderRadius: '50%'
                                 }}></span>
-                                <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>Refinery</span>
+                                <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>Refinery</span>
                             </label>
                             <label style={{ 
                                 display: 'flex', 
                                 alignItems: 'center', 
-                                gap: '10px', 
+                                gap: '8px', 
                                 cursor: 'pointer',
-                                padding: '6px',
+                                padding: '4px',
                                 borderRadius: '4px',
                                 transition: 'background 0.2s ease'
                             }}
@@ -789,8 +820,8 @@ const Map: React.FC = () => {
                                     onChange={(e) => setShowExtraction(e.target.checked)}
                                     style={{ 
                                         cursor: 'pointer',
-                                        width: '16px',
-                                        height: '16px',
+                                        width: '14px',
+                                        height: '14px',
                                         accentColor: '#6b7280'
                                     }}
                                 />
@@ -801,14 +832,14 @@ const Map: React.FC = () => {
                                     backgroundColor: '#8B5CF6',
                                     borderRadius: '2px'
                                 }}></span>
-                                <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>Extraction</span>
+                                <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>Extraction</span>
                             </label>
                             <label style={{ 
                                 display: 'flex', 
                                 alignItems: 'center', 
-                                gap: '10px', 
+                                gap: '8px', 
                                 cursor: 'pointer',
-                                padding: '6px',
+                                padding: '4px',
                                 borderRadius: '4px',
                                 transition: 'background 0.2s ease'
                             }}
@@ -821,8 +852,8 @@ const Map: React.FC = () => {
                                     onChange={(e) => setShowStorage(e.target.checked)}
                                     style={{ 
                                         cursor: 'pointer',
-                                        width: '16px',
-                                        height: '16px',
+                                        width: '14px',
+                                        height: '14px',
                                         accentColor: '#6b7280'
                                     }}
                                 />
@@ -833,16 +864,16 @@ const Map: React.FC = () => {
                                     backgroundColor: '#F59E0B',
                                     borderRadius: '2px'
                                 }}></span>
-                                <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>Storage</span>
+                                <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>Storage</span>
                             </label>
                         </div>
                     </div>
 
-                    {/* Weapon Ranges Legend */}
+                    {/* Damage Legend */}
                     <div style={{ 
                         borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-                        paddingTop: '16px',
-                        marginTop: '16px'
+                        paddingTop: '12px',
+                        marginTop: '12px'
                     }}>
                         <div style={{ 
                             fontSize: '12px', 
@@ -850,37 +881,105 @@ const Map: React.FC = () => {
                             fontWeight: '600',
                             textTransform: 'uppercase',
                             letterSpacing: '0.8px',
-                            marginBottom: '8px'
+                            marginBottom: '6px'
+                        }}>
+                            Damage Level
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                            <div style={{ 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                gap: '8px', 
+                                padding: '4px'
+                            }}>
+                                <span style={{ 
+                                    display: 'inline-block',
+                                    width: '12px', 
+                                    height: '12px', 
+                                    backgroundColor: '#10B981',
+                                    borderRadius: '50%',
+                                    border: '2px solid #10B981'
+                                }}></span>
+                                <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>Operational</span>
+                            </div>
+                            <div style={{ 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                gap: '8px', 
+                                padding: '4px'
+                            }}>
+                                <span style={{ 
+                                    display: 'inline-block',
+                                    width: '12px', 
+                                    height: '12px', 
+                                    backgroundColor: '#F59E0B',
+                                    borderRadius: '50%',
+                                    border: '2px solid #F59E0B'
+                                }}></span>
+                                <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>1-50% Damage</span>
+                            </div>
+                            <div style={{ 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                gap: '8px', 
+                                padding: '4px'
+                            }}>
+                                <span style={{ 
+                                    display: 'inline-block',
+                                    width: '12px', 
+                                    height: '12px', 
+                                    backgroundColor: '#DC2626',
+                                    borderRadius: '50%',
+                                    border: '2px solid #DC2626'
+                                }}></span>
+                                <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>51-100% Damage</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Weapon Ranges Legend */}
+                    <div style={{ 
+                        borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+                        paddingTop: '12px',
+                        marginTop: '12px'
+                    }}>
+                        <div style={{ 
+                            fontSize: '12px', 
+                            color: '#a0aec0', 
+                            fontWeight: '600',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.8px',
+                            marginBottom: '6px'
                         }}>
                             Weapon Ranges
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
                             <div style={{ 
                                 display: 'flex', 
                                 alignItems: 'center', 
-                                gap: '10px', 
-                                padding: '6px'
+                                gap: '8px', 
+                                padding: '4px'
                             }}>
-                                <span style={{ color: '#10B981', fontSize: '16px' }}>■</span>
-                                <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>500km Range</span>
+                                <span style={{ color: '#10B981', fontSize: '14px' }}>■</span>
+                                <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>500km</span>
                             </div>
                             <div style={{ 
                                 display: 'flex', 
                                 alignItems: 'center', 
-                                gap: '10px', 
-                                padding: '6px'
+                                gap: '8px', 
+                                padding: '4px'
                             }}>
-                                <span style={{ color: '#F97316', fontSize: '16px' }}>■</span>
-                                <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>1000km Range</span>
+                                <span style={{ color: '#F97316', fontSize: '14px' }}>■</span>
+                                <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>1000km</span>
                             </div>
                             <div style={{ 
                                 display: 'flex', 
                                 alignItems: 'center', 
-                                gap: '10px', 
-                                padding: '6px'
+                                gap: '8px', 
+                                padding: '4px'
                             }}>
-                                <span style={{ color: '#EF4444', fontSize: '16px' }}>■</span>
-                                <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>1500km Range</span>
+                                <span style={{ color: '#EF4444', fontSize: '14px' }}>■</span>
+                                <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>1500km</span>
                             </div>
                         </div>
                     </div>
