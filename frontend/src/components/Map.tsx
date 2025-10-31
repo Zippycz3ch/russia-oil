@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Polygon, Tooltip } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Polygon, Tooltip, GeoJSON } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -304,11 +304,14 @@ const createCustomIcon = (color: string, damagePercentage: number = 0) => {
     let borderColor = 'white'; // White for operational
     let borderWidth = 2;
     
-    if (damagePercentage > 0 && damagePercentage < 50) {
-        borderColor = '#F59E0B'; // Orange
+    if (damagePercentage >= 80) {
+        borderColor = '#000000'; // Black for 80-100%
         borderWidth = 3;
-    } else if (damagePercentage >= 50) {
-        borderColor = '#DC2626'; // Red
+    } else if (damagePercentage >= 40) {
+        borderColor = '#DC2626'; // Red for 40-79%
+        borderWidth = 3;
+    } else if (damagePercentage > 0) {
+        borderColor = '#F59E0B'; // Orange for 1-39%
         borderWidth = 3;
     }
     
@@ -449,6 +452,7 @@ const Map: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [minCapacity, setMinCapacity] = useState<number>(0);
     const [minGasCapacity, setMinGasCapacity] = useState<number>(0);
+    const [countriesGeoJSON, setCountriesGeoJSON] = useState<any>(null);
     
     // Facility type visibility
     const [showRefinery, setShowRefinery] = useState<boolean>(true);
@@ -460,6 +464,17 @@ const Map: React.FC = () => {
     const [show1000km, setShow1000km] = useState<boolean>(true);
     const [show1500km, setShow1500km] = useState<boolean>(true);
     const [show2000km, setShow2000km] = useState<boolean>(true);
+
+    // Load countries GeoJSON
+    useEffect(() => {
+        fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json')
+            .then(response => response.json())
+            .then(data => {
+                console.log('GeoJSON loaded:', data);
+                setCountriesGeoJSON(data);
+            })
+            .catch(error => console.error('Error loading countries GeoJSON:', error));
+    }, []);
 
     useEffect(() => {
         const fetchFacilities = async () => {
@@ -895,61 +910,82 @@ const Map: React.FC = () => {
                             fontWeight: '600',
                             textTransform: 'uppercase',
                             letterSpacing: '0.8px',
-                            marginBottom: '6px'
+                            marginBottom: '4px'
                         }}>
                             Damage Level
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                            <div style={{ 
-                                display: 'flex', 
-                                alignItems: 'center', 
-                                gap: '8px', 
-                                padding: '4px'
-                            }}>
-                                <span style={{ 
-                                    display: 'inline-block',
-                                    width: '12px', 
-                                    height: '12px', 
-                                    backgroundColor: '#1cc5b7ff',
-                                    borderRadius: '50%',
-                                    border: '2px solid white',
-                                    boxSizing: 'border-box'
-                                }}></span>
-                                <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>Operational</span>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', padding: '4px' }}>
+                            <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+                                <div style={{ 
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    gap: '6px',
+                                    flex: '1'
+                                }}>
+                                    <span style={{ 
+                                        display: 'inline-block',
+                                        width: '12px', 
+                                        height: '12px', 
+                                        backgroundColor: '#1cc5b7ff',
+                                        borderRadius: '50%',
+                                        border: '2px solid white',
+                                        boxSizing: 'border-box'
+                                    }}></span>
+                                    <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>0%</span>
+                                </div>
+                                <div style={{ 
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    gap: '6px',
+                                    flex: '1'
+                                }}>
+                                    <span style={{ 
+                                        display: 'inline-block',
+                                        width: '12px', 
+                                        height: '12px', 
+                                        backgroundColor: '#1cc5b7ff',
+                                        borderRadius: '50%',
+                                        border: '3px solid #F59E0B',
+                                        boxSizing: 'border-box'
+                                    }}></span>
+                                    <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>1-39%</span>
+                                </div>
                             </div>
-                            <div style={{ 
-                                display: 'flex', 
-                                alignItems: 'center', 
-                                gap: '8px', 
-                                padding: '4px'
-                            }}>
-                                <span style={{ 
-                                    display: 'inline-block',
-                                    width: '12px', 
-                                    height: '12px', 
-                                    backgroundColor: '#1cc5b7ff',
-                                    borderRadius: '50%',
-                                    border: '3px solid #F59E0B',
-                                    boxSizing: 'border-box'
-                                }}></span>
-                                <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>1-49% Damage</span>
-                            </div>
-                            <div style={{ 
-                                display: 'flex', 
-                                alignItems: 'center', 
-                                gap: '8px', 
-                                padding: '4px'
-                            }}>
-                                <span style={{ 
-                                    display: 'inline-block',
-                                    width: '12px', 
-                                    height: '12px', 
-                                    backgroundColor: '#1cc5b7ff',
-                                    borderRadius: '50%',
-                                    border: '3px solid #DC2626',
-                                    boxSizing: 'border-box'
-                                }}></span>
-                                <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>50-100% Damage</span>
+                            <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+                                <div style={{ 
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    gap: '6px',
+                                    flex: '1'
+                                }}>
+                                    <span style={{ 
+                                        display: 'inline-block',
+                                        width: '12px', 
+                                        height: '12px', 
+                                        backgroundColor: '#1cc5b7ff',
+                                        borderRadius: '50%',
+                                        border: '3px solid #DC2626',
+                                        boxSizing: 'border-box'
+                                    }}></span>
+                                    <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>40-79%</span>
+                                </div>
+                                <div style={{ 
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    gap: '6px',
+                                    flex: '1'
+                                }}>
+                                    <span style={{ 
+                                        display: 'inline-block',
+                                        width: '12px', 
+                                        height: '12px', 
+                                        backgroundColor: '#1cc5b7ff',
+                                        borderRadius: '50%',
+                                        border: '3px solid #000000',
+                                        boxSizing: 'border-box'
+                                    }}></span>
+                                    <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>80-100%</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1012,6 +1048,25 @@ const Map: React.FC = () => {
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
                 />
                 
+                {/* Countries choropleth - Ukraine highlighted */}
+                {countriesGeoJSON && (
+                    <GeoJSON
+                        data={countriesGeoJSON}
+                        style={(feature) => {
+                            const countryName = feature?.properties?.name;
+                            const isUkraine = countryName === 'Ukraine';
+                            console.log('Country:', countryName, 'isUkraine:', isUkraine);
+                            return {
+                                fillColor: isUkraine ? '#0057B7' : 'transparent',
+                                fillOpacity: isUkraine ? 0.3 : 0,
+                                color: isUkraine ? '#0057B7' : 'transparent',
+                                weight: isUkraine ? 2 : 0,
+                                opacity: isUkraine ? 1 : 0
+                            };
+                        }}
+                    />
+                )}
+                
                 {/* Range boundary from Ukraine border */}
                 {missileTypes.map((missile) => {
                     // Check if this range should be shown
@@ -1030,7 +1085,8 @@ const Map: React.FC = () => {
                                 fillColor: 'transparent',
                                 weight: 2,
                                 opacity: 0.9,
-                                fillOpacity: 0
+                                fillOpacity: 0,
+                                dashArray: '10, 15'
                             }}
                         />
                     );
