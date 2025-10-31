@@ -1,3 +1,14 @@
+/* Global reset to ensure pages can scroll */
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow: auto !important;
+}
+
+#root {
+    overflow: auto !important;
+}
+
 /* Dark mode Leaflet popup styling */
 .leaflet-popup-content-wrapper {
     background-color: #1a1a2e !important;
