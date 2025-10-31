@@ -461,12 +461,25 @@ const FacilityDetail: React.FC = () => {
                             {hits.map((hit, index) => (
                                 <div 
                                     key={hit.id}
+                                    onClick={() => navigate(`/hit/${hit.id}`)}
                                     style={{
                                         backgroundColor: '#0a0a0a',
                                         border: '1px solid #333',
                                         borderRadius: '6px',
                                         padding: '20px',
-                                        borderLeft: '4px solid #dc2626'
+                                        borderLeft: '4px solid #dc2626',
+                                        cursor: 'pointer',
+                                        transition: 'all 0.2s ease'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.backgroundColor = '#1a1a1a';
+                                        e.currentTarget.style.borderColor = '#444';
+                                        e.currentTarget.style.transform = 'translateX(4px)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.backgroundColor = '#0a0a0a';
+                                        e.currentTarget.style.borderColor = '#333';
+                                        e.currentTarget.style.transform = 'translateX(0)';
                                     }}
                                 >
                                     <div style={{
@@ -602,11 +615,29 @@ const FacilityDetail: React.FC = () => {
                                             borderRadius: '4px',
                                             fontSize: '14px',
                                             color: '#ccc',
-                                            lineHeight: '1.5'
+                                            lineHeight: '1.5',
+                                            marginBottom: '12px'
                                         }}>
                                             {hit.notes}
                                         </div>
                                     )}
+
+                                    {/* Click indicator */}
+                                    <div style={{
+                                        marginTop: '8px',
+                                        paddingTop: '12px',
+                                        borderTop: '1px solid #333',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'flex-end',
+                                        gap: '6px',
+                                        color: '#3b82f6',
+                                        fontSize: '13px',
+                                        fontWeight: '500'
+                                    }}>
+                                        <span>View Full Details</span>
+                                        <span style={{ fontSize: '16px' }}>→</span>
+                                    </div>
                                 </div>
                             ))}
                         </div>
