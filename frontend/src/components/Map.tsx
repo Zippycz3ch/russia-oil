@@ -350,7 +350,7 @@ const FacilityMarker: React.FC<{
             <Popup>
                 <div style={{ color: '#000', minWidth: '200px' }}>
                     <h3 style={{ margin: '0 0 10px 0', fontSize: '16px' }}>{facility.name}</h3>
-                    <div style={{ marginBottom: '8px' }}>
+                    <div style={{ marginBottom: '8px', display: 'flex', gap: '6px', alignItems: 'center' }}>
                         <div style={{ 
                             display: 'inline-block',
                             padding: '3px 8px',
@@ -363,6 +363,19 @@ const FacilityMarker: React.FC<{
                         }}>
                             {facility.hit ? 'HIT' : 'OPERATIONAL'}
                         </div>
+                        {facility.hit && facility.damagePercentage && facility.damagePercentage > 0 && (
+                            <div style={{ 
+                                display: 'inline-block',
+                                padding: '3px 8px',
+                                backgroundColor: '#f59e0b',
+                                color: 'white',
+                                borderRadius: '3px',
+                                fontSize: '11px',
+                                fontWeight: '600'
+                            }}>
+                                -{facility.damagePercentage}%
+                            </div>
+                        )}
                     </div>
                     <p style={{ margin: '5px 0', fontSize: '13px' }}>
                         <strong>Type:</strong> <span style={{ textTransform: 'capitalize' }}>{facility.type}</span>
@@ -371,10 +384,20 @@ const FacilityMarker: React.FC<{
                         <p style={{ margin: '0 0 5px 0', fontSize: '13px', fontWeight: 'bold' }}>Production:</p>
                         <p style={{ margin: '2px 0 2px 10px', fontSize: '13px' }}>
                             <strong>Oil:</strong> {facility.capacity.toLocaleString()} bbl/day
+                            {facility.hit && facility.damagePercentage && facility.damagePercentage > 0 && (
+                                <span style={{ color: '#dc2626', fontWeight: '600', marginLeft: '6px' }}>
+                                    → {Math.round(facility.capacity * (1 - facility.damagePercentage / 100)).toLocaleString()} bbl/day
+                                </span>
+                            )}
                         </p>
                         {facility.gasCapacity && (
                             <p style={{ margin: '2px 0 2px 10px', fontSize: '13px' }}>
                                 <strong>Gas:</strong> {facility.gasCapacity.toLocaleString()} m³/year
+                                {facility.hit && facility.damagePercentage && facility.damagePercentage > 0 && (
+                                    <span style={{ color: '#dc2626', fontWeight: '600', marginLeft: '6px' }}>
+                                        → {Math.round(facility.gasCapacity * (1 - facility.damagePercentage / 100)).toLocaleString()} m³/year
+                                    </span>
+                                )}
                             </p>
                         )}
                     </div>
