@@ -313,18 +313,18 @@ const FacilityMarker: React.FC<{
     useEffect(() => {
         // Update marker icon when damage percentage changes
         if (markerRef.current) {
-            const color = facility.type === 'refinery' ? '#FF5733' : 
-                         facility.type === 'extraction' ? '#33FF57' : 
-                         facility.type === 'storage' ? '#3357FF' : '#FFC300';
+            const color = facility.type === 'refinery' ? '#DC2626' : 
+                         facility.type === 'extraction' ? '#16A34A' : 
+                         facility.type === 'storage' ? '#2563EB' : '#FFC300';
             markerRef.current.setIcon(createCustomIcon(color, facility.damagePercentage || 0));
         }
     }, [facility.damagePercentage, facility.type]);
     
     const getMarkerColor = (type: string) => {
         switch (type) {
-            case 'refinery': return '#FF5733';
-            case 'extraction': return '#33FF57';
-            case 'storage': return '#3357FF';
+            case 'refinery': return '#DC2626';
+            case 'extraction': return '#16A34A';
+            case 'storage': return '#2563EB';
             default: return '#FFC300';
         }
     };
@@ -479,9 +479,9 @@ const Map: React.FC = () => {
 
     const getMarkerColor = (type: string) => {
         switch (type) {
-            case 'refinery': return '#FF5733';
-            case 'extraction': return '#33FF57';
-            case 'storage': return '#3357FF';
+            case 'refinery': return '#DC2626';
+            case 'extraction': return '#16A34A';
+            case 'storage': return '#2563EB';
             default: return '#FFC300';
         }
     };
@@ -720,7 +720,7 @@ const Map: React.FC = () => {
                                         accentColor: '#6b7280'
                                     }}
                                 />
-                                <span style={{ color: '#FF5733', fontSize: '16px', lineHeight: '1' }}>●</span>
+                                <span style={{ color: '#DC2626', fontSize: '16px', lineHeight: '1' }}>●</span>
                                 <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>Refinery</span>
                             </label>
                             <label style={{ 
@@ -746,7 +746,7 @@ const Map: React.FC = () => {
                                         accentColor: '#6b7280'
                                     }}
                                 />
-                                <span style={{ color: '#33FF57', fontSize: '16px', lineHeight: '1' }}>●</span>
+                                <span style={{ color: '#16A34A', fontSize: '16px', lineHeight: '1' }}>●</span>
                                 <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>Extraction</span>
                             </label>
                             <label style={{ 
@@ -772,7 +772,7 @@ const Map: React.FC = () => {
                                         accentColor: '#6b7280'
                                     }}
                                 />
-                                <span style={{ color: '#3357FF', fontSize: '16px', lineHeight: '1' }}>●</span>
+                                <span style={{ color: '#2563EB', fontSize: '16px', lineHeight: '1' }}>●</span>
                                 <span style={{ fontSize: '13px', color: '#cbd5e0', fontWeight: '500' }}>Storage</span>
                             </label>
                         </div>
