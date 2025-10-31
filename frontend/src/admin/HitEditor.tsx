@@ -358,41 +358,37 @@ const HitEditor: React.FC = () => {
                                             fontSize: '14px'
                                         }}
                                     />
-                                </div>
-                            </div>
-
-                            <div style={{ gridColumn: '1 / -1', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-                                <div>
-                                    <label style={{
-                                        display: 'block',
-                                        marginBottom: '8px',
-                                        color: '#999',
-                                        fontSize: '14px',
-                                        fontWeight: '600'
-                                    }}>
-                                        Expected Repair Time (days)
-                                    </label>
-                                    <input
-                                        type="number"
-                                        value={hit.expectedRepairTime || ''}
-                                        onChange={(e) => setHit({ ...hit, expectedRepairTime: e.target.value ? Number(e.target.value) : undefined })}
-                                        placeholder="e.g., 30"
-                                        style={{
-                                            width: '100%',
-                                            padding: '12px',
-                                            backgroundColor: '#0a0a0a',
-                                            border: '1px solid #333',
-                                            borderRadius: '4px',
-                                            color: '#fff',
-                                            fontSize: '14px'
-                                        }}
-                                    />
-                                </div>
-                                <div>
-                                    <p style={{ margin: '36px 0 0 0', color: '#666', fontSize: '12px' }}>
+                                    <p style={{ margin: '6px 0 0 0', color: '#666', fontSize: '12px' }}>
                                         Percentage of facility capacity affected by this hit
                                     </p>
                                 </div>
+                            </div>
+
+                            <div style={{ gridColumn: '1 / -1' }}>
+                                <label style={{
+                                    display: 'block',
+                                    marginBottom: '8px',
+                                    color: '#999',
+                                    fontSize: '14px',
+                                    fontWeight: '600'
+                                }}>
+                                    Expected Repair Time (days)
+                                </label>
+                                <input
+                                    type="number"
+                                    value={hit.expectedRepairTime || ''}
+                                    onChange={(e) => setHit({ ...hit, expectedRepairTime: e.target.value ? Number(e.target.value) : undefined })}
+                                    placeholder="e.g., 30"
+                                    style={{
+                                        width: '100%',
+                                        padding: '12px',
+                                        backgroundColor: '#0a0a0a',
+                                        border: '1px solid #333',
+                                        borderRadius: '4px',
+                                        color: '#fff',
+                                        fontSize: '14px'
+                                    }}
+                                />
                             </div>
 
                             <div style={{ gridColumn: '1 / -1' }}>
