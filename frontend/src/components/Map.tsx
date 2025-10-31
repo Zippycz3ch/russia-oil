@@ -300,8 +300,8 @@ const createCustomIcon = (color: string, damagePercentage: number = 0) => {
     }
     
     return L.divIcon({
-        className: 'custom-marker',
-        html: `<div style="background-color: ${color}; width: 12px; height: 12px; border-radius: 50%; border: ${borderWidth}px solid ${borderColor};"></div>`,
+        className: 'custom-marker-v2',
+        html: `<div style="background-color: ${color}; width: 12px; height: 12px; border-radius: 50%; border: ${borderWidth}px solid ${borderColor}; box-sizing: border-box;"></div>`,
         iconSize: [12, 12],
         iconAnchor: [6, 6]
     });
@@ -314,16 +314,6 @@ const FacilityMarker: React.FC<{
 }> = ({ facility, onViewDetails }) => {
     const markerRef = useRef<L.Marker>(null);
     
-    useEffect(() => {
-        // Update marker icon when damage percentage changes
-        if (markerRef.current) {
-            const color = facility.type === 'refinery' ? '#DC2626' : 
-                         facility.type === 'extraction' ? '#16A34A' : 
-                         facility.type === 'storage' ? '#2563EB' : '#FFC300';
-            markerRef.current.setIcon(createCustomIcon(color, facility.damagePercentage || 0));
-        }
-    }, [facility.damagePercentage, facility.type]);
-    
     const getMarkerColor = (type: string) => {
         switch (type) {
             case 'refinery': return '#DC2626';
@@ -332,15 +322,27 @@ const FacilityMarker: React.FC<{
             default: return '#FFC300';
         }
     };
+    
+    useEffect(() => {
+        // Update marker icon when damage percentage changes
+        if (markerRef.current) {
+            const color = getMarkerColor(facility.type);
+            markerRef.current.setIcon(createCustomIcon(color, facility.damagePercentage || 0));
+        }
+    }, [facility.damagePercentage, facility.type]);
+    
     // Get latitude and longitude from either location object or flat properties
     const lat = facility.location?.latitude ?? facility.latitude ?? 0;
     const lon = facility.location?.longitude ?? facility.longitude ?? 0;
+    
+    // Get the marker color
+    const markerColor = getMarkerColor(facility.type);
     
     return (
         <Marker
             ref={markerRef}
             position={[lat, lon]}
-            icon={createCustomIcon(getMarkerColor(facility.type), facility.damagePercentage || 0)}
+            icon={createCustomIcon(markerColor, facility.damagePercentage || 0)}
         >
             <Popup>
                 <div style={{ color: '#000', minWidth: '200px' }}>
