@@ -2,7 +2,9 @@ export interface Hit {
     id: number;
     facilityId: number;
     date: string;
-    videoLink?: string;
+    severity?: 'damaged' | 'destroyed';
+    mediaLinks?: string[];
+    videoLink?: string; // kept for backward compatibility
     expectedRepairTime?: number;
     notes?: string;
 }
