@@ -830,7 +830,7 @@ const Map: React.FC = () => {
                                     width: '12px', 
                                     height: '12px', 
                                     backgroundColor: '#8B5CF6',
-                                    borderRadius: '2px'
+                                    borderRadius: '50%'
                                 }}></span>
                                 <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>Extraction</span>
                             </label>
@@ -862,7 +862,7 @@ const Map: React.FC = () => {
                                     width: '12px', 
                                     height: '12px', 
                                     backgroundColor: '#F59E0B',
-                                    borderRadius: '2px'
+                                    borderRadius: '50%'
                                 }}></span>
                                 <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>Storage</span>
                             </label>
@@ -954,35 +954,26 @@ const Map: React.FC = () => {
                             letterSpacing: '0.8px',
                             marginBottom: '6px'
                         }}>
-                            Weapon Ranges
+                            Weapon Ranges (km)
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                            <div style={{ 
-                                display: 'flex', 
-                                alignItems: 'center', 
-                                gap: '8px', 
-                                padding: '4px'
-                            }}>
+                        <div style={{ 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            gap: '12px', 
+                            padding: '4px',
+                            flexWrap: 'wrap'
+                        }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                                 <span style={{ color: '#10B981', fontSize: '14px' }}>■</span>
-                                <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>500km</span>
+                                <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>500</span>
                             </div>
-                            <div style={{ 
-                                display: 'flex', 
-                                alignItems: 'center', 
-                                gap: '8px', 
-                                padding: '4px'
-                            }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                                 <span style={{ color: '#F97316', fontSize: '14px' }}>■</span>
-                                <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>1000km</span>
+                                <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>1000</span>
                             </div>
-                            <div style={{ 
-                                display: 'flex', 
-                                alignItems: 'center', 
-                                gap: '8px', 
-                                padding: '4px'
-                            }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                                 <span style={{ color: '#EF4444', fontSize: '14px' }}>■</span>
-                                <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>1500km</span>
+                                <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>1500</span>
                             </div>
                         </div>
                     </div>
