@@ -102,7 +102,7 @@ const Map: React.FC = () => {
     });
 
     return (
-        <div style={{ display: 'flex', width: '100%', height: 'calc(100vh - 60px)', maxHeight: '900px', backgroundColor: '#0a0a0a', overflow: 'hidden', margin: '20px auto' }}>
+        <div style={{ display: 'flex', width: '100%', height: '100vh', backgroundColor: '#0a0a0a', overflow: 'hidden' }}>
             {/* Left Sidebar */}
             <Sidebar 
                 filteredCount={filteredFacilities.length}
