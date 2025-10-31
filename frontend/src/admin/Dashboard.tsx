@@ -39,8 +39,6 @@ const Dashboard: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [showAddHitForm, setShowAddHitForm] = useState<number | null>(null);
-    const [editingHitId, setEditingHitId] = useState<number | null>(null);
-    const [editHitForm, setEditHitForm] = useState<Partial<Hit>>({});
     const [newHit, setNewHit] = useState<Partial<Hit>>({
         date: new Date().toISOString().split('T')[0],
         severity: 'damaged',
@@ -255,39 +253,7 @@ const Dashboard: React.FC = () => {
         }
     };
 
-    const handleEditHit = (hit: Hit) => {
-        setEditingHitId(hit.id);
-        setEditHitForm({
-            ...hit,
-            mediaLinks: hit.mediaLinks || (hit.videoLink ? [hit.videoLink] : [''])
-        });
-    };
 
-    const handleUpdateHit = async () => {
-        if (!editingHitId) return;
-
-        try {
-            if (!db) throw new Error('Firebase not initialized');
-            
-            const updateData: any = {
-                date: editHitForm.date,
-                severity: editHitForm.severity,
-                mediaLinks: editHitForm.mediaLinks?.filter(link => link.trim() !== ''),
-                expectedRepairTime: editHitForm.expectedRepairTime,
-                notes: editHitForm.notes
-            };
-            
-            const docRef = doc(db, COLLECTIONS.HITS, editingHitId.toString());
-            await updateDoc(docRef, updateData);
-            
-            setEditingHitId(null);
-            setEditHitForm({});
-            fetchFacilities();
-        } catch (error) {
-            console.error('Error updating hit:', error);
-            alert('Failed to update hit record');
-        }
-    };
 
     if (!isLoggedIn) {
         return (
@@ -651,7 +617,7 @@ const Dashboard: React.FC = () => {
                                 <p style={{ color: '#999' }}>View and manage all hits across facilities</p>
                             </div>
                             <button
-                                onClick={() => setShowAddHitForm(showAddHitForm === -1 ? null : -1)}
+                                onClick={() => navigate('/admin/hit/new')}
                                 style={{
                                     padding: '10px 20px',
                                     backgroundColor: '#dc2626',
@@ -663,7 +629,7 @@ const Dashboard: React.FC = () => {
                                     fontWeight: '600'
                                 }}
                             >
-                                {showAddHitForm === -1 ? 'Cancel' : '+ Add New Hit'}
+                                + Add New Hit
                             </button>
                         </div>
 
@@ -1084,289 +1050,122 @@ const Dashboard: React.FC = () => {
                                                         backgroundColor: '#0a0a0a',
                                                         padding: '15px',
                                                         borderRadius: '4px',
-                                                        border: editingHitId === hit.id ? '1px solid #2196F3' : '1px solid #333'
+                                                        border: '1px solid #333'
                                                     }}>
-                                                        {editingHitId === hit.id ? (
-                                                            // Edit Mode
-                                                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                                                                <div>
-                                                                    <label style={{ color: '#999', display: 'block', marginBottom: '5px', fontSize: '12px' }}>Date *</label>
-                                                                    <input
-                                                                        type="date"
-                                                                        value={editHitForm.date}
-                                                                        onChange={(e) => setEditHitForm({ ...editHitForm, date: e.target.value })}
-                                                                        style={{
-                                                                            width: '100%',
-                                                                            padding: '8px',
-                                                                            backgroundColor: '#1a1a1a',
-                                                                            border: '1px solid #333',
-                                                                            borderRadius: '4px',
-                                                                            color: '#fff'
-                                                                        }}
-                                                                    />
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
+                                                            <div style={{ flex: 1 }}>
+                                                                <div style={{ display: 'flex', gap: '15px', marginBottom: '10px', flexWrap: 'wrap' }}>
+                                                                    <div>
+                                                                        <div style={{ color: '#666', fontSize: '12px' }}>Hit ID</div>
+                                                                        <div style={{ color: '#4CAF50', fontWeight: 'bold' }}>#{hit.id}</div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <div style={{ color: '#666', fontSize: '12px' }}>Date</div>
+                                                                        <div style={{ color: '#fff' }}>{new Date(hit.date).toLocaleDateString()}</div>
+                                                                    </div>
+                                                                    {hit.severity && (
+                                                                        <div>
+                                                                            <div style={{ color: '#666', fontSize: '12px' }}>Severity</div>
+                                                                            <div style={{
+                                                                                color: '#fff',
+                                                                                backgroundColor: hit.severity === 'destroyed' ? '#f44336' : '#FF9800',
+                                                                                padding: '2px 8px',
+                                                                                borderRadius: '4px',
+                                                                                fontSize: '12px',
+                                                                                fontWeight: 'bold',
+                                                                                textTransform: 'uppercase',
+                                                                                display: 'inline-block'
+                                                                            }}>
+                                                                                {hit.severity}
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
+                                                                    {hit.expectedRepairTime && (
+                                                                        <div>
+                                                                            <div style={{ color: '#666', fontSize: '12px' }}>Repair Time</div>
+                                                                            <div style={{ color: '#FF9800' }}>{hit.expectedRepairTime} days</div>
+                                                                        </div>
+                                                                    )}
                                                                 </div>
-                                                                <div>
-                                                                    <label style={{ color: '#999', display: 'block', marginBottom: '5px', fontSize: '12px' }}>Severity *</label>
-                                                                    <select
-                                                                        value={editHitForm.severity}
-                                                                        onChange={(e) => setEditHitForm({ ...editHitForm, severity: e.target.value as 'damaged' | 'destroyed' })}
-                                                                        style={{
-                                                                            width: '100%',
-                                                                            padding: '8px',
-                                                                            backgroundColor: '#1a1a1a',
-                                                                            border: '1px solid #333',
-                                                                            borderRadius: '4px',
-                                                                            color: '#fff'
-                                                                        }}
-                                                                    >
-                                                                        <option value="damaged">Damaged</option>
-                                                                        <option value="destroyed">Destroyed</option>
-                                                                    </select>
-                                                                </div>
-                                                                <div style={{ gridColumn: '1 / -1' }}>
-                                                                    <label style={{ color: '#999', display: 'block', marginBottom: '5px', fontSize: '12px' }}>Repair Time (days)</label>
-                                                                    <input
-                                                                        type="number"
-                                                                        value={editHitForm.expectedRepairTime || ''}
-                                                                        onChange={(e) => setEditHitForm({ ...editHitForm, expectedRepairTime: Number(e.target.value) })}
-                                                                        style={{
-                                                                            width: '100%',
-                                                                            padding: '8px',
-                                                                            backgroundColor: '#1a1a1a',
-                                                                            border: '1px solid #333',
-                                                                            borderRadius: '4px',
-                                                                            color: '#fff'
-                                                                        }}
-                                                                    />
-                                                                </div>
-                                                                <div style={{ gridColumn: '1 / -1' }}>
-                                                                    <label style={{ color: '#999', display: 'block', marginBottom: '10px', fontSize: '12px' }}>Media Links (Videos/Photos)</label>
-                                                                    {editHitForm.mediaLinks?.map((link, index) => (
-                                                                        <div key={index} style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
-                                                                            <input
-                                                                                type="url"
-                                                                                value={link}
-                                                                                onChange={(e) => {
-                                                                                    const updated = [...(editHitForm.mediaLinks || [])];
-                                                                                    updated[index] = e.target.value;
-                                                                                    setEditHitForm({ ...editHitForm, mediaLinks: updated });
-                                                                                }}
-                                                                                placeholder="https://..."
-                                                                                style={{
-                                                                                    flex: 1,
-                                                                                    padding: '8px',
-                                                                                    backgroundColor: '#1a1a1a',
-                                                                                    border: '1px solid #333',
-                                                                                    borderRadius: '4px',
-                                                                                    color: '#fff'
-                                                                                }}
-                                                                            />
-                                                                            {index > 0 && (
-                                                                                <button
-                                                                                    type="button"
-                                                                                    onClick={() => {
-                                                                                        const updated = editHitForm.mediaLinks?.filter((_, i) => i !== index);
-                                                                                        setEditHitForm({ ...editHitForm, mediaLinks: updated });
-                                                                                    }}
+                                                                {(hit.mediaLinks && hit.mediaLinks.length > 0) && (
+                                                                    <div style={{ marginTop: '10px' }}>
+                                                                        <div style={{ color: '#666', fontSize: '12px', marginBottom: '5px' }}>Media:</div>
+                                                                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                                                                            {hit.mediaLinks.map((link, idx) => (
+                                                                                <a
+                                                                                    key={idx}
+                                                                                    href={link}
+                                                                                    target="_blank"
+                                                                                    rel="noopener noreferrer"
                                                                                     style={{
-                                                                                        padding: '8px 12px',
-                                                                                        backgroundColor: '#666',
-                                                                                        color: '#fff',
-                                                                                        border: 'none',
+                                                                                        color: '#2196F3',
+                                                                                        textDecoration: 'none',
+                                                                                        fontSize: '13px',
+                                                                                        padding: '4px 8px',
+                                                                                        backgroundColor: '#1a1a1a',
                                                                                         borderRadius: '4px',
-                                                                                        cursor: 'pointer',
-                                                                                        fontSize: '12px'
+                                                                                        border: '1px solid #2196F3'
                                                                                     }}
                                                                                 >
-                                                                                    Remove
-                                                                                </button>
-                                                                            )}
+                                                                                    🔗 Link {idx + 1}
+                                                                                </a>
+                                                                            ))}
                                                                         </div>
-                                                                    ))}
-                                                                    <button
-                                                                        type="button"
-                                                                        onClick={() => setEditHitForm({ ...editHitForm, mediaLinks: [...(editHitForm.mediaLinks || []), ''] })}
-                                                                        style={{
-                                                                            padding: '6px 12px',
-                                                                            backgroundColor: '#333',
-                                                                            color: '#fff',
-                                                                            border: '1px solid #555',
-                                                                            borderRadius: '4px',
-                                                                            cursor: 'pointer',
-                                                                            fontSize: '12px'
-                                                                        }}
-                                                                    >
-                                                                        + Add Another Link
-                                                                    </button>
-                                                                </div>
-                                                                <div style={{ gridColumn: '1 / -1' }}>
-                                                                    <label style={{ color: '#999', display: 'block', marginBottom: '5px', fontSize: '12px' }}>Notes</label>
-                                                                    <textarea
-                                                                        value={editHitForm.notes}
-                                                                        onChange={(e) => setEditHitForm({ ...editHitForm, notes: e.target.value })}
-                                                                        rows={3}
-                                                                        placeholder="Describe the damage..."
-                                                                        style={{
-                                                                            width: '100%',
-                                                                            padding: '8px',
-                                                                            backgroundColor: '#1a1a1a',
-                                                                            border: '1px solid #333',
-                                                                            borderRadius: '4px',
-                                                                            color: '#fff',
-                                                                            resize: 'vertical',
-                                                                            fontFamily: 'inherit'
-                                                                        }}
-                                                                    />
-                                                                </div>
-                                                                <div style={{ gridColumn: '1 / -1', display: 'flex', gap: '10px' }}>
-                                                                    <button
-                                                                        onClick={handleUpdateHit}
-                                                                        style={{
-                                                                            padding: '8px 16px',
-                                                                            backgroundColor: '#4CAF50',
-                                                                            color: '#fff',
-                                                                            border: 'none',
-                                                                            borderRadius: '4px',
-                                                                            cursor: 'pointer',
-                                                                            fontSize: '13px',
-                                                                            fontWeight: '600'
-                                                                        }}
-                                                                    >
-                                                                        Save Changes
-                                                                    </button>
-                                                                    <button
-                                                                        onClick={() => setEditingHitId(null)}
-                                                                        style={{
-                                                                            padding: '8px 16px',
-                                                                            backgroundColor: '#666',
-                                                                            color: '#fff',
-                                                                            border: 'none',
-                                                                            borderRadius: '4px',
-                                                                            cursor: 'pointer',
-                                                                            fontSize: '13px'
-                                                                        }}
-                                                                    >
-                                                                        Cancel
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        ) : (
-                                                            // Display Mode
-                                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
-                                                                <div style={{ flex: 1 }}>
-                                                                    <div style={{ display: 'flex', gap: '15px', marginBottom: '10px', flexWrap: 'wrap' }}>
-                                                                        <div>
-                                                                            <div style={{ color: '#666', fontSize: '12px' }}>Hit ID</div>
-                                                                            <div style={{ color: '#4CAF50', fontWeight: 'bold' }}>#{hit.id}</div>
-                                                                        </div>
-                                                                        <div>
-                                                                            <div style={{ color: '#666', fontSize: '12px' }}>Date</div>
-                                                                            <div style={{ color: '#fff' }}>{new Date(hit.date).toLocaleDateString()}</div>
-                                                                        </div>
-                                                                        {hit.severity && (
-                                                                            <div>
-                                                                                <div style={{ color: '#666', fontSize: '12px' }}>Severity</div>
-                                                                                <div style={{
-                                                                                    color: '#fff',
-                                                                                    backgroundColor: hit.severity === 'destroyed' ? '#f44336' : '#FF9800',
-                                                                                    padding: '2px 8px',
-                                                                                    borderRadius: '4px',
-                                                                                    fontSize: '12px',
-                                                                                    fontWeight: 'bold',
-                                                                                    textTransform: 'uppercase',
-                                                                                    display: 'inline-block'
-                                                                                }}>
-                                                                                    {hit.severity}
-                                                                                </div>
-                                                                            </div>
-                                                                        )}
-                                                                        {hit.expectedRepairTime && (
-                                                                            <div>
-                                                                                <div style={{ color: '#666', fontSize: '12px' }}>Repair Time</div>
-                                                                                <div style={{ color: '#FF9800' }}>{hit.expectedRepairTime} days</div>
-                                                                            </div>
-                                                                        )}
                                                                     </div>
-                                                                    {(hit.mediaLinks && hit.mediaLinks.length > 0) && (
-                                                                        <div style={{ marginTop: '10px' }}>
-                                                                            <div style={{ color: '#666', fontSize: '12px', marginBottom: '5px' }}>Media:</div>
-                                                                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-                                                                                {hit.mediaLinks.map((link, idx) => (
-                                                                                    <a
-                                                                                        key={idx}
-                                                                                        href={link}
-                                                                                        target="_blank"
-                                                                                        rel="noopener noreferrer"
-                                                                                        style={{
-                                                                                            color: '#2196F3',
-                                                                                            textDecoration: 'none',
-                                                                                            fontSize: '13px',
-                                                                                            padding: '4px 8px',
-                                                                                            backgroundColor: '#1a1a1a',
-                                                                                            borderRadius: '4px',
-                                                                                            border: '1px solid #2196F3'
-                                                                                        }}
-                                                                                    >
-                                                                                        🔗 Link {idx + 1}
-                                                                                    </a>
-                                                                                ))}
-                                                                            </div>
-                                                                        </div>
-                                                                    )}
-                                                                    {!hit.mediaLinks && hit.videoLink && (
-                                                                        <div style={{ marginTop: '10px' }}>
-                                                                            <a
-                                                                                href={hit.videoLink}
-                                                                                target="_blank"
-                                                                                rel="noopener noreferrer"
-                                                                                style={{
-                                                                                    color: '#2196F3',
-                                                                                    textDecoration: 'none',
-                                                                                    fontSize: '14px'
-                                                                                }}
-                                                                            >
-                                                                                🎥 View Video
-                                                                            </a>
-                                                                        </div>
-                                                                    )}
-                                                                    {hit.notes && (
-                                                                        <div style={{ marginTop: '10px', color: '#ccc', fontSize: '14px' }}>
-                                                                            <strong>Notes:</strong> {hit.notes}
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-                                                                <div style={{ display: 'flex', gap: '5px' }}>
-                                                                    <button
-                                                                        onClick={() => handleEditHit(hit)}
-                                                                        style={{
-                                                                            padding: '5px 10px',
-                                                                            backgroundColor: '#2196F3',
-                                                                            color: '#fff',
-                                                                            border: 'none',
-                                                                            borderRadius: '4px',
-                                                                            cursor: 'pointer',
-                                                                            fontSize: '12px'
-                                                                        }}
-                                                                    >
-                                                                        Edit
-                                                                    </button>
-                                                                    <button
-                                                                        onClick={() => handleDeleteHit(facility.id, hit.id)}
-                                                                        style={{
-                                                                            padding: '5px 10px',
-                                                                            backgroundColor: '#f44336',
-                                                                            color: '#fff',
-                                                                            border: 'none',
-                                                                            borderRadius: '4px',
-                                                                            cursor: 'pointer',
-                                                                            fontSize: '12px'
-                                                                        }}
-                                                                    >
-                                                                        Delete
-                                                                    </button>
-                                                                </div>
+                                                                )}
+                                                                {!hit.mediaLinks && hit.videoLink && (
+                                                                    <div style={{ marginTop: '10px' }}>
+                                                                        <a
+                                                                            href={hit.videoLink}
+                                                                            target="_blank"
+                                                                            rel="noopener noreferrer"
+                                                                            style={{
+                                                                                color: '#2196F3',
+                                                                                textDecoration: 'none',
+                                                                                fontSize: '14px'
+                                                                            }}
+                                                                        >
+                                                                            🎥 View Video
+                                                                        </a>
+                                                                    </div>
+                                                                )}
+                                                                {hit.notes && (
+                                                                    <div style={{ marginTop: '10px', color: '#ccc', fontSize: '14px' }}>
+                                                                        <strong>Notes:</strong> {hit.notes}
+                                                                    </div>
+                                                                )}
                                                             </div>
-                                                        )}
+                                                            <div style={{ display: 'flex', gap: '5px' }}>
+                                                                <button
+                                                                    onClick={() => navigate(`/admin/hit/${hit.id}`)}
+                                                                    style={{
+                                                                        padding: '5px 10px',
+                                                                        backgroundColor: '#2196F3',
+                                                                        color: '#fff',
+                                                                        border: 'none',
+                                                                        borderRadius: '4px',
+                                                                        cursor: 'pointer',
+                                                                        fontSize: '12px'
+                                                                    }}
+                                                                >
+                                                                    Edit
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => handleDeleteHit(facility.id, hit.id)}
+                                                                    style={{
+                                                                        padding: '5px 10px',
+                                                                        backgroundColor: '#f44336',
+                                                                        color: '#fff',
+                                                                        border: 'none',
+                                                                        borderRadius: '4px',
+                                                                        cursor: 'pointer',
+                                                                        fontSize: '12px'
+                                                                    }}
+                                                                >
+                                                                    Delete
+                                                                </button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     ))}
                                                 </div>
