@@ -3,10 +3,12 @@ export interface Hit {
     facilityId: number;
     date: string;
     severity?: 'damaged' | 'destroyed';
+    damagePercentage?: number; // % of production capacity lost (0-100)
     mediaLinks?: string[];
     videoLink?: string; // kept for backward compatibility
     expectedRepairTime?: number;
     notes?: string;
+    draft?: boolean;
 }
 
 export interface Facility {
@@ -16,8 +18,9 @@ export interface Facility {
         latitude: number;
         longitude: number;
     };
-    capacity: number;
+    capacity: number; // normal production capacity
     gasCapacity?: number;
+    currentProduction?: number; // calculated based on hits
     type: string;
     hit: boolean;
     hits?: Hit[];

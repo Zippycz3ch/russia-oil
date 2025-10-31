@@ -9,10 +9,12 @@ interface Hit {
     facilityId: number;
     date: string;
     severity?: 'damaged' | 'destroyed';
+    damagePercentage?: number;
     mediaLinks?: string[];
     videoLink?: string; // kept for backward compatibility
     expectedRepairTime?: number;
     notes?: string;
+    draft?: boolean;
 }
 
 interface Facility {
@@ -21,6 +23,7 @@ interface Facility {
     type: string;
     capacity: number;
     gasCapacity?: number;
+    currentProduction?: number;
     latitude: number;
     longitude: number;
     status: string;
@@ -42,9 +45,11 @@ const Dashboard: React.FC = () => {
     const [newHit, setNewHit] = useState<Partial<Hit>>({
         date: new Date().toISOString().split('T')[0],
         severity: 'damaged',
+        damagePercentage: 0,
         mediaLinks: [''],
         expectedRepairTime: 0,
-        notes: ''
+        notes: '',
+        draft: true
     });
     const navigate = useNavigate();
 
@@ -95,12 +100,18 @@ const Dashboard: React.FC = () => {
                     const latitude = data.location?.latitude ?? data.latitude;
                     const longitude = data.location?.longitude ?? data.longitude;
                     
+                    // Calculate current production based on non-draft hits
+                    const publishedHits = hits.filter(hit => !hit.draft);
+                    const totalDamage = publishedHits.reduce((sum, hit) => sum + (hit.damagePercentage || 0), 0);
+                    const currentProduction = Math.max(0, data.capacity * (1 - totalDamage / 100));
+                    
                     return {
                         id: parseInt(facilityDoc.id),
                         name: data.name,
                         type: data.type,
                         capacity: data.capacity,
                         gasCapacity: data.gasCapacity,
+                        currentProduction,
                         latitude,
                         longitude,
                         status: data.status,
@@ -198,9 +209,11 @@ const Dashboard: React.FC = () => {
                 facilityId: facilityId,
                 date: newHit.date,
                 severity: newHit.severity,
+                damagePercentage: newHit.damagePercentage || 0,
                 mediaLinks: newHit.mediaLinks?.filter(link => link.trim() !== ''),
                 expectedRepairTime: newHit.expectedRepairTime,
-                notes: newHit.notes
+                notes: newHit.notes,
+                draft: newHit.draft ?? true
             };
             
             await setDoc(doc(db, COLLECTIONS.HITS, newHitId.toString()), hitData);
@@ -213,9 +226,11 @@ const Dashboard: React.FC = () => {
             setNewHit({
                 date: new Date().toISOString().split('T')[0],
                 severity: 'damaged',
+                damagePercentage: 0,
                 mediaLinks: [''],
                 expectedRepairTime: 0,
-                notes: ''
+                notes: '',
+                draft: true
             });
             fetchFacilities();
         } catch (error) {
@@ -515,7 +530,8 @@ const Dashboard: React.FC = () => {
                             <th style={{ padding: '15px', textAlign: 'left', borderBottom: '1px solid #333' }}>ID</th>
                             <th style={{ padding: '15px', textAlign: 'left', borderBottom: '1px solid #333' }}>Name</th>
                             <th style={{ padding: '15px', textAlign: 'left', borderBottom: '1px solid #333' }}>Type</th>
-                            <th style={{ padding: '15px', textAlign: 'left', borderBottom: '1px solid #333' }}>Oil Capacity</th>
+                            <th style={{ padding: '15px', textAlign: 'left', borderBottom: '1px solid #333' }}>Normal Production</th>
+                            <th style={{ padding: '15px', textAlign: 'left', borderBottom: '1px solid #333' }}>Current Production</th>
                             <th style={{ padding: '15px', textAlign: 'left', borderBottom: '1px solid #333' }}>Gas Capacity</th>
                             <th style={{ padding: '15px', textAlign: 'left', borderBottom: '1px solid #333' }}>Location</th>
                             <th style={{ padding: '15px', textAlign: 'left', borderBottom: '1px solid #333' }}>Status</th>
@@ -529,8 +545,28 @@ const Dashboard: React.FC = () => {
                                 <td style={{ padding: '15px' }}>{facility.id}</td>
                                 <td style={{ padding: '15px' }}>{facility.name}</td>
                                 <td style={{ padding: '15px' }}>{facility.type}</td>
-                                <td style={{ padding: '15px' }}>{facility.capacity?.toLocaleString() || 0}</td>
-                                <td style={{ padding: '15px' }}>{facility.gasCapacity ? facility.gasCapacity.toLocaleString() : '-'}</td>
+                                <td style={{ padding: '15px' }}>{facility.capacity?.toLocaleString() || 0} bbl/day</td>
+                                <td style={{ padding: '15px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                        <span style={{ 
+                                            color: facility.currentProduction === facility.capacity ? '#4CAF50' : '#FF9800'
+                                        }}>
+                                            {facility.currentProduction?.toLocaleString() || 0} bbl/day
+                                        </span>
+                                        {facility.currentProduction !== facility.capacity && (
+                                            <span style={{ 
+                                                fontSize: '11px',
+                                                color: '#f44336',
+                                                backgroundColor: '#331111',
+                                                padding: '2px 6px',
+                                                borderRadius: '3px'
+                                            }}>
+                                                -{((1 - (facility.currentProduction || 0) / facility.capacity) * 100).toFixed(0)}%
+                                            </span>
+                                        )}
+                                    </div>
+                                </td>
+                                <td style={{ padding: '15px' }}>{facility.gasCapacity ? facility.gasCapacity.toLocaleString() + ' million m³/year' : '-'}</td>
                                 <td style={{ padding: '15px', fontSize: '12px', color: '#999' }}>
                                     {facility.latitude != null && facility.longitude != null 
                                         ? `${facility.latitude.toFixed(4)}, ${facility.longitude.toFixed(4)}`
@@ -1080,10 +1116,39 @@ const Dashboard: React.FC = () => {
                                                                             </div>
                                                                         </div>
                                                                     )}
+                                                                    {hit.damagePercentage != null && (
+                                                                        <div>
+                                                                            <div style={{ color: '#666', fontSize: '12px' }}>Production Impact</div>
+                                                                            <div style={{ 
+                                                                                color: '#f44336', 
+                                                                                fontWeight: 'bold',
+                                                                                fontSize: '14px'
+                                                                            }}>
+                                                                                -{hit.damagePercentage}%
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
                                                                     {hit.expectedRepairTime && (
                                                                         <div>
                                                                             <div style={{ color: '#666', fontSize: '12px' }}>Repair Time</div>
                                                                             <div style={{ color: '#FF9800' }}>{hit.expectedRepairTime} days</div>
+                                                                        </div>
+                                                                    )}
+                                                                    {hit.draft && (
+                                                                        <div>
+                                                                            <div style={{ color: '#666', fontSize: '12px' }}>Status</div>
+                                                                            <div style={{
+                                                                                color: '#000',
+                                                                                backgroundColor: '#ff9800',
+                                                                                padding: '2px 8px',
+                                                                                borderRadius: '4px',
+                                                                                fontSize: '12px',
+                                                                                fontWeight: 'bold',
+                                                                                textTransform: 'uppercase',
+                                                                                display: 'inline-block'
+                                                                            }}>
+                                                                                DRAFT
+                                                                            </div>
                                                                         </div>
                                                                     )}
                                                                 </div>

@@ -8,10 +8,12 @@ interface Hit {
     facilityId: number;
     date: string;
     severity?: 'damaged' | 'destroyed';
+    damagePercentage?: number;
     mediaLinks?: string[];
     videoLink?: string;
     expectedRepairTime?: number;
     notes?: string;
+    draft?: boolean;
 }
 
 interface Facility {
@@ -30,9 +32,11 @@ const HitEditor: React.FC = () => {
         facilityId: 0,
         date: new Date().toISOString().split('T')[0],
         severity: 'damaged',
+        damagePercentage: 0,
         mediaLinks: [''],
         expectedRepairTime: 0,
-        notes: ''
+        notes: '',
+        draft: true
     });
 
     useEffect(() => {
@@ -72,9 +76,11 @@ const HitEditor: React.FC = () => {
                     facilityId: data.facilityId,
                     date: data.date,
                     severity: data.severity || 'damaged',
+                    damagePercentage: data.damagePercentage || 0,
                     mediaLinks: data.mediaLinks || (data.videoLink ? [data.videoLink] : ['']),
                     expectedRepairTime: data.expectedRepairTime,
-                    notes: data.notes
+                    notes: data.notes,
+                    draft: data.draft ?? false
                 });
             } else {
                 alert('Hit record not found');
@@ -88,7 +94,7 @@ const HitEditor: React.FC = () => {
         }
     };
 
-    const handleSave = async () => {
+    const handleSave = async (publishNow: boolean = false) => {
         if (!hit.facilityId) {
             alert('Please select a facility');
             return;
@@ -107,9 +113,11 @@ const HitEditor: React.FC = () => {
                 facilityId: hit.facilityId,
                 date: hit.date,
                 severity: hit.severity,
+                damagePercentage: hit.damagePercentage || 0,
                 mediaLinks: hit.mediaLinks?.filter(link => link.trim() !== ''),
                 expectedRepairTime: hit.expectedRepairTime,
-                notes: hit.notes
+                notes: hit.notes,
+                draft: publishNow ? false : hit.draft
             };
 
             if (id === 'new') {
@@ -319,6 +327,41 @@ const HitEditor: React.FC = () => {
                                 </select>
                             </div>
 
+                            <div>
+                                <label style={{
+                                    display: 'block',
+                                    marginBottom: '8px',
+                                    color: '#999',
+                                    fontSize: '14px',
+                                    fontWeight: '600'
+                                }}>
+                                    Damage to Production (%) *
+                                </label>
+                                <input
+                                    type="number"
+                                    min="0"
+                                    max="100"
+                                    value={hit.damagePercentage || 0}
+                                    onChange={(e) => {
+                                        const val = Number(e.target.value);
+                                        setHit({ ...hit, damagePercentage: Math.min(100, Math.max(0, val)) });
+                                    }}
+                                    placeholder="0-100"
+                                    style={{
+                                        width: '100%',
+                                        padding: '12px',
+                                        backgroundColor: '#0a0a0a',
+                                        border: '1px solid #333',
+                                        borderRadius: '4px',
+                                        color: '#fff',
+                                        fontSize: '14px'
+                                    }}
+                                />
+                                <p style={{ margin: '5px 0 0 0', color: '#666', fontSize: '12px' }}>
+                                    Percentage of facility capacity affected by this hit
+                                </p>
+                            </div>
+
                             <div style={{ gridColumn: '1 / -1' }}>
                                 <label style={{
                                     display: 'block',
@@ -443,6 +486,20 @@ const HitEditor: React.FC = () => {
                             </div>
                         </div>
 
+                        {hit.draft && (
+                            <div style={{
+                                marginTop: '20px',
+                                padding: '15px',
+                                backgroundColor: '#ff9800',
+                                color: '#000',
+                                borderRadius: '4px',
+                                fontWeight: '600',
+                                textAlign: 'center'
+                            }}>
+                                ⚠️ This hit record is in DRAFT mode and will not affect production calculations
+                            </div>
+                        )}
+
                         <div style={{
                             marginTop: '30px',
                             paddingTop: '20px',
@@ -467,7 +524,23 @@ const HitEditor: React.FC = () => {
                                 Cancel
                             </button>
                             <button
-                                onClick={handleSave}
+                                onClick={() => handleSave(false)}
+                                disabled={loading}
+                                style={{
+                                    padding: '12px 24px',
+                                    backgroundColor: loading ? '#666' : '#ff9800',
+                                    color: '#fff',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    cursor: loading ? 'not-allowed' : 'pointer',
+                                    fontSize: '14px',
+                                    fontWeight: '600'
+                                }}
+                            >
+                                {loading ? 'Saving...' : '📝 Save as Draft'}
+                            </button>
+                            <button
+                                onClick={() => handleSave(true)}
                                 disabled={loading}
                                 style={{
                                     padding: '12px 24px',
@@ -480,7 +553,7 @@ const HitEditor: React.FC = () => {
                                     fontWeight: '600'
                                 }}
                             >
-                                {loading ? 'Saving...' : (id === 'new' ? '💥 Create Hit Record' : '✓ Save Changes')}
+                                {loading ? 'Saving...' : (id === 'new' ? '💥 Publish Hit Record' : '✓ Publish')}
                             </button>
                         </div>
                     </div>
