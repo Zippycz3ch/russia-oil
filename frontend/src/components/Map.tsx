@@ -288,7 +288,7 @@ const capitals = [
 
 // Custom marker icons
 const createCustomIcon = (color: string, damagePercentage: number = 0) => {
-    let borderColor = '#10B981'; // Green for operational
+    let borderColor = 'white'; // White for operational
     let borderWidth = 2;
     
     if (damagePercentage > 0 && damagePercentage < 50) {
@@ -898,7 +898,7 @@ const Map: React.FC = () => {
                                     height: '12px', 
                                     backgroundColor: '#1cc5b7ff',
                                     borderRadius: '50%',
-                                    border: '2px solid #10B981',
+                                    border: '2px solid white',
                                     boxSizing: 'border-box'
                                 }}></span>
                                 <span style={{ fontSize: '12px', color: '#cbd5e0', fontWeight: '500' }}>Operational</span>
