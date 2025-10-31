@@ -443,7 +443,7 @@ const FacilityDetail: React.FC = () => {
                                 fontSize: '20px', 
                                 fontWeight: '600' 
                             }}>
-                                Strike Records
+                                Hit Records
                             </h2>
                             <div style={{
                                 backgroundColor: '#dc2626',
@@ -457,85 +457,156 @@ const FacilityDetail: React.FC = () => {
                             </div>
                         </div>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                             {hits.map((hit, index) => (
                                 <div 
                                     key={hit.id}
-                                    onClick={() => navigate(`/hit/${hit.id}`)}
                                     style={{
                                         backgroundColor: '#0a0a0a',
                                         border: '1px solid #333',
                                         borderRadius: '6px',
-                                        padding: '16px 20px',
-                                        borderLeft: '4px solid #dc2626',
-                                        cursor: 'pointer',
-                                        transition: 'all 0.2s ease',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between'
-                                    }}
-                                    onMouseEnter={(e) => {
-                                        e.currentTarget.style.backgroundColor = '#1a1a1a';
-                                        e.currentTarget.style.borderColor = '#444';
-                                        e.currentTarget.style.transform = 'translateX(4px)';
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.currentTarget.style.backgroundColor = '#0a0a0a';
-                                        e.currentTarget.style.borderColor = '#333';
-                                        e.currentTarget.style.transform = 'translateX(0)';
+                                        padding: '20px',
+                                        borderLeft: '4px solid #dc2626'
                                     }}
                                 >
                                     <div style={{
                                         display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '16px',
-                                        flex: 1
+                                        justifyContent: 'space-between',
+                                        alignItems: 'flex-start',
+                                        marginBottom: '12px'
                                     }}>
                                         <div style={{
-                                            backgroundColor: '#dc2626',
-                                            color: 'white',
-                                            width: '36px',
-                                            height: '36px',
-                                            borderRadius: '50%',
                                             display: 'flex',
                                             alignItems: 'center',
-                                            justifyContent: 'center',
-                                            fontWeight: '600',
-                                            fontSize: '14px',
-                                            flexShrink: 0
+                                            gap: '12px'
                                         }}>
-                                            {hits.length - index}
-                                        </div>
-                                        <div style={{ flex: 1 }}>
-                                            <div style={{ 
-                                                fontSize: '16px', 
+                                            <div style={{
+                                                backgroundColor: '#dc2626',
+                                                color: 'white',
+                                                width: '32px',
+                                                height: '32px',
+                                                borderRadius: '50%',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
                                                 fontWeight: '600',
-                                                marginBottom: '4px'
+                                                fontSize: '14px'
                                             }}>
-                                                {new Date(hit.date).toLocaleDateString('en-US', {
-                                                    year: 'numeric',
-                                                    month: 'long',
-                                                    day: 'numeric'
-                                                })}
+                                                {hits.length - index}
                                             </div>
-                                            {hit.damagePercentage != null && (
+                                            <div>
+                                                <div style={{ 
+                                                    fontSize: '16px', 
+                                                    fontWeight: '600',
+                                                    marginBottom: '4px'
+                                                }}>
+                                                    Hit on {new Date(hit.date).toLocaleDateString('en-US', {
+                                                        year: 'numeric',
+                                                        month: 'long',
+                                                        day: 'numeric'
+                                                    })}
+                                                </div>
                                                 <div style={{
                                                     fontSize: '13px',
-                                                    color: '#f44336',
-                                                    fontWeight: '600'
+                                                    color: '#888',
+                                                    display: 'flex',
+                                                    gap: '12px',
+                                                    flexWrap: 'wrap'
                                                 }}>
-                                                    -{hit.damagePercentage}% production impact
+                                                    {hit.severity && (
+                                                        <span>
+                                                            Severity: <span style={{ 
+                                                                color: hit.severity === 'destroyed' ? '#f44336' : '#FF9800', 
+                                                                fontWeight: '600',
+                                                                textTransform: 'uppercase'
+                                                            }}>
+                                                                {hit.severity}
+                                                            </span>
+                                                        </span>
+                                                    )}
+                                                    {hit.damagePercentage != null && (
+                                                        <span>
+                                                            Impact: <span style={{ color: '#f44336', fontWeight: '600' }}>
+                                                                -{hit.damagePercentage}%
+                                                            </span>
+                                                        </span>
+                                                    )}
+                                                    {hit.expectedRepairTime && (
+                                                        <span>
+                                                            Repair: <span style={{ color: '#f59e0b', fontWeight: '600' }}>
+                                                                {hit.expectedRepairTime} days
+                                                            </span>
+                                                        </span>
+                                                    )}
                                                 </div>
-                                            )}
+                                            </div>
                                         </div>
                                     </div>
-                                    <div style={{
-                                        color: '#3b82f6',
-                                        fontSize: '20px',
-                                        flexShrink: 0
-                                    }}>
-                                        →
-                                    </div>
+
+                                    {/* Media Links */}
+                                    {((hit.mediaLinks && hit.mediaLinks.length > 0) || hit.videoLink) && (
+                                        <div style={{
+                                            display: 'flex',
+                                            gap: '8px',
+                                            flexWrap: 'wrap',
+                                            marginBottom: '12px'
+                                        }}>
+                                            {hit.mediaLinks && hit.mediaLinks.length > 0 ? (
+                                                hit.mediaLinks.map((link, idx) => (
+                                                    <a
+                                                        key={idx}
+                                                        href={link}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        style={{
+                                                            padding: '6px 12px',
+                                                            backgroundColor: '#dc2626',
+                                                            color: 'white',
+                                                            textDecoration: 'none',
+                                                            borderRadius: '4px',
+                                                            fontSize: '12px',
+                                                            fontWeight: '500',
+                                                            whiteSpace: 'nowrap',
+                                                            display: 'inline-block'
+                                                        }}
+                                                    >
+                                                        {link.includes('youtube') || link.includes('youtu.be') || link.includes('video') ? '📹' : '📷'} Media {idx + 1}
+                                                    </a>
+                                                ))
+                                            ) : hit.videoLink && (
+                                                <a
+                                                    href={hit.videoLink}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    style={{
+                                                        padding: '6px 12px',
+                                                        backgroundColor: '#dc2626',
+                                                        color: 'white',
+                                                        textDecoration: 'none',
+                                                        borderRadius: '4px',
+                                                        fontSize: '12px',
+                                                        fontWeight: '500',
+                                                        whiteSpace: 'nowrap'
+                                                    }}
+                                                >
+                                                    📹 Video
+                                                </a>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {hit.notes && (
+                                        <div style={{
+                                            padding: '12px',
+                                            backgroundColor: '#1a1a1a',
+                                            borderRadius: '4px',
+                                            fontSize: '14px',
+                                            color: '#ccc',
+                                            lineHeight: '1.5'
+                                        }}>
+                                            {hit.notes}
+                                        </div>
+                                    )}
                                 </div>
                             ))}
                         </div>
