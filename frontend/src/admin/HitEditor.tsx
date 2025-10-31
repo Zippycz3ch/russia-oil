@@ -32,9 +32,9 @@ const HitEditor: React.FC = () => {
         facilityId: 0,
         date: new Date().toISOString().split('T')[0],
         severity: 'damaged',
-        damagePercentage: 0,
+        damagePercentage: 20,
         mediaLinks: [''],
-        expectedRepairTime: 0,
+        expectedRepairTime: 30,
         notes: '',
         draft: true
     });
@@ -299,94 +299,100 @@ const HitEditor: React.FC = () => {
                                 />
                             </div>
 
-                            <div>
-                                <label style={{
-                                    display: 'block',
-                                    marginBottom: '8px',
-                                    color: '#999',
-                                    fontSize: '14px',
-                                    fontWeight: '600'
-                                }}>
-                                    Severity *
-                                </label>
-                                <select
-                                    value={hit.severity}
-                                    onChange={(e) => setHit({ ...hit, severity: e.target.value as 'damaged' | 'destroyed' })}
-                                    style={{
-                                        width: '100%',
-                                        padding: '12px',
-                                        backgroundColor: '#0a0a0a',
-                                        border: '1px solid #333',
-                                        borderRadius: '4px',
-                                        color: '#fff',
-                                        fontSize: '14px'
-                                    }}
-                                >
-                                    <option value="damaged">Damaged</option>
-                                    <option value="destroyed">Destroyed</option>
-                                </select>
+                            <div style={{ gridColumn: '1 / -1', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                                <div>
+                                    <label style={{
+                                        display: 'block',
+                                        marginBottom: '8px',
+                                        color: '#999',
+                                        fontSize: '14px',
+                                        fontWeight: '600'
+                                    }}>
+                                        Severity *
+                                    </label>
+                                    <select
+                                        value={hit.severity}
+                                        onChange={(e) => setHit({ ...hit, severity: e.target.value as 'damaged' | 'destroyed' })}
+                                        style={{
+                                            width: '100%',
+                                            padding: '12px',
+                                            backgroundColor: '#0a0a0a',
+                                            border: '1px solid #333',
+                                            borderRadius: '4px',
+                                            color: '#fff',
+                                            fontSize: '14px'
+                                        }}
+                                    >
+                                        <option value="damaged">Damaged</option>
+                                        <option value="destroyed">Destroyed</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label style={{
+                                        display: 'block',
+                                        marginBottom: '8px',
+                                        color: '#999',
+                                        fontSize: '14px',
+                                        fontWeight: '600'
+                                    }}>
+                                        Damage to Production (%) *
+                                    </label>
+                                    <input
+                                        type="number"
+                                        min="0"
+                                        max="100"
+                                        value={hit.damagePercentage || 0}
+                                        onChange={(e) => {
+                                            const val = Number(e.target.value);
+                                            setHit({ ...hit, damagePercentage: Math.min(100, Math.max(0, val)) });
+                                        }}
+                                        placeholder="0-100"
+                                        style={{
+                                            width: '100%',
+                                            padding: '12px',
+                                            backgroundColor: '#0a0a0a',
+                                            border: '1px solid #333',
+                                            borderRadius: '4px',
+                                            color: '#fff',
+                                            fontSize: '14px'
+                                        }}
+                                    />
+                                </div>
                             </div>
 
-                            <div>
-                                <label style={{
-                                    display: 'block',
-                                    marginBottom: '8px',
-                                    color: '#999',
-                                    fontSize: '14px',
-                                    fontWeight: '600'
-                                }}>
-                                    Damage to Production (%) *
-                                </label>
-                                <input
-                                    type="number"
-                                    min="0"
-                                    max="100"
-                                    value={hit.damagePercentage || 0}
-                                    onChange={(e) => {
-                                        const val = Number(e.target.value);
-                                        setHit({ ...hit, damagePercentage: Math.min(100, Math.max(0, val)) });
-                                    }}
-                                    placeholder="0-100"
-                                    style={{
-                                        width: '100%',
-                                        padding: '12px',
-                                        backgroundColor: '#0a0a0a',
-                                        border: '1px solid #333',
-                                        borderRadius: '4px',
-                                        color: '#fff',
-                                        fontSize: '14px'
-                                    }}
-                                />
-                                <p style={{ margin: '5px 0 0 0', color: '#666', fontSize: '12px' }}>
-                                    Percentage of facility capacity affected by this hit
-                                </p>
-                            </div>
-
-                            <div style={{ gridColumn: '1 / -1' }}>
-                                <label style={{
-                                    display: 'block',
-                                    marginBottom: '8px',
-                                    color: '#999',
-                                    fontSize: '14px',
-                                    fontWeight: '600'
-                                }}>
-                                    Expected Repair Time (days)
-                                </label>
-                                <input
-                                    type="number"
-                                    value={hit.expectedRepairTime || ''}
-                                    onChange={(e) => setHit({ ...hit, expectedRepairTime: e.target.value ? Number(e.target.value) : undefined })}
-                                    placeholder="e.g., 30"
-                                    style={{
-                                        width: '100%',
-                                        padding: '12px',
-                                        backgroundColor: '#0a0a0a',
-                                        border: '1px solid #333',
-                                        borderRadius: '4px',
-                                        color: '#fff',
-                                        fontSize: '14px'
-                                    }}
-                                />
+                            <div style={{ gridColumn: '1 / -1', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                                <div>
+                                    <label style={{
+                                        display: 'block',
+                                        marginBottom: '8px',
+                                        color: '#999',
+                                        fontSize: '14px',
+                                        fontWeight: '600'
+                                    }}>
+                                        Expected Repair Time (days)
+                                    </label>
+                                    <input
+                                        type="number"
+                                        value={hit.expectedRepairTime || ''}
+                                        onChange={(e) => setHit({ ...hit, expectedRepairTime: e.target.value ? Number(e.target.value) : undefined })}
+                                        placeholder="e.g., 30"
+                                        style={{
+                                            width: '100%',
+                                            padding: '12px',
+                                            backgroundColor: '#0a0a0a',
+                                            border: '1px solid #333',
+                                            borderRadius: '4px',
+                                            color: '#fff',
+                                            fontSize: '14px'
+                                        }}
+                                    />
+                                </div>
+                                <div>
+                                    <p style={{ margin: '36px 0 0 0', color: '#666', fontSize: '12px' }}>
+                                        Percentage of facility capacity affected by this hit
+                                    </p>
+                                </div>
                             </div>
 
                             <div style={{ gridColumn: '1 / -1' }}>

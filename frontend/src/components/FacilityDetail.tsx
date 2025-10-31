@@ -23,9 +23,13 @@ interface Hit {
     id: number;
     facilityId: number;
     date: string;
-    videoLink: string;
-    expectedRepairTime: number;
-    notes: string;
+    severity?: 'damaged' | 'destroyed';
+    damagePercentage?: number;
+    mediaLinks?: string[];
+    videoLink?: string;
+    expectedRepairTime?: number;
+    notes?: string;
+    draft?: boolean;
 }
 
 const FacilityDetail: React.FC = () => {
@@ -63,10 +67,12 @@ const FacilityDetail: React.FC = () => {
                             orderBy('date', 'desc')
                         );
                         const hitsSnap = await getDocs(q);
-                        const hitsData = hitsSnap.docs.map(doc => ({
-                            id: doc.data().id,
-                            ...doc.data()
-                        } as Hit));
+                        const hitsData = hitsSnap.docs
+                            .map(doc => ({
+                                id: doc.data().id,
+                                ...doc.data()
+                            } as Hit))
+                            .filter(hit => !hit.draft); // Filter out draft hits
                         setHits(hitsData);
                     } else {
                         console.error('Facility not found');
@@ -502,34 +508,93 @@ const FacilityDetail: React.FC = () => {
                                                 </div>
                                                 <div style={{
                                                     fontSize: '13px',
-                                                    color: '#888'
+                                                    color: '#888',
+                                                    display: 'flex',
+                                                    gap: '12px',
+                                                    flexWrap: 'wrap'
                                                 }}>
-                                                    Expected repair time: <span style={{ color: '#f59e0b', fontWeight: '600' }}>
-                                                        {hit.expectedRepairTime} days
-                                                    </span>
+                                                    {hit.severity && (
+                                                        <span>
+                                                            Severity: <span style={{ 
+                                                                color: hit.severity === 'destroyed' ? '#f44336' : '#FF9800', 
+                                                                fontWeight: '600',
+                                                                textTransform: 'uppercase'
+                                                            }}>
+                                                                {hit.severity}
+                                                            </span>
+                                                        </span>
+                                                    )}
+                                                    {hit.damagePercentage != null && (
+                                                        <span>
+                                                            Impact: <span style={{ color: '#f44336', fontWeight: '600' }}>
+                                                                -{hit.damagePercentage}%
+                                                            </span>
+                                                        </span>
+                                                    )}
+                                                    {hit.expectedRepairTime && (
+                                                        <span>
+                                                            Repair: <span style={{ color: '#f59e0b', fontWeight: '600' }}>
+                                                                {hit.expectedRepairTime} days
+                                                            </span>
+                                                        </span>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>
-                                        {hit.videoLink && (
-                                            <a
-                                                href={hit.videoLink}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                style={{
-                                                    padding: '6px 12px',
-                                                    backgroundColor: '#dc2626',
-                                                    color: 'white',
-                                                    textDecoration: 'none',
-                                                    borderRadius: '4px',
-                                                    fontSize: '12px',
-                                                    fontWeight: '500',
-                                                    whiteSpace: 'nowrap'
-                                                }}
-                                            >
-                                                📹 Video
-                                            </a>
-                                        )}
                                     </div>
+
+                                    {/* Media Links */}
+                                    {((hit.mediaLinks && hit.mediaLinks.length > 0) || hit.videoLink) && (
+                                        <div style={{
+                                            display: 'flex',
+                                            gap: '8px',
+                                            flexWrap: 'wrap',
+                                            marginBottom: '12px'
+                                        }}>
+                                            {hit.mediaLinks && hit.mediaLinks.length > 0 ? (
+                                                hit.mediaLinks.map((link, idx) => (
+                                                    <a
+                                                        key={idx}
+                                                        href={link}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        style={{
+                                                            padding: '6px 12px',
+                                                            backgroundColor: '#dc2626',
+                                                            color: 'white',
+                                                            textDecoration: 'none',
+                                                            borderRadius: '4px',
+                                                            fontSize: '12px',
+                                                            fontWeight: '500',
+                                                            whiteSpace: 'nowrap',
+                                                            display: 'inline-block'
+                                                        }}
+                                                    >
+                                                        {link.includes('youtube') || link.includes('youtu.be') || link.includes('video') ? '📹' : '📷'} Media {idx + 1}
+                                                    </a>
+                                                ))
+                                            ) : hit.videoLink && (
+                                                <a
+                                                    href={hit.videoLink}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    style={{
+                                                        padding: '6px 12px',
+                                                        backgroundColor: '#dc2626',
+                                                        color: 'white',
+                                                        textDecoration: 'none',
+                                                        borderRadius: '4px',
+                                                        fontSize: '12px',
+                                                        fontWeight: '500',
+                                                        whiteSpace: 'nowrap'
+                                                    }}
+                                                >
+                                                    📹 Video
+                                                </a>
+                                            )}
+                                        </div>
+                                    )}
+
                                     {hit.notes && (
                                         <div style={{
                                             padding: '12px',

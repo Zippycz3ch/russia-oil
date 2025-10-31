@@ -45,9 +45,9 @@ const Dashboard: React.FC = () => {
     const [newHit, setNewHit] = useState<Partial<Hit>>({
         date: new Date().toISOString().split('T')[0],
         severity: 'damaged',
-        damagePercentage: 0,
+        damagePercentage: 20,
         mediaLinks: [''],
-        expectedRepairTime: 0,
+        expectedRepairTime: 30,
         notes: '',
         draft: true
     });
@@ -226,9 +226,9 @@ const Dashboard: React.FC = () => {
             setNewHit({
                 date: new Date().toISOString().split('T')[0],
                 severity: 'damaged',
-                damagePercentage: 0,
+                damagePercentage: 20,
                 mediaLinks: [''],
-                expectedRepairTime: 0,
+                expectedRepairTime: 30,
                 notes: '',
                 draft: true
             });
@@ -1172,7 +1172,7 @@ const Dashboard: React.FC = () => {
                                                                                         border: '1px solid #2196F3'
                                                                                     }}
                                                                                 >
-                                                                                    🔗 Link {idx + 1}
+                                                                                    {link.includes('youtube') || link.includes('youtu.be') || link.includes('video') ? '📹' : '📷'} Media {idx + 1}
                                                                                 </a>
                                                                             ))}
                                                                         </div>
