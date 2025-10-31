@@ -371,7 +371,7 @@ const FacilityMarker: React.FC<{
                     </p>
                     {facility.gasCapacity && (
                         <p style={{ margin: '5px 0', fontSize: '13px' }}>
-                            <strong>Gas Capacity:</strong> {facility.gasCapacity.toLocaleString()} m³/day
+                            <strong>Gas Capacity:</strong> {facility.gasCapacity.toLocaleString()} m³/year
                         </p>
                     )}
                     <p style={{ margin: '5px 0 10px 0', fontSize: '11px', color: '#666' }}>
