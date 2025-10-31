@@ -366,14 +366,17 @@ const FacilityMarker: React.FC<{
                     <p style={{ margin: '5px 0', fontSize: '13px' }}>
                         <strong>Type:</strong> <span style={{ textTransform: 'capitalize' }}>{facility.type}</span>
                     </p>
-                    <p style={{ margin: '5px 0', fontSize: '13px' }}>
-                        <strong>Capacity:</strong> {facility.capacity.toLocaleString()} bbl/day
-                    </p>
-                    {facility.gasCapacity && (
-                        <p style={{ margin: '5px 0', fontSize: '13px' }}>
-                            <strong>Gas Capacity:</strong> {facility.gasCapacity.toLocaleString()} m³/year
+                    <div style={{ margin: '10px 0' }}>
+                        <p style={{ margin: '0 0 5px 0', fontSize: '13px', fontWeight: 'bold' }}>Production:</p>
+                        <p style={{ margin: '2px 0 2px 10px', fontSize: '13px' }}>
+                            <strong>Oil:</strong> {facility.capacity.toLocaleString()} bbl/day
                         </p>
-                    )}
+                        {facility.gasCapacity && (
+                            <p style={{ margin: '2px 0 2px 10px', fontSize: '13px' }}>
+                                <strong>Gas:</strong> {facility.gasCapacity.toLocaleString()} m³/year
+                            </p>
+                        )}
+                    </div>
                     <p style={{ margin: '5px 0 10px 0', fontSize: '11px', color: '#666' }}>
                         {lat.toFixed(4)}, {lon.toFixed(4)}
                     </p>
