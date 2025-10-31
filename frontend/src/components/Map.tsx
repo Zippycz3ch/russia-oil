@@ -289,15 +289,19 @@ const capitals = [
 // Custom marker icons
 const createCustomIcon = (color: string, damagePercentage: number = 0) => {
     let borderColor = 'white';
+    let borderWidth = 2;
+    
     if (damagePercentage > 0 && damagePercentage < 50) {
         borderColor = '#FF9800'; // Orange
+        borderWidth = 3;
     } else if (damagePercentage >= 50) {
-        borderColor = '#DC2626'; // Red
+        borderColor = '#EF4444'; // Brighter red for visibility
+        borderWidth = 3;
     }
     
     return L.divIcon({
         className: 'custom-marker',
-        html: `<div style="background-color: ${color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid ${borderColor};"></div>`,
+        html: `<div style="background-color: ${color}; width: 12px; height: 12px; border-radius: 50%; border: ${borderWidth}px solid ${borderColor};"></div>`,
         iconSize: [12, 12],
         iconAnchor: [6, 6]
     });
