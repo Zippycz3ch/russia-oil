@@ -499,59 +499,117 @@ export const Sidebar: React.FC<SidebarProps> = ({ filteredCount, totalCount, fac
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
-                        gap: '8px',
-                        padding: '8px'
+                        gap: '12px',
+                        padding: '10px 8px'
                     }}>
-                        {/* Simple vertical bar meter */}
+                        {/* Oil barrel container */}
                         <div style={{
-                            width: '60px',
-                            height: '100px',
-                            background: '#1a1a1a',
+                            width: '70px',
+                            height: '110px',
+                            background: 'linear-gradient(90deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%)',
                             borderRadius: '4px',
-                            border: '2px solid #333',
+                            border: '2px solid #2a2a2a',
                             position: 'relative',
                             overflow: 'hidden',
-                            boxShadow: 'inset 0 2px 8px rgba(0, 0, 0, 0.5)'
+                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 0, 0, 0.6)'
                         }}>
-                            {/* Oil fill */}
+                            {/* Pre-war production level (lighter black oil) */}
                             <div style={{
                                 position: 'absolute',
                                 bottom: 0,
                                 left: 0,
                                 right: 0,
-                                height: `${productionPercentage}%`,
-                                background: productionPercentage > 70 
-                                    ? 'linear-gradient(to top, #0a7a4f, #10B981)'
-                                    : productionPercentage > 40 
-                                    ? 'linear-gradient(to top, #c45c10, #F97316)'
-                                    : 'linear-gradient(to top, #a01f1f, #EF4444)',
+                                height: '100%',
+                                background: 'linear-gradient(90deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%)',
                                 transition: 'height 0.6s ease',
-                                boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.3)'
+                                boxShadow: 'inset -3px 0 8px rgba(0, 0, 0, 0.6), inset 3px 0 8px rgba(255, 255, 255, 0.03)'
                             }}>
-                                {/* Surface shimmer */}
+                                {/* Pre-war oil surface */}
                                 <div style={{
                                     position: 'absolute',
                                     top: 0,
                                     left: 0,
                                     right: 0,
                                     height: '2px',
-                                    background: 'rgba(255, 255, 255, 0.3)'
+                                    background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15) 50%, transparent)',
+                                    boxShadow: '0 1px 3px rgba(255, 255, 255, 0.1)'
                                 }} />
                             </div>
                             
-                            {/* Percentage in center */}
+                            {/* Current production level (darker black oil) */}
+                            <div style={{
+                                position: 'absolute',
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                height: `${productionPercentage}%`,
+                                background: 'linear-gradient(90deg, #050505 0%, #0f0f0f 50%, #050505 100%)',
+                                transition: 'height 0.6s ease',
+                                boxShadow: 'inset -3px 0 10px rgba(0, 0, 0, 0.8), inset 3px 0 10px rgba(0, 0, 0, 0.5), 0 -1px 4px rgba(0, 0, 0, 0.6)'
+                            }}>
+                                {/* Current oil surface */}
+                                <div style={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: 0,
+                                    right: 0,
+                                    height: '2px',
+                                    background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2) 50%, transparent)',
+                                    boxShadow: '0 1px 4px rgba(255, 255, 255, 0.15)'
+                                }} />
+                            </div>
+                            
+                            {/* Percentage badge */}
                             <div style={{
                                 position: 'absolute',
                                 top: '50%',
                                 left: '50%',
                                 transform: 'translate(-50%, -50%)',
-                                fontSize: '18px',
+                                fontSize: '22px',
                                 fontWeight: '900',
                                 color: '#ffffff',
-                                textShadow: '0 2px 6px rgba(0, 0, 0, 0.9)',
+                                textShadow: '0 0 10px rgba(0, 0, 0, 1), 0 2px 8px rgba(0, 0, 0, 0.9)',
                                 zIndex: 10
                             }}>
                                 {productionPercentage.toFixed(0)}%
+                            </div>
+                        </div>
+                        
+                        {/* Production stats */}
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '6px',
+                            width: '100%',
+                            fontSize: '13px'
+                        }}>
+                            <div style={{ 
+                                display: 'flex', 
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                padding: '6px 10px',
+                                background: 'rgba(0, 87, 183, 0.2)',
+                                borderRadius: '4px',
+                                border: '1px solid rgba(0, 87, 183, 0.3)'
+                            }}>
+                                <span style={{ color: '#ffffff', fontWeight: '600' }}>Pre-war:</span>
+                                <span style={{ fontWeight: '800', color: '#ffffff' }}>
+                                    {(totalProduction / 1000).toFixed(0)}k bbl/d
+                                </span>
+                            </div>
+                            <div style={{ 
+                                display: 'flex', 
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                padding: '6px 10px',
+                                background: 'rgba(255, 215, 0, 0.2)',
+                                borderRadius: '4px',
+                                border: '1px solid rgba(255, 215, 0, 0.3)'
+                            }}>
+                                <span style={{ color: '#ffffff', fontWeight: '600' }}>Current:</span>
+                                <span style={{ fontWeight: '800', color: '#ffffff' }}>
+                                    {(currentProduction / 1000).toFixed(0)}k bbl/d
+                                </span>
                             </div>
                         </div>
                     </div>
